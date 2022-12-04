@@ -8,6 +8,17 @@ This package tries a different approach to analyse the coverage rate. We only an
 
 You can set thresholds to make tests fail on a CI tool. This package can also print those lines that were not covered by tests.
 
+## Installing
+Add this line to your package's pubspec.yaml under the `dev_dependencies` section:
+
+```yaml
+dev_dependencies:
+  images_files_checker:
+```
+
+You should specify the version to avoid breaking changes
+
+
 ## Usage
 
 This package uses two information to generate its report:
