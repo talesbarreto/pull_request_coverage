@@ -1,6 +1,6 @@
-
 import 'package:pull_request_coverage/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:test/test.dart';
+
 void main() {
   const fileContent = r'''diff --git
 a

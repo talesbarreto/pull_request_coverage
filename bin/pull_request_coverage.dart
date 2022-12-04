@@ -17,7 +17,9 @@ import 'package:pull_request_coverage/domain/user_options/models/user_options.da
 import 'package:pull_request_coverage/domain/user_options/repositories/user_options_repository.dart';
 
 UserOptions _getOrFailUserOptions(List<String> arguments) {
-  final UserOptionsRepository argsRepository = UserOptionsRepositoryImpl(ArgParser());
+  final UserOptionsRepository argsRepository = UserOptionsRepositoryImpl(
+    ArgParser(),
+  );
   final userOptions = argsRepository.getUserOptions(arguments);
   if (userOptions is ResultSuccess<UserOptions>) {
     return userOptions.data;
@@ -42,14 +44,17 @@ Future<void> main(List<String> arguments) async {
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath);
 
   final result = Analyze(
-    convertFileDiffFromGitDiffToFileDiff: ConvertFileDiffFromGitDiffToFileDiff(),
-    forEachFileOnGitDiff: ForEachFileOnGitDiff(() => stdin.readLineSync(encoding: utf8)),
+    convertFileDiffFromGitDiffToFileDiff:
+        ConvertFileDiffFromGitDiffToFileDiff(),
+    forEachFileOnGitDiff: ForEachFileOnGitDiff(
+      () => stdin.readLineSync(encoding: utf8),
+    ),
     lcovLines: lcovLines,
     shouldAnalyseThisFile: ShouldAnalyseThisFile(userOptions),
     setUncoveredLines: SetUncoveredLinesOnFileDiff(),
     getUncoveredFileLines: GetUncoveredFileLines(),
     printResultForFile: PrintResultForFile(print),
-    shouldPrintResultsForEachFile: userOptions.showUncoveredLines,
+    shouldPrintResultsForEachFile: !userOptions.hideUncoveredLines,
   )();
 
   PrintAnalysisResult(print)(result, userOptions);

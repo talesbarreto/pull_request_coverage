@@ -14,5 +14,6 @@ class FileLine {
   bool get isAnUncoveredNewLine => isANewLine && isUncovered;
 
   @override
-  String toString() => "$lineNumber ${isAnUncoveredNewLine ? "💃" : "👍"}: $line";
+  String toString() =>
+      "$lineNumber ${isAnUncoveredNewLine ? "💃" : "👍"}: $line";
 }

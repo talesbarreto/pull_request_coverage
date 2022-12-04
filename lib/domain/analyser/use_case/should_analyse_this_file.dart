@@ -6,6 +6,9 @@ class ShouldAnalyseThisFile {
   ShouldAnalyseThisFile(this.userOptions);
 
   bool call(String filePath) {
-    return filePath.endsWith(".dart") && filePath.startsWith("lib/") && !userOptions.excludePrefixPaths.any(filePath.startsWith) && !userOptions.excludeSuffixPaths.any(filePath.endsWith);
+    return filePath.endsWith(".dart") &&
+        filePath.startsWith("lib/") &&
+        !userOptions.excludePrefixPaths.any(filePath.startsWith) &&
+        !userOptions.excludeSuffixPaths.any(filePath.endsWith);
   }
 }

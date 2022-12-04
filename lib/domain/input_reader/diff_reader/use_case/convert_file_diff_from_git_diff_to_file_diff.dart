@@ -1,4 +1,3 @@
-
 import 'package:pull_request_coverage/domain/input_reader/diff_reader/models/file_diff.dart';
 import 'package:pull_request_coverage/domain/input_reader/diff_reader/models/file_line.dart';
 

@@ -7,7 +7,8 @@ import 'package:pull_request_coverage/domain/input_reader/locv_reader/get_uncove
 import 'package:pull_request_coverage/domain/presentation/use_case/print_result_for_file.dart';
 
 class Analyze {
-  final ConvertFileDiffFromGitDiffToFileDiff convertFileDiffFromGitDiffToFileDiff;
+  final ConvertFileDiffFromGitDiffToFileDiff
+      convertFileDiffFromGitDiffToFileDiff;
   final ForEachFileOnGitDiff forEachFileOnGitDiff;
   final ShouldAnalyseThisFile shouldAnalyseThisFile;
   final SetUncoveredLinesOnFileDiff setUncoveredLines;
@@ -34,11 +35,15 @@ class Analyze {
     forEachFileOnGitDiff((file) {
       final fileDiff = convertFileDiffFromGitDiffToFileDiff(file);
       if (fileDiff != null && shouldAnalyseThisFile(fileDiff.path)) {
-        final uncoveredLinesOnFile = getUncoveredFileLines(lcovLines, fileDiff.path);
+        final uncoveredLinesOnFile =
+            getUncoveredFileLines(lcovLines, fileDiff.path);
         if (uncoveredLinesOnFile != null) {
           setUncoveredLines(fileDiff, uncoveredLinesOnFile);
-          newLines += fileDiff.lines.where((element) => element.isANewLine).length;
-          uncoveredLines += fileDiff.lines.where((element) => element.isAnUncoveredNewLine).length;
+          newLines +=
+              fileDiff.lines.where((element) => element.isANewLine).length;
+          uncoveredLines += fileDiff.lines
+              .where((element) => element.isAnUncoveredNewLine)
+              .length;
         }
         if (shouldPrintResultsForEachFile) {
           printResultForFile(fileDiff);

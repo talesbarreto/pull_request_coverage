@@ -14,13 +14,16 @@ class PrintResultForFile {
   void call(FileDiff fileDiff) {
     final outputBuilder = StringBuffer();
     if (fileDiff.hasUncoveredLines) {
-      outputBuilder.writeln("${TextColor.colorize(fileDiff.path,TextColor.red)} has uncovered lines 👀  (${TextColor.colorize("+${fileDiff.newLinesCount}", TextColor.green)})");
+      outputBuilder.writeln(
+          "${TextColor.colorize(fileDiff.path, TextColor.red)} has uncovered lines 👀  (${TextColor.colorize("+${fileDiff.newLinesCount}", TextColor.green)})");
       for (int i = 0; i < fileDiff.lines.length; i++) {
         final line = fileDiff.lines[i];
         var shouldPrint = line.isAnUncoveredNewLine;
         if (!shouldPrint) {
           // printing [printCodeWindow] codes after and before the uncovered line
-          for (int j = max(i - printCodeWindow, 0); j < fileDiff.lines.length && j < printCodeWindow + i + 1; j++) {
+          for (int j = max(i - printCodeWindow, 0);
+              j < fileDiff.lines.length && j < printCodeWindow + i + 1;
+              j++) {
             if (fileDiff.lines[j].isAnUncoveredNewLine) {
               shouldPrint = true;
               break;
@@ -29,14 +32,16 @@ class PrintResultForFile {
         }
         if (shouldPrint) {
           if (line.isAnUncoveredNewLine) {
-            outputBuilder.writeln(TextColor.colorize(" ⬤  : ${line.line}", TextColor.red));
+            outputBuilder.writeln(
+                TextColor.colorize(" ⬤  : ${line.line}", TextColor.red));
           } else {
             outputBuilder.writeln(" ${line.lineNumber} : ${line.line}");
           }
         }
       }
     } else {
-      outputBuilder.write("${fileDiff.path} is fully covered 🎉 (${TextColor.colorize("+${fileDiff.newLinesCount}", TextColor.green)})");
+      outputBuilder.write(
+          "${fileDiff.path} is fully covered 🎉 (${TextColor.colorize("+${fileDiff.newLinesCount}", TextColor.green)})");
     }
     print(outputBuilder.toString());
   }

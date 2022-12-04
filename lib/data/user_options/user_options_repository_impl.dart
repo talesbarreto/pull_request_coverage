@@ -5,7 +5,8 @@ import 'package:pull_request_coverage/domain/user_options/repositories/user_opti
 
 class UserOptionsRepositoryImpl implements UserOptionsRepository {
   static const defaultLcovFile = "coverage/lcov.info";
-  static const defaultExcludeSuffix = ".g.dart,.pb.dart,.pbenum.dart,.pbserver.dart,.pbjson.dart";
+  static const defaultExcludeSuffix =
+      ".g.dart,.pb.dart,.pbenum.dart,.pbserver.dart,.pbjson.dart";
 
   final ArgParser argParser;
 
@@ -27,7 +28,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
     argParser.addOption(
       "exclude-suffix",
       help: "Exclude files path with those suffix, separated by comma",
-      defaultsTo: defaultLcovFile,
+      defaultsTo: defaultExcludeSuffix,
     );
     argParser.addOption(
       "exclude-prefix",
@@ -40,12 +41,13 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
     );
     argParser.addOption(
       "maximum-uncovered-lines",
-      help: "If there is more than this number of uncovered lines, the test will fail",
+      help:
+          "If there is more than this number of uncovered lines, the test will fail",
     );
     argParser.addFlag(
-      "show-uncovered-lines",
+      "hide-uncovered-lines",
       help: "Print on the console the uncovered lines of the code",
-      defaultsTo: true,
+      defaultsTo: false,
     );
   }
 
@@ -57,12 +59,24 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
 
       return ResultSuccess(
         UserOptions(
-          excludePrefixPaths: result["exclude-prefix"]?.toLowerCase().split(",").toList(growable: false) ?? [],
-          excludeSuffixPaths: result["exclude-suffix"]?.toLowerCase().split(",").toList(growable: false) ?? [],
+          excludePrefixPaths: result["exclude-prefix"]
+                  ?.toLowerCase()
+                  .split(",")
+                  .toList(growable: false) ??
+              [],
+          excludeSuffixPaths: result["exclude-suffix"]
+                  ?.toLowerCase()
+                  .split(",")
+                  .toList(growable: false) ??
+              [],
           lcovFilePath: result["lcov-file"],
-          minimumCoverageRate: result["minimum-coverage"] != null ? double.tryParse(result["minimum-coverage"]) : null,
-          maximumUncoveredLines: result["maximum-uncovered-lines"] != null ? int.tryParse(result["maximum-uncovered-lines"]) : null,
-          showUncoveredLines: result["show-uncovered-lines"],
+          minimumCoverageRate: result["minimum-coverage"] != null
+              ? double.tryParse(result["minimum-coverage"])
+              : null,
+          maximumUncoveredLines: result["maximum-uncovered-lines"] != null
+              ? int.tryParse(result["maximum-uncovered-lines"])
+              : null,
+          hideUncoveredLines: result["hide-uncovered-lines"],
         ),
       );
     } catch (e) {

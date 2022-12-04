@@ -1,4 +1,3 @@
-
 import 'package:pull_request_coverage/domain/input_reader/diff_reader/use_case/convert_file_diff_from_git_diff_to_file_diff.dart';
 import 'package:test/test.dart';
 
@@ -13,11 +12,15 @@ void main() {
     test("expect correct file name", () => expect(result.path, ".drone.yml"));
     test(
       "line 17 is `     commands:`",
-      () => expect(result.lines.firstWhere((element) => element.lineNumber == 17).line, "     commands:"),
+      () => expect(
+          result.lines.firstWhere((element) => element.lineNumber == 17).line,
+          "     commands:"),
     );
     test(
       "line 55 is `+    image: cirrusci/flutter:3.3.7`",
-      () => expect(result.lines.firstWhere((element) => element.lineNumber == 55).line, "+    image: cirrusci/flutter:3.3.7"),
+      () => expect(
+          result.lines.firstWhere((element) => element.lineNumber == 55).line,
+          "+    image: cirrusci/flutter:3.3.7"),
     );
   });
 }

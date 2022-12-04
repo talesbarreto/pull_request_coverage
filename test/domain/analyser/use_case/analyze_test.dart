@@ -18,7 +18,8 @@ void main() {
   test('do not analyse file if `shouldAnalyseThisFile` returns false', () {
     final getUncoveredFileLines = _MockGetUncoveredFileLines();
     final analyze = Analyze(
-      convertFileDiffFromGitDiffToFileDiff: _MockConvertFileDiffFromGitDiffToFileDiff(),
+      convertFileDiffFromGitDiffToFileDiff:
+          _MockConvertFileDiffFromGitDiffToFileDiff(),
       forEachFileOnGitDiff: _MockForEachFileOnGitDiff.dummy([
         ["aho"]
       ]),
@@ -35,22 +36,38 @@ void main() {
     verifyNever(() => getUncoveredFileLines.call(any(), any()));
   });
 
-  group('When there is three files, each one has two new lines ans one of them is uncovered', () {
+  group(
+      'When there is three files, each one has two new lines ans one of them is uncovered',
+      () {
     const totalOfFilesOnDiff = 3;
     // To simplify the test, all files are equal
     final linesOfEachFile = [
-      FileLine(line: "int main(){", lineNumber: 1, isANewLine: true, isUncovered: true),
-      FileLine(line: "   print(\"oba\")", lineNumber: 2, isANewLine: true, isUncovered: false),
-      FileLine(line: "   return 0", lineNumber: 3, isANewLine: false, isUncovered: true),
+      FileLine(
+          line: "int main(){",
+          lineNumber: 1,
+          isANewLine: true,
+          isUncovered: true),
+      FileLine(
+          line: "   print(\"oba\")",
+          lineNumber: 2,
+          isANewLine: true,
+          isUncovered: false),
+      FileLine(
+          line: "   return 0",
+          lineNumber: 3,
+          isANewLine: false,
+          isUncovered: true),
     ];
 
     final setUncoveredLines = _MockSetUncoveredLinesOnFileDiff();
 
     final analyze = Analyze(
-      convertFileDiffFromGitDiffToFileDiff: _MockConvertFileDiffFromGitDiffToFileDiff(
+      convertFileDiffFromGitDiffToFileDiff:
+          _MockConvertFileDiffFromGitDiffToFileDiff(
         answer: FileDiff(path: '/var/tmp/ha.dart', lines: linesOfEachFile),
       ),
-      forEachFileOnGitDiff: _MockForEachFileOnGitDiff.dummy(List.generate(totalOfFilesOnDiff, (index) => ["file$index"])),
+      forEachFileOnGitDiff: _MockForEachFileOnGitDiff.dummy(
+          List.generate(totalOfFilesOnDiff, (index) => ["file$index"])),
       lcovLines: [],
       shouldAnalyseThisFile: _MockShouldAnalyseThisFile.dummy(true),
       setUncoveredLines: setUncoveredLines,
@@ -68,15 +85,18 @@ void main() {
       expect(analysisResult.totalOfNewLines, 2 * totalOfFilesOnDiff);
     });
     test('expect to invoke `setUncoveredLines` for each file', () {
-      verify(() => setUncoveredLines.call(any(), any())).called(totalOfFilesOnDiff);
+      verify(() => setUncoveredLines.call(any(), any()))
+          .called(totalOfFilesOnDiff);
     });
   });
 }
 
-class _MockConvertFileDiffFromGitDiffToFileDiff extends Mock implements ConvertFileDiffFromGitDiffToFileDiff {
+class _MockConvertFileDiffFromGitDiffToFileDiff extends Mock
+    implements ConvertFileDiffFromGitDiffToFileDiff {
   final FileDiff? answer;
 
-  _MockConvertFileDiffFromGitDiffToFileDiff({this.answer = const FileDiff(path: '/var/tmp/ha.dart', lines: [])});
+  _MockConvertFileDiffFromGitDiffToFileDiff(
+      {this.answer = const FileDiff(path: '/var/tmp/ha.dart', lines: [])});
 
   @override
   FileDiff? call(List<String> fileLines) => answer;
@@ -88,7 +108,8 @@ class _MockForEachFileOnGitDiff extends Mock implements ForEachFileOnGitDiff {
   factory _MockForEachFileOnGitDiff.dummy(List<List<String>> files) {
     final mock = _MockForEachFileOnGitDiff();
     when(() => mock(captureAny())).thenAnswer((realInvocation) {
-      final onFile = realInvocation.positionalArguments.first as void Function(List<String> lines);
+      final onFile = realInvocation.positionalArguments.first as void Function(
+          List<String> lines);
       for (final file in files) {
         onFile(file);
       }
@@ -107,7 +128,8 @@ class _MockShouldAnalyseThisFile extends Mock implements ShouldAnalyseThisFile {
   }
 }
 
-class _MockSetUncoveredLinesOnFileDiff extends Mock implements SetUncoveredLinesOnFileDiff {}
+class _MockSetUncoveredLinesOnFileDiff extends Mock
+    implements SetUncoveredLinesOnFileDiff {}
 
 class _MockGetUncoveredFileLines extends Mock implements GetUncoveredFileLines {
   _MockGetUncoveredFileLines();

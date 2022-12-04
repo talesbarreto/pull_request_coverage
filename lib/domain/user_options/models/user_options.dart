@@ -4,14 +4,13 @@ class UserOptions {
   final String lcovFilePath;
   final double? minimumCoverageRate;
   final int? maximumUncoveredLines;
-  final bool showUncoveredLines;
-
+  final bool hideUncoveredLines;
 
   const UserOptions({
     required this.excludePrefixPaths,
     required this.excludeSuffixPaths,
     required this.lcovFilePath,
-    required this.showUncoveredLines,
+    required this.hideUncoveredLines,
     this.minimumCoverageRate,
     this.maximumUncoveredLines,
   });
