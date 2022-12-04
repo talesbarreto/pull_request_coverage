@@ -1,7 +1,7 @@
 name: pull_request_coverage
 description: A CLI tool to verify the test coverage of a pull request only, ignoring the rest of the project.
 repository: https://github.com/talesbarreto/pull_request_coverage
-version: 0.0.1
+version: 0.0.1+1
 
 executables:
   pull_request_coverage:
@@ -16,3 +16,8 @@ dev_dependencies:
   test: ^1.22.0
   mocktail: ^0.3.0
   lints: ^2.0.1
+
+platforms:
+  linux:
+  macos:
+  windows:
