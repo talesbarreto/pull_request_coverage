@@ -12,6 +12,5 @@ enum TextColor {
   final String colorCode;
 
   const TextColor(this.colorCode);
-  static String colorize(String text, TextColor color) =>
-      "${color.colorCode}$text${TextColor.noColor.colorCode}";
+  static String colorize(String text, TextColor color) => "${color.colorCode}$text${TextColor.noColor.colorCode}";
 }

@@ -19,7 +19,7 @@ a''';
     final inputSplitByLines = fileContent.split("\n");
     final files = <List<String>>[];
 
-    final useCase = ForEachFileOnGitDiff(() {
+    final useCase = ForEachFileOnGitDiff(() async {
       if (currentLine >= inputSplitByLines.length) {
         return null;
       }

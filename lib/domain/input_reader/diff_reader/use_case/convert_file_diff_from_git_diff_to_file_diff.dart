@@ -1,6 +1,7 @@
 import 'package:pull_request_coverage/domain/input_reader/diff_reader/models/file_diff.dart';
 import 'package:pull_request_coverage/domain/input_reader/diff_reader/models/file_line.dart';
 
+/// Parses a segment of the git diff, that represents one single file on this diff, and returns a [FileDiff] object.
 class ConvertFileDiffFromGitDiffToFileDiff {
   int _parseFirstLineNumber(String header) {
     // example: "@@ -13,7 +13,7 @@ workspace:"

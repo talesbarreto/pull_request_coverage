@@ -5,8 +5,7 @@ void main() {
   group("When GetUncoveredFileLines is called", () {
     test("should return the lines that are not covered by the lcov file", () {
       final useCase = GetUncoveredFileLines();
-      final result =
-          useCase(content.split("\n"), "lib/extensions/iterable.dart");
+      final result = useCase(content.split("\n"), "lib/extensions/iterable.dart");
 
       expect(result!.length, 2);
       expect(result.first, 4);

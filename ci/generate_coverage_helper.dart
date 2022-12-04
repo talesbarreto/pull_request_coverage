@@ -12,26 +12,20 @@ void main() async {
   var files = libDir
       .listSync(recursive: true)
       .whereType<File>()
-      .where((file) =>
-          file.path.endsWith('.dart') &&
-          !file.path.contains('.freezed.') &&
-          !file.path.contains('.g.') &&
-          !file.path.endsWith('generated_plugin_registrant.dart'))
+      .where((file) => file.path.endsWith('.dart') && !file.path.contains('.freezed.') && !file.path.contains('.g.') && !file.path.endsWith('generated_plugin_registrant.dart'))
       .toList();
 
   buffer.writeln('// ignore_for_file: unused_import');
   buffer.writeln();
 
   for (var file in files) {
-    final fileLibPath =
-        file.uri.toFilePath().substring(libDir.uri.toFilePath().length);
+    final fileLibPath = file.uri.toFilePath().substring(libDir.uri.toFilePath().length);
     buffer.writeln('import \'package:$packageName/$fileLibPath\';');
   }
 
   buffer.writeln();
   buffer.writeln('void main() {}');
 
-  final output =
-      File(cwd.resolve('test/coverage_helper_test.dart').toFilePath());
+  final output = File(cwd.resolve('test/coverage_helper_test.dart').toFilePath());
   await output.writeAsString(buffer.toString());
 }

@@ -21,4 +21,4 @@ jobs:
         run: dart test
 
       - name: Format
-        run: dart format .
+        run: dart format -l 200 .
