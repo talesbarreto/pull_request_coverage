@@ -6,7 +6,7 @@ This is a CI tool that analyzes the coverage rate of a pull request, ignoring th
 
 The coverage rate threshold on CI tools is a common approach to encourage developers to write tests and keep improving the whole project's quality. Unfortunately, judging a pull request coverage by analyzing the coverage of the entire project is not always fair, especially on big refactor tasks, witch may naturally decrease the coverage rate.
 
-This package tries a different approach to analyse the coverage rate. We only analyse lines that have been added on the pull request. The coverage rate will be calculated by dividing the amount of uncovered new lines by the amount of new lines.
+This package tries a different approach to analyse the test coverage. We only analyse lines that have been added in the pull request. The coverage rate will be calculated by dividing the amount of uncovered new lines by the amount of new lines.
 
 You can set thresholds to make tests fail on a CI tool. This package can also print those lines that were not covered, making it easier to identify the missing tests.
 
@@ -36,7 +36,7 @@ flutter test --coverage
 ```
 
 ### Running pull_request_coverage
-To check the PR's code, this packages needs a diff between the pull request and the target branch of the repository. The package reads the diff from the `STDIN` input. 
+To check the PR's code, this packages needs a diff between its branch and the target one of the repository. The diff is read from the `STDIN` input. 
 
 You can feed the STDIN using bash's `|` operator, like this:
 ```bash
@@ -81,9 +81,9 @@ git diff repository/main | flutter pub run pull_request_coverage --minimum-cover
 
 | Code | Description                                      |
 |------|--------------------------------------------------|
-| 0    | All images are properly arranged                 |
-| 1    | Inconsistencies were found                       |
-| 255  | Execution has failed and tests were not executed |
+| 0    | Tests passed.                                    |
+| 1    | Tests failed (only when thresholds are set).     |
+| 255  | Execution has failed and tests were not executed.|
 
 ## Options
 
