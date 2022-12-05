@@ -5,7 +5,7 @@ import 'package:pull_request_coverage/domain/input_reader/diff_reader/models/fil
 class ConvertFileDiffFromGitDiffToFileDiff {
   int _parseFirstLineNumber(String header) {
     // example: "@@ -13,7 +13,7 @@ workspace:"
-    final numberString = header.split(" ")[1].substring(1).split(",")[0];
+    final numberString = header.split(" ")[2].substring(1).split(",")[0];
     return int.parse(numberString);
   }
 
