@@ -11,11 +11,6 @@ class ReadLineFromStdin {
       final line = await _stdinLineStreamBroadcaster.first.timeout(Duration(seconds: 1));
       return line;
     } catch (e) {
-      if (e is TimeoutException) {
-        return null;
-      } else {
-        print("Error reading diff: $e");
-      }
       return null;
     }
   }
