@@ -19,5 +19,6 @@ pubspec.lock
 .pub/
 /build/
 
-
+/.idea/
 /test/coverage_helper_test.dart
+/coverage/
