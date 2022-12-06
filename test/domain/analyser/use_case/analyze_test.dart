@@ -1,13 +1,13 @@
 import 'package:mocktail/mocktail.dart';
-import 'package:pull_request_coverage/domain/analyser/use_case/analyze.dart';
-import 'package:pull_request_coverage/domain/analyser/use_case/set_uncoverd_lines_on_file_diff.dart';
-import 'package:pull_request_coverage/domain/analyser/use_case/should_analyse_this_file.dart';
-import 'package:pull_request_coverage/domain/input_reader/diff_reader/models/file_diff.dart';
-import 'package:pull_request_coverage/domain/input_reader/diff_reader/models/file_line.dart';
-import 'package:pull_request_coverage/domain/input_reader/diff_reader/use_case/convert_file_diff_from_git_diff_to_file_diff.dart';
-import 'package:pull_request_coverage/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
-import 'package:pull_request_coverage/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
-import 'package:pull_request_coverage/domain/presentation/use_case/print_result_for_file.dart';
+import 'package:pull_request_coverage/src/domain/analyser/use_case/analyze.dart';
+import 'package:pull_request_coverage/src/domain/analyser/use_case/set_uncoverd_lines_on_file_diff.dart';
+import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyse_this_file.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_line.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/convert_file_diff_from_git_diff_to_file_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
+import 'package:pull_request_coverage/src/domain/presentation/use_case/print_result_for_file.dart';
 import 'package:test/test.dart';
 
 void main() {

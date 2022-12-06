@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:pull_request_coverage/domain/input_reader/diff_reader/models/file_diff.dart';
-import 'package:pull_request_coverage/domain/presentation/use_case/text_color.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
+import 'package:pull_request_coverage/src/domain/presentation/use_case/text_color.dart';
 
 class PrintResultForFile {
   /// print [printCodeWindow] line of codes before and after the uncovered line
@@ -29,7 +29,7 @@ class PrintResultForFile {
         }
         if (shouldPrint) {
           if (line.isAnUncoveredNewLine) {
-            outputBuilder.writeln(TextColor.colorize(" ⬤  : ${line.line}", TextColor.red));
+            outputBuilder.writeln(TextColor.colorize(" ${line.lineNumber} : ${line.line.replaceFirst("+", "⬤")}", TextColor.red));
           } else {
             outputBuilder.writeln(" ${line.lineNumber} : ${line.line}");
           }

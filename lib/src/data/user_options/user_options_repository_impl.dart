@@ -1,7 +1,7 @@
 import 'package:args/args.dart';
-import 'package:pull_request_coverage/domain/common/result.dart';
-import 'package:pull_request_coverage/domain/user_options/models/user_options.dart';
-import 'package:pull_request_coverage/domain/user_options/repositories/user_options_repository.dart';
+import 'package:pull_request_coverage/src/domain/common/result.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
 
 class UserOptionsRepositoryImpl implements UserOptionsRepository {
   static const defaultLcovFile = "coverage/lcov.info";
