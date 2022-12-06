@@ -1,3 +1,9 @@
+## 0.0.2+1
+
+- Fix wrong message when there is no new lines in the PR
+- Update readme
+- Making this package a binary only
+
 ## 0.0.2
 
 - Fix code diff showing missing coverage in wrong line
