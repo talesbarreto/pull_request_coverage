@@ -1,11 +1,12 @@
 import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
-import 'package:pull_request_coverage/src/domain/presentation/use_case/text_color.dart';
+import 'package:pull_request_coverage/src/domain/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 
 class PrintAnalysisResult {
   final void Function(String message) print;
+  final ColorizeText colorizeText;
 
-  const PrintAnalysisResult(this.print);
+  const PrintAnalysisResult(this.print, this.colorizeText);
 
   void call(AnalysisResult analysisResult, UserOptions userOptions) {
     if (analysisResult.totalOfNewLines == 0) {
@@ -22,14 +23,14 @@ class PrintAnalysisResult {
     outputBuilder.writeln("After ignoring excluded files, this pull request has:");
     outputBuilder.write("\t✪ ${analysisResult.totalOfNewLines} new lines, ");
     if (analysisResult.totalOfUncoveredNewLines == 0) {
-      outputBuilder.writeln(TextColor.colorize("ALL of them are covered by tests", TextColor.green));
+      outputBuilder.writeln(colorizeText("ALL of them are covered by tests", TextColor.green));
     } else {
-      outputBuilder.write(TextColor.colorize("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ", TextColor.yellow));
+      outputBuilder.write(colorizeText("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ", TextColor.yellow));
       if (minimumCoveredLines != null) {
         if (analysisResult.totalOfUncoveredNewLines > minimumCoveredLines) {
-          outputBuilder.write(TextColor.colorize("You need at least $minimumCoveredLines covered lines", TextColor.red));
+          outputBuilder.write(colorizeText("You need at least $minimumCoveredLines covered lines", TextColor.red));
         } else {
-          outputBuilder.write(TextColor.colorize("But....it's enough to pass the test 😉", TextColor.green));
+          outputBuilder.write(colorizeText("But....it's enough to pass the test 😉", TextColor.green));
         }
       }
       outputBuilder.writeln();
@@ -39,9 +40,9 @@ class PrintAnalysisResult {
 
     if (minimumCoverageRate != null) {
       if (analysisResult.coverageRate < (minimumCoverageRate / 100)) {
-        outputBuilder.write(TextColor.colorize("You need at least $minimumCoverageRate% of coverage", TextColor.red));
+        outputBuilder.write(colorizeText("You need at least $minimumCoverageRate% of coverage", TextColor.red));
       } else {
-        outputBuilder.write(TextColor.colorize("This is above the limit of $minimumCoverageRate%", TextColor.green));
+        outputBuilder.write(colorizeText("This is above the limit of $minimumCoverageRate%", TextColor.green));
       }
     } else {
       outputBuilder.writeln();

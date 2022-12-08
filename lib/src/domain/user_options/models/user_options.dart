@@ -4,14 +4,18 @@ class UserOptions {
   final String lcovFilePath;
   final double? minimumCoverageRate;
   final int? maximumUncoveredLines;
-  final bool hideUncoveredLines;
+  final bool showUncoveredCode;
+  final bool useColorfulFont;
+  final bool reportFullyCoveredFiles;
 
   const UserOptions({
     required this.excludePrefixPaths,
     required this.excludeSuffixPaths,
     required this.lcovFilePath,
-    required this.hideUncoveredLines,
+    required this.showUncoveredCode,
     this.minimumCoverageRate,
     this.maximumUncoveredLines,
+    this.useColorfulFont = true,
+    this.reportFullyCoveredFiles = true,
   });
 }

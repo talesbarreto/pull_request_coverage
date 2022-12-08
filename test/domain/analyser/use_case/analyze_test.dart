@@ -27,7 +27,6 @@ void main() {
       setUncoveredLines: _MockSetUncoveredLinesOnFileDiff(),
       getUncoveredFileLines: getUncoveredFileLines,
       printResultForFile: _MockPrintResultForFile(),
-      shouldPrintResultsForEachFile: false,
     );
 
     analyze();
@@ -56,7 +55,6 @@ void main() {
       setUncoveredLines: setUncoveredLines,
       getUncoveredFileLines: _MockGetUncoveredFileLines.dummy([1, 3]),
       printResultForFile: _MockPrintResultForFile(),
-      shouldPrintResultsForEachFile: false,
     );
 
     final analysisResult = analyze();

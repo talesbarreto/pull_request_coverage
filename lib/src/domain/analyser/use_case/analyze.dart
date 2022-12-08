@@ -16,7 +16,6 @@ class Analyze {
   final GetUncoveredFileLines getUncoveredFileLines;
   final PrintResultForFile printResultForFile;
   final List<String> lcovLines;
-  final bool shouldPrintResultsForEachFile;
 
   const Analyze({
     required this.convertFileDiffFromGitDiffToFileDiff,
@@ -26,7 +25,6 @@ class Analyze {
     required this.setUncoveredLines,
     required this.getUncoveredFileLines,
     required this.printResultForFile,
-    required this.shouldPrintResultsForEachFile,
   });
 
   Future<AnalysisResult> call() async {
@@ -46,9 +44,7 @@ class Analyze {
             return element.isAnUncoveredNewLine;
           }).length;
         }
-        if (shouldPrintResultsForEachFile) {
-          printResultForFile(fileDiff);
-        }
+        printResultForFile(fileDiff);
       }
     });
     return AnalysisResult(

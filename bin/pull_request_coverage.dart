@@ -11,6 +11,7 @@ import 'package:pull_request_coverage/src/domain/common/result.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/convert_file_diff_from_git_diff_to_file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
+import 'package:pull_request_coverage/src/domain/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/domain/presentation/use_case/print_analyze_result.dart';
 import 'package:pull_request_coverage/src/domain/presentation/use_case/print_result_for_file.dart';
 import 'package:pull_request_coverage/src/domain/stdin_reader/use_case/read_line_from_stdin.dart';
@@ -41,6 +42,7 @@ Future<List<String>> _getOrFailLcovLines(String filePath) {
 Future<void> main(List<String> arguments) async {
   final userOptions = _getOrFailUserOptions(arguments);
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath);
+  final useColorfulFont = ColorizeText(userOptions.useColorfulFont);
 
   final analyzeUseCase = Analyze(
     convertFileDiffFromGitDiffToFileDiff: ConvertFileDiffFromGitDiffToFileDiff(),
@@ -49,13 +51,17 @@ Future<void> main(List<String> arguments) async {
     shouldAnalyseThisFile: ShouldAnalyseThisFile(userOptions),
     setUncoveredLines: SetUncoveredLinesOnFileDiff(),
     getUncoveredFileLines: GetUncoveredFileLines(),
-    printResultForFile: PrintResultForFile(print),
-    shouldPrintResultsForEachFile: !userOptions.hideUncoveredLines,
+    printResultForFile: PrintResultForFile(
+      print: print,
+      colorizeText: useColorfulFont,
+      reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
+      showUncoveredLines: userOptions.showUncoveredCode,
+    ),
   );
 
   final result = await analyzeUseCase();
 
-  PrintAnalysisResult(print)(result, userOptions);
+  PrintAnalysisResult(print, useColorfulFont)(result, userOptions);
 
   exit(GetExitCode()(result, userOptions));
 }
