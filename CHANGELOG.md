@@ -1,6 +1,9 @@
+## 0.0.3+1
+- Update readme
+
 ## 0.0.3
 
-- "hide-uncovered-lines" param replaced by "show-uncovered-code", which is now a boolean
+- ⚠️ "hide-uncovered-lines" param replaced by "show-uncovered-code", which is now a boolean
 - new "use-colorful-font" param.
 - new "report-fully-covered-files" param.
 - removed emojis from the output

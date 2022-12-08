@@ -44,7 +44,7 @@ git diff repository/main | flutter pub run pull_request_coverage
 ```
 
 #### Output example:
-![Screenshot 2022-12-05 at 22 12 48](https://user-images.githubusercontent.com/7644323/205782547-e75af628-4e2b-4b6d-a1fd-625872998caf.png)
+<img width="1081" alt="Screenshot 2022-12-08 at 09 53 09" src="https://user-images.githubusercontent.com/7644323/206462841-cea856a4-6ddf-4531-91f5-ab356c315bcd.png">
 
 Uncovered lines are printed in red, starting with `⬤` symbol.
 
