@@ -1,4 +1,4 @@
-/// [isUncovered] is `false` when `FileLine` is created by `ConvertFileDiffFromGitDiffToFileDiff`
+/// [isUncovered] is `false` when `FileLine` is created by `ParseGitDiff`
 /// To coverage will be analysed by `Analyze` use case and this value will be updated there.
 ///
 /// [isANewLine] tells if this line was added in the current PR.

@@ -1,11 +1,11 @@
-import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/convert_file_diff_from_git_diff_to_file_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_hub_diff.dart';
 import 'package:test/test.dart';
 
 void main() {
 
   group("When file1 content is mapped", () {
     final fileLines = _file1Content.split("\n");
-    final useCase = ConvertFileDiffFromGitDiffToFileDiff();
+    final useCase = ParseGitDiff();
 
     final result = useCase(fileLines)!;
 
@@ -23,7 +23,7 @@ void main() {
   // bugfix
   group("When file2 content is mapped", () {
     final fileLines = _file2Content.split("\n");
-    final useCase = ConvertFileDiffFromGitDiffToFileDiff();
+    final useCase = ParseGitDiff();
 
     final result = useCase(fileLines)!;
 

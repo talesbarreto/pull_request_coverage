@@ -28,7 +28,7 @@ class PrintAnalysisResult {
       outputBuilder.write(colorizeText("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ", TextColor.yellow));
       if (minimumCoveredLines != null) {
         if (analysisResult.totalOfUncoveredNewLines > minimumCoveredLines) {
-          outputBuilder.write(colorizeText("You need at least $minimumCoveredLines covered lines", TextColor.red));
+          outputBuilder.write(colorizeText("You can only have up to $minimumCoveredLines uncovered lines", TextColor.red));
         } else {
           outputBuilder.write(colorizeText("But....it's enough to pass the test 😉", TextColor.green));
         }

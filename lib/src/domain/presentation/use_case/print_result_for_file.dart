@@ -22,7 +22,7 @@ class PrintResultForFile {
   void call(FileDiff fileDiff) {
     final outputBuilder = StringBuffer();
     if (fileDiff.hasUncoveredLines) {
-      outputBuilder.writeln("${colorizeText(fileDiff.path, TextColor.red)} has uncovered lines (${colorizeText("+${fileDiff.newLinesCount}", TextColor.green)})");
+      outputBuilder.writeln("${colorizeText(fileDiff.path, TextColor.red)} has ${fileDiff.uncoveredNewLinesCount} uncovered lines (${colorizeText("+${fileDiff.newLinesCount}", TextColor.green)})");
       if (showUncoveredLines) {
         for (int i = 0; i < fileDiff.lines.length; i++) {
           final line = fileDiff.lines[i];
@@ -38,7 +38,7 @@ class PrintResultForFile {
           }
           if (shouldPrint) {
             if (line.isAnUncoveredNewLine) {
-              outputBuilder.writeln(colorizeText(" ${line.lineNumber} : ${line.line.replaceFirst("+", "⬤")}", TextColor.red));
+              outputBuilder.writeln(colorizeText("[${line.lineNumber}]: ${line.line.replaceFirst("+", "→")}", TextColor.red));
             } else {
               outputBuilder.writeln(" ${line.lineNumber} : ${line.line}");
             }

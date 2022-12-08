@@ -8,8 +8,8 @@ import 'package:pull_request_coverage/src/domain/analyser/use_case/get_exit_code
 import 'package:pull_request_coverage/src/domain/analyser/use_case/set_uncoverd_lines_on_file_diff.dart';
 import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyse_this_file.dart';
 import 'package:pull_request_coverage/src/domain/common/result.dart';
-import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/convert_file_diff_from_git_diff_to_file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_hub_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
 import 'package:pull_request_coverage/src/domain/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/domain/presentation/use_case/print_analyze_result.dart';
@@ -42,10 +42,10 @@ Future<List<String>> _getOrFailLcovLines(String filePath) {
 Future<void> main(List<String> arguments) async {
   final userOptions = _getOrFailUserOptions(arguments);
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath);
-  final useColorfulFont = ColorizeText(userOptions.useColorfulFont);
+  final colorizeText = ColorizeText(userOptions.useColorfulFont);
 
   final analyzeUseCase = Analyze(
-    convertFileDiffFromGitDiffToFileDiff: ConvertFileDiffFromGitDiffToFileDiff(),
+    parseGitDiff: ParseGitDiff(),
     forEachFileOnGitDiff: ForEachFileOnGitDiff(ReadLineFromStdin().call),
     lcovLines: lcovLines,
     shouldAnalyseThisFile: ShouldAnalyseThisFile(userOptions),
@@ -53,7 +53,7 @@ Future<void> main(List<String> arguments) async {
     getUncoveredFileLines: GetUncoveredFileLines(),
     printResultForFile: PrintResultForFile(
       print: print,
-      colorizeText: useColorfulFont,
+      colorizeText: colorizeText,
       reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
       showUncoveredLines: userOptions.showUncoveredCode,
     ),
@@ -61,7 +61,7 @@ Future<void> main(List<String> arguments) async {
 
   final result = await analyzeUseCase();
 
-  PrintAnalysisResult(print, useColorfulFont)(result, userOptions);
+  PrintAnalysisResult(print, colorizeText)(result, userOptions);
 
   exit(GetExitCode()(result, userOptions));
 }

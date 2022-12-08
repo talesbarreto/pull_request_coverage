@@ -8,6 +8,7 @@ class FileDiff {
   bool get hasUncoveredLines => lines.any((line) => line.isAnUncoveredNewLine);
 
   int get newLinesCount => lines.where((line) => line.isANewLine).length;
+  int get uncoveredNewLinesCount => lines.where((line) => line.isAnUncoveredNewLine).length;
 
   const FileDiff({
     required this.path,

@@ -4,8 +4,8 @@ import 'package:pull_request_coverage/src/domain/analyser/use_case/set_uncoverd_
 import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyse_this_file.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_line.dart';
-import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/convert_file_diff_from_git_diff_to_file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_hub_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
 import 'package:pull_request_coverage/src/domain/presentation/use_case/print_result_for_file.dart';
 import 'package:test/test.dart';
@@ -18,7 +18,7 @@ void main() {
   test('do not analyse file if `shouldAnalyseThisFile` returns false', () {
     final getUncoveredFileLines = _MockGetUncoveredFileLines();
     final analyze = Analyze(
-      convertFileDiffFromGitDiffToFileDiff: _MockConvertFileDiffFromGitDiffToFileDiff(),
+      parseGitDiff: _MockParseGitHubDiff(),
       forEachFileOnGitDiff: _MockForEachFileOnGitDiff.dummy([
         ["aho"]
       ]),
@@ -46,7 +46,7 @@ void main() {
     final setUncoveredLines = _MockSetUncoveredLinesOnFileDiff();
 
     final analyze = Analyze(
-      convertFileDiffFromGitDiffToFileDiff: _MockConvertFileDiffFromGitDiffToFileDiff(
+      parseGitDiff: _MockParseGitHubDiff(
         answer: FileDiff(path: '/var/tmp/ha.dart', lines: linesOfEachFile),
       ),
       forEachFileOnGitDiff: _MockForEachFileOnGitDiff.dummy(List.generate(totalOfFilesOnDiff, (index) => ["file$index"])),
@@ -71,10 +71,10 @@ void main() {
   });
 }
 
-class _MockConvertFileDiffFromGitDiffToFileDiff extends Mock implements ConvertFileDiffFromGitDiffToFileDiff {
+class _MockParseGitHubDiff extends Mock implements ParseGitDiff {
   final FileDiff? answer;
 
-  _MockConvertFileDiffFromGitDiffToFileDiff({this.answer = const FileDiff(path: '/var/tmp/ha.dart', lines: [])});
+  _MockParseGitHubDiff({this.answer = const FileDiff(path: '/var/tmp/ha.dart', lines: [])});
 
   @override
   FileDiff? call(List<String> fileLines) => answer;
