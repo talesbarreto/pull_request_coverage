@@ -46,7 +46,7 @@ git diff repository/main | flutter pub run pull_request_coverage
 #### Output example:
 <img width="1081" alt="Screenshot 2022-12-08 at 09 53 09" src="https://user-images.githubusercontent.com/7644323/206462841-cea856a4-6ddf-4531-91f5-ab356c315bcd.png">
 
-Uncovered lines are printed in red, starting with `⬤` symbol.
+Uncovered lines are printed in red, starting with `→` symbol.
 
 Example with thresholds set and not showing uncovered lines:
 ```bash
