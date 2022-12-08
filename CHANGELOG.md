@@ -1,3 +1,11 @@
+## 0.0.3
+
+- "hide-uncovered-lines" param replaced by "show-uncovered-code", which is now a boolean
+- new "use-colorful-font" param.
+- new "report-fully-covered-files" param.
+- removed emojis from the output
+
+
 ## 0.0.2+1
 
 - Fix wrong message when there is no new lines in the PR
