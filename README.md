@@ -97,5 +97,5 @@ If this parameter is set to `false`, only the file path will be shown on the log
 ### --use-colorful-font
 - default : true
 
-pull_request_coverage uses a colorful font to highlight the uncovered lines. You can disable it by setting this parameter to `false`
+pull_request_coverage uses a colorful font to highlight uncovered lines. You can disable this by setting this parameter to `false`
 
