@@ -1,3 +1,7 @@
+## 0.0.3+2
+- Replaced ✪ from output by a -
+- Replace 😉 from output by a `=D`
+
 ## 0.0.3+1
 - Update readme
 

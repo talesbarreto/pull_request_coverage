@@ -21,7 +21,7 @@ class PrintAnalysisResult {
 
     outputBuilder.writeln("------------------------------------");
     outputBuilder.writeln("After ignoring excluded files, this pull request has:");
-    outputBuilder.write("\t✪ ${analysisResult.totalOfNewLines} new lines, ");
+    outputBuilder.write("\t- ${analysisResult.totalOfNewLines} new lines, ");
     if (analysisResult.totalOfUncoveredNewLines == 0) {
       outputBuilder.writeln(colorizeText("ALL of them are covered by tests", TextColor.green));
     } else {
@@ -30,13 +30,13 @@ class PrintAnalysisResult {
         if (analysisResult.totalOfUncoveredNewLines > minimumCoveredLines) {
           outputBuilder.write(colorizeText("You can only have up to $minimumCoveredLines uncovered lines", TextColor.red));
         } else {
-          outputBuilder.write(colorizeText("But....it's enough to pass the test 😉", TextColor.green));
+          outputBuilder.write(colorizeText("But....it's enough to pass the test =D", TextColor.green));
         }
       }
       outputBuilder.writeln();
     }
 
-    outputBuilder.write("\t✪ ${analysisResult.coverageRate * 100}% of coverage. ");
+    outputBuilder.write("\t- ${analysisResult.coverageRate * 100}% of coverage. ");
 
     if (minimumCoverageRate != null) {
       if (analysisResult.coverageRate < (minimumCoverageRate / 100)) {
