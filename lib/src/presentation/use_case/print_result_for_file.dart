@@ -1,54 +1,45 @@
 import 'dart:math';
 
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 
 class PrintResultForFile {
   /// print [printCodeWindow] line of codes before and after the uncovered line
   static const printCodeWindow = 3;
 
+  final OutputGenerator outputGenerator;
   final void Function(String message) print;
-  final ColorizeText colorizeText;
-  final bool reportFullyCoveredFiles;
-  final bool showUncoveredLines;
 
   const PrintResultForFile({
     required this.print,
-    required this.colorizeText,
-    required this.reportFullyCoveredFiles,
-    required this.showUncoveredLines,
+    required this.outputGenerator,
   });
 
   void call(FileDiff fileDiff) {
     final outputBuilder = StringBuffer();
+    void write(String? message) => message != null ? outputBuilder.write(message) : null;
+
+    write(outputGenerator.getFileHeader(fileDiff.path, fileDiff.uncoveredNewLinesCount, fileDiff.newLinesCount));
+
     if (fileDiff.hasUncoveredLines) {
-      outputBuilder.writeln("${colorizeText(fileDiff.path, TextColor.red)} has ${fileDiff.uncoveredNewLinesCount} uncovered lines (${colorizeText("+${fileDiff.newLinesCount}", TextColor.green)})");
-      if (showUncoveredLines) {
-        for (int i = 0; i < fileDiff.lines.length; i++) {
-          final line = fileDiff.lines[i];
-          var shouldPrint = line.isAnUncoveredNewLine;
-          if (!shouldPrint) {
-            // printing [printCodeWindow] codes after and before the uncovered line
-            for (int j = max(i - printCodeWindow, 0); j < fileDiff.lines.length && j < printCodeWindow + i + 1; j++) {
-              if (fileDiff.lines[j].isAnUncoveredNewLine) {
-                shouldPrint = true;
-                break;
-              }
-            }
-          }
-          if (shouldPrint) {
-            if (line.isAnUncoveredNewLine) {
-              outputBuilder.writeln(colorizeText("[${line.lineNumber}]: ${line.line.replaceFirst("+", "→")}", TextColor.red));
-            } else {
-              outputBuilder.writeln(" ${line.lineNumber} : ${line.line}");
+      write(outputGenerator.getSourceCodeHeader());
+      for (int i = 0; i < fileDiff.lines.length; i++) {
+        final line = fileDiff.lines[i];
+        var shouldPrint = line.isAnUncoveredNewLine;
+        if (!shouldPrint) {
+          // printing [printCodeWindow] codes after and before the uncovered line
+          for (int j = max(i - printCodeWindow, 0); j < fileDiff.lines.length && j < printCodeWindow + i + 1; j++) {
+            if (fileDiff.lines[j].isAnUncoveredNewLine) {
+              shouldPrint = true;
+              break;
             }
           }
         }
+        if (shouldPrint) {
+          write(outputGenerator.getLine(line.line, line.lineNumber, line.isANewLine, line.isUncovered));
+        }
       }
-    } else {
-      if (reportFullyCoveredFiles) {
-        outputBuilder.write("${fileDiff.path} is fully covered (${colorizeText("+${fileDiff.newLinesCount}", TextColor.green)})");
-      }
+      write(outputGenerator.getSourceCodeFooter());
     }
     if (outputBuilder.isNotEmpty) {
       print(outputBuilder.toString());

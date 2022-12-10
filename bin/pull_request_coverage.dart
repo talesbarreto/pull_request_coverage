@@ -11,6 +11,7 @@ import 'package:pull_request_coverage/src/domain/common/result.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_hub_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_analyze_result.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
@@ -53,9 +54,11 @@ Future<void> main(List<String> arguments) async {
     getUncoveredFileLines: GetUncoveredFileLines(),
     printResultForFile: PrintResultForFile(
       print: print,
-      colorizeText: colorizeText,
-      reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
-      showUncoveredLines: userOptions.showUncoveredCode,
+      outputGenerator: CliOutputGenerator(
+        colorizeText: colorizeText,
+        reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
+        showUncoveredLines: userOptions.showUncoveredCode,
+      ),
     ),
   );
 

@@ -10,7 +10,7 @@ class PrintAnalysisResult {
 
   void call(AnalysisResult analysisResult, UserOptions userOptions) {
     if (analysisResult.totalOfNewLines == 0) {
-      print("This pull request has no new lines 🤔");
+      print("This pull request has no new lines");
       return;
     }
 
