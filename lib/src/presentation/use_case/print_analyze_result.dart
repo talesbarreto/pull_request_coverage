@@ -1,5 +1,5 @@
 import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
-import 'package:pull_request_coverage/src/domain/presentation/use_case/colorize_text.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 
 class PrintAnalysisResult {

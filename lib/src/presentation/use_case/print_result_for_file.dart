@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
-import 'package:pull_request_coverage/src/domain/presentation/use_case/colorize_text.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 
 class PrintResultForFile {
   /// print [printCodeWindow] line of codes before and after the uncovered line

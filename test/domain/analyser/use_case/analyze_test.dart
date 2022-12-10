@@ -7,7 +7,7 @@ import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_hub_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
-import 'package:pull_request_coverage/src/domain/presentation/use_case/print_result_for_file.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
 import 'package:test/test.dart';
 
 void main() {
