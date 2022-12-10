@@ -19,6 +19,11 @@ class MarkdownOutputGenerator implements OutputGenerator {
   String? getSourceCodeFooter() => "```";
 
   @override
+  String? getSourceCodeBlocDivider() {
+    return "```\n${getSourceCodeHeader()}";
+  }
+
+  @override
   String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount) {
     if (uncoveredLinesCount == 0) {
       if (reportFullyCoveredFiles) {
@@ -65,7 +70,9 @@ class MarkdownOutputGenerator implements OutputGenerator {
       outputBuilder.write("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ");
       if (maximumUncoveredLines != null) {
         if (analysisResult.totalOfUncoveredNewLines > maximumUncoveredLines) {
-          outputBuilder.write("${boldSurrounding}You can only have up to $maximumUncoveredLines uncovered lines$boldSurrounding",);
+          outputBuilder.write(
+            "${boldSurrounding}You can only have up to $maximumUncoveredLines uncovered lines$boldSurrounding",
+          );
         } else {
           outputBuilder.write("But....it's enough to pass the test =D");
         }

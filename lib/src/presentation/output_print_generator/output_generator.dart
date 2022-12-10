@@ -7,6 +7,9 @@ abstract class OutputGenerator {
 
   String? getLine(String line, int lineNumber, bool isANewLine, bool isCovered);
 
+  /// [getSourceCodeBlocDivider] is used to separate the source code blocs in the same file
+  String? getSourceCodeBlocDivider();
+
   String? getSourceCodeFooter();
 
   String? getResume(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines);

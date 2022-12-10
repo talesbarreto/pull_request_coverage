@@ -20,6 +20,9 @@ class CliOutputGenerator implements OutputGenerator {
   String? getSourceCodeFooter() => null;
 
   @override
+  String? getSourceCodeBlocDivider() => "......\n";
+
+  @override
   String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount) {
     if (uncoveredLinesCount == 0) {
       if (reportFullyCoveredFiles) {

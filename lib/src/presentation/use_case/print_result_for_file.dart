@@ -20,6 +20,7 @@ class PrintResultForFile {
     void write(String? message) => message != null ? outputBuilder.write(message) : null;
 
     write(outputGenerator.getFileHeader(fileDiff.path, fileDiff.uncoveredNewLinesCount, fileDiff.newLinesCount));
+    int? lastPrintedLineNumber;
 
     if (fileDiff.hasUncoveredLines) {
       write(outputGenerator.getSourceCodeHeader());
@@ -36,6 +37,10 @@ class PrintResultForFile {
           }
         }
         if (shouldPrint) {
+          if (lastPrintedLineNumber != null && lastPrintedLineNumber + 1 != line.lineNumber) {
+            write(outputGenerator.getSourceCodeBlocDivider());
+          }
+          lastPrintedLineNumber = line.lineNumber;
           write(outputGenerator.getLine(line.line, line.lineNumber, line.isANewLine, line.isUncovered));
         }
       }
