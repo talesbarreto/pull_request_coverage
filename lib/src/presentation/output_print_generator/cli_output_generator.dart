@@ -5,12 +5,10 @@ import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_tex
 class CliOutputGenerator implements OutputGenerator {
   final ColorizeCliText colorizeText;
   final bool reportFullyCoveredFiles;
-  final bool showUncoveredLines;
 
   const CliOutputGenerator({
     required this.colorizeText,
     required this.reportFullyCoveredFiles,
-    required this.showUncoveredLines,
   });
 
   @override

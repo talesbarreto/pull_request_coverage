@@ -6,6 +6,7 @@ import 'package:pull_request_coverage/src/presentation/output_print_generator/ou
 class PrintResultForFile {
   /// print [printCodeWindow] line of codes before and after the uncovered line
   static const printCodeWindow = 3;
+  final bool showUncoveredLines;
 
   final OutputGenerator outputGenerator;
   final void Function(String message) print;
@@ -13,6 +14,7 @@ class PrintResultForFile {
   const PrintResultForFile({
     required this.print,
     required this.outputGenerator,
+    required this.showUncoveredLines,
   });
 
   void call(FileDiff fileDiff) {
@@ -22,7 +24,7 @@ class PrintResultForFile {
     write(outputGenerator.getFileHeader(fileDiff.path, fileDiff.uncoveredNewLinesCount, fileDiff.newLinesCount));
     int? lastPrintedLineNumber;
 
-    if (fileDiff.hasUncoveredLines) {
+    if (fileDiff.hasUncoveredLines && showUncoveredLines) {
       write(outputGenerator.getSourceCodeHeader());
       for (int i = 0; i < fileDiff.lines.length; i++) {
         final line = fileDiff.lines[i];

@@ -48,12 +48,10 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
     case OutputMode.cli:
       return CliOutputGenerator(
         colorizeText: colorizeText,
-        showUncoveredLines: userOptions.showUncoveredCode,
         reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
       );
     case OutputMode.markdown:
       return MarkdownOutputGenerator(
-        showUncoveredLines: userOptions.showUncoveredCode,
         reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
         useColorfulOutput: userOptions.useColorfulOutput,
       );
@@ -76,6 +74,7 @@ Future<void> main(List<String> arguments) async {
     printResultForFile: PrintResultForFile(
       print: print,
       outputGenerator: outputGenerator,
+      showUncoveredLines: userOptions.showUncoveredCode,
     ),
   );
 

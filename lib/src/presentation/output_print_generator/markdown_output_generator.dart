@@ -3,12 +3,10 @@ import 'package:pull_request_coverage/src/presentation/output_print_generator/ou
 
 class MarkdownOutputGenerator implements OutputGenerator {
   final bool reportFullyCoveredFiles;
-  final bool showUncoveredLines;
   final bool useColorfulOutput;
 
   const MarkdownOutputGenerator({
     required this.reportFullyCoveredFiles,
-    required this.showUncoveredLines,
     required this.useColorfulOutput,
   });
 
