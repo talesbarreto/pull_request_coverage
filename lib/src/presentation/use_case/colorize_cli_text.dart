@@ -1,10 +1,10 @@
-class ColorizeText {
-  final bool useColorfulFont;
+class ColorizeCliText {
+  final bool useColorfulOutput;
 
-  const ColorizeText(this.useColorfulFont);
+  const ColorizeCliText(this.useColorfulOutput);
 
   String call(String text, TextColor color) {
-    if (useColorfulFont) {
+    if (useColorfulOutput) {
       return "${color.colorCode}$text${TextColor.noColor.colorCode}";
     } else {
       return text;

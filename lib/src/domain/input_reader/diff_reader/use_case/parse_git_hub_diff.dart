@@ -1,5 +1,6 @@
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_line.dart';
+import 'package:pull_request_coverage/src/extensions/string.dart';
 
 /// Parses a segment of the git diff, that represents one single file on this diff, and returns a [FileDiff] object.
 class ParseGitDiff {
@@ -27,7 +28,7 @@ class ParseGitDiff {
         lineNumber++;
         lines.add(
           FileLine(
-            line: line,
+            line: line.removePrefix("+"),
             lineNumber: lineNumber,
             isANewLine: line.startsWith("+"),
           ),

@@ -1,10 +1,10 @@
 import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 
 class PrintAnalysisResult {
   final void Function(String message) print;
-  final ColorizeText colorizeText;
+  final ColorizeCliText colorizeText;
 
   const PrintAnalysisResult(this.print, this.colorizeText);
 

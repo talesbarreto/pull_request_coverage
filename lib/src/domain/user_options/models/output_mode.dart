@@ -1,0 +1,4 @@
+enum OutputMode {
+  cli,
+  markdown,
+}

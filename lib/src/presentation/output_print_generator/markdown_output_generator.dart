@@ -1,41 +1,48 @@
 import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 
-class CliOutputGenerator implements OutputGenerator {
-  final ColorizeCliText colorizeText;
+class MarkdownOutputGenerator implements OutputGenerator {
   final bool reportFullyCoveredFiles;
   final bool showUncoveredLines;
+  final bool useColorfulOutput;
 
-  const CliOutputGenerator({
-    required this.colorizeText,
+  const MarkdownOutputGenerator({
     required this.reportFullyCoveredFiles,
     required this.showUncoveredLines,
+    required this.useColorfulOutput,
   });
 
   @override
-  String? getSourceCodeHeader() => null;
+  String? getSourceCodeHeader() => useColorfulOutput ? "```diff\n" : "```dart\n";
 
   @override
-  String? getSourceCodeFooter() => null;
+  String? getSourceCodeFooter() => "```";
 
   @override
   String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount) {
     if (uncoveredLinesCount == 0) {
       if (reportFullyCoveredFiles) {
-        return "$filePath is fully covered (${colorizeText("+$totalNewLinesCount", TextColor.green)})\n";
+        return " - `$filePath` is fully covered (${"+$totalNewLinesCount"})\n";
       }
       return null;
     }
-    return "${colorizeText(filePath, TextColor.red)} has $uncoveredLinesCount uncovered lines (${colorizeText("+$totalNewLinesCount", TextColor.green)})\n";
+    return " - `$filePath` has $uncoveredLinesCount uncovered lines (${"+$totalNewLinesCount"})\n";
   }
 
   @override
   String? getLine(String line, int lineNumber, bool isANewLine, bool isUncovered) {
     if (isANewLine && isUncovered) {
-      return "${colorizeText("[$lineNumber]: ${line.replaceFirst("+", "→")}", TextColor.red)}\n";
+      if (useColorfulOutput) {
+        return "${"- $lineNumber: $line"}\n";
+      } else {
+        return "$line\t// <- MISSING TEST AT LINE $lineNumber\n";
+      }
     } else {
-      return " $lineNumber : $line\n";
+      if (useColorfulOutput) {
+        return "  $lineNumber: $line\n";
+      } else {
+        return "$line\n";
+      }
     }
   }
 
@@ -45,32 +52,34 @@ class CliOutputGenerator implements OutputGenerator {
       return "This pull request has no new lines";
     }
 
+    final boldSurrounding = useColorfulOutput ? "**" : "";
+
     final outputBuilder = StringBuffer();
 
     outputBuilder.writeln("------------------------------------");
     outputBuilder.writeln("After ignoring excluded files, this pull request has:");
-    outputBuilder.write("\t- ${analysisResult.totalOfNewLines} new lines, ");
+    outputBuilder.write(" - ${analysisResult.totalOfNewLines} new lines, ");
     if (analysisResult.totalOfUncoveredNewLines == 0) {
-      outputBuilder.writeln(colorizeText("ALL of them are covered by tests", TextColor.green));
+      outputBuilder.writeln("ALL of them are covered by tests");
     } else {
-      outputBuilder.write(colorizeText("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ", TextColor.yellow));
+      outputBuilder.write("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ");
       if (maximumUncoveredLines != null) {
         if (analysisResult.totalOfUncoveredNewLines > maximumUncoveredLines) {
-          outputBuilder.write(colorizeText("You can only have up to $maximumUncoveredLines uncovered lines", TextColor.red));
+          outputBuilder.write("${boldSurrounding}You can only have up to $maximumUncoveredLines uncovered lines$boldSurrounding",);
         } else {
-          outputBuilder.write(colorizeText("But....it's enough to pass the test =D", TextColor.green));
+          outputBuilder.write("But....it's enough to pass the test =D");
         }
       }
       outputBuilder.writeln();
     }
 
-    outputBuilder.write("\t- ${analysisResult.coverageRate * 100}% of coverage. ");
+    outputBuilder.write(" - ${analysisResult.coverageRate * 100}% of coverage. ");
 
     if (minimumCoverageRate != null) {
       if (analysisResult.coverageRate < (minimumCoverageRate / 100)) {
-        outputBuilder.write(colorizeText("You need at least $minimumCoverageRate% of coverage", TextColor.red));
+        outputBuilder.write("${boldSurrounding}You need at least $minimumCoverageRate% of coverage$boldSurrounding");
       } else {
-        outputBuilder.write(colorizeText("This is above the limit of $minimumCoverageRate%", TextColor.green));
+        outputBuilder.write("This is above the limit of $minimumCoverageRate%");
       }
     } else {
       outputBuilder.writeln();

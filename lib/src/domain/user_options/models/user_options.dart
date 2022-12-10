@@ -1,3 +1,5 @@
+import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
+
 class UserOptions {
   final List<String> excludePrefixPaths;
   final List<String> excludeSuffixPaths;
@@ -5,17 +7,19 @@ class UserOptions {
   final double? minimumCoverageRate;
   final int? maximumUncoveredLines;
   final bool showUncoveredCode;
-  final bool useColorfulFont;
+  final bool useColorfulOutput;
   final bool reportFullyCoveredFiles;
+  final OutputMode outputMode;
 
   const UserOptions({
     required this.excludePrefixPaths,
     required this.excludeSuffixPaths,
     required this.lcovFilePath,
     required this.showUncoveredCode,
+    required this.outputMode,
     this.minimumCoverageRate,
     this.maximumUncoveredLines,
-    this.useColorfulFont = true,
+    this.useColorfulOutput = true,
     this.reportFullyCoveredFiles = true,
   });
 }

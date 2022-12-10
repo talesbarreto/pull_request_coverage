@@ -1,8 +1,15 @@
+## 0.0.4
+
+- ⚠️ "use-colorful-font" replaced by "use-colorful-output", since it depends on the output type now
+- New markdown output type
+
 ## 0.0.3+2
+
 - Replaced ✪ from output by a -
 - Replace 😉 from output by a `=D`
 
 ## 0.0.3+1
+
 - Update readme
 
 ## 0.0.3
@@ -11,7 +18,6 @@
 - new "use-colorful-font" param.
 - new "report-fully-covered-files" param.
 - removed emojis from the output
-
 
 ## 0.0.2+1
 

@@ -1,5 +1,6 @@
 import 'package:args/args.dart';
 import 'package:pull_request_coverage/src/domain/common/result.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
 
@@ -43,7 +44,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
       help: "If there is more than this number of uncovered lines, the test will fail",
     );
     argParser.addOption(
-      "use-colorful-font",
+      "use-colorful-output",
       defaultsTo: "true",
     );
     argParser.addOption(
@@ -53,6 +54,11 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
     argParser.addOption(
       "report-fully-covered-files",
       defaultsTo: "true",
+    );
+    argParser.addOption(
+      "output-mode",
+      defaultsTo: "cli",
+      allowed: ["cli", "markdown"],
     );
   }
 
@@ -70,8 +76,9 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
           minimumCoverageRate: result["minimum-coverage"] != null ? double.tryParse(result["minimum-coverage"]) : null,
           maximumUncoveredLines: result["maximum-uncovered-lines"] != null ? int.tryParse(result["maximum-uncovered-lines"]) : null,
           showUncoveredCode: result["show-uncovered-code"] == "true",
-          useColorfulFont: result["use-colorful-font"] == "true",
+          useColorfulOutput: result["use-colorful-output"] == "true",
           reportFullyCoveredFiles: result["report-fully-covered-files"] == "true",
+          outputMode: result["output-mode"] == "markdown" ? OutputMode.markdown : OutputMode.cli,
         ),
       );
     } catch (e) {

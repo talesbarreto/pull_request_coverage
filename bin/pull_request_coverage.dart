@@ -11,8 +11,11 @@ import 'package:pull_request_coverage/src/domain/common/result.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_hub_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_output_generator.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/markdown_output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_analyze_result.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
 import 'package:pull_request_coverage/src/domain/stdin_reader/use_case/read_line_from_stdin.dart';
@@ -40,10 +43,28 @@ Future<List<String>> _getOrFailLcovLines(String filePath) {
   }
 }
 
+OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText colorizeText) {
+  switch (userOptions.outputMode) {
+    case OutputMode.cli:
+      return CliOutputGenerator(
+        colorizeText: colorizeText,
+        showUncoveredLines: userOptions.showUncoveredCode,
+        reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
+      );
+    case OutputMode.markdown:
+      return MarkdownOutputGenerator(
+        showUncoveredLines: userOptions.showUncoveredCode,
+        reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
+        useColorfulOutput: userOptions.useColorfulOutput,
+      );
+  }
+}
+
 Future<void> main(List<String> arguments) async {
   final userOptions = _getOrFailUserOptions(arguments);
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath);
-  final colorizeText = ColorizeText(userOptions.useColorfulFont);
+  final colorizeText = ColorizeCliText(userOptions.useColorfulOutput);
+  final outputGenerator = _getOutputGenerator(userOptions, colorizeText);
 
   final analyzeUseCase = Analyze(
     parseGitDiff: ParseGitDiff(),
@@ -54,17 +75,13 @@ Future<void> main(List<String> arguments) async {
     getUncoveredFileLines: GetUncoveredFileLines(),
     printResultForFile: PrintResultForFile(
       print: print,
-      outputGenerator: CliOutputGenerator(
-        colorizeText: colorizeText,
-        reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
-        showUncoveredLines: userOptions.showUncoveredCode,
-      ),
+      outputGenerator: outputGenerator,
     ),
   );
 
   final result = await analyzeUseCase();
 
-  PrintAnalysisResult(print, colorizeText)(result, userOptions);
+  print(outputGenerator.getResume(result, userOptions.minimumCoverageRate, userOptions.maximumUncoveredLines));
 
   exit(GetExitCode()(result, userOptions));
 }
