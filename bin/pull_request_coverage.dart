@@ -16,7 +16,6 @@ import 'package:pull_request_coverage/src/presentation/output_print_generator/cl
 import 'package:pull_request_coverage/src/presentation/output_print_generator/markdown_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/print_analyze_result.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
 import 'package:pull_request_coverage/src/domain/stdin_reader/use_case/read_line_from_stdin.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
