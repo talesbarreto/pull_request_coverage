@@ -4,10 +4,12 @@ import 'package:pull_request_coverage/src/presentation/output_print_generator/ou
 class MarkdownOutputGenerator implements OutputGenerator {
   final bool reportFullyCoveredFiles;
   final bool useColorfulOutput;
+  final int fractionalDigits;
 
   const MarkdownOutputGenerator({
     required this.reportFullyCoveredFiles,
     required this.useColorfulOutput,
+    required this.fractionalDigits,
   });
 
   @override
@@ -78,7 +80,7 @@ class MarkdownOutputGenerator implements OutputGenerator {
       outputBuilder.writeln();
     }
 
-    outputBuilder.write(" - ${analysisResult.coverageRate * 100}% of coverage. ");
+    outputBuilder.write(" - ${(analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits)}% of coverage. ");
 
     if (minimumCoverageRate != null) {
       if (analysisResult.coverageRate < (minimumCoverageRate / 100)) {

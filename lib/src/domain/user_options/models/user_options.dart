@@ -10,13 +10,16 @@ class UserOptions {
   final bool useColorfulOutput;
   final bool reportFullyCoveredFiles;
   final OutputMode outputMode;
+  final int fractionalDigits;
 
+  /// [fractionalDigits] how many digits after the decimal point to show on coverage rate
   const UserOptions({
     required this.excludePrefixPaths,
     required this.excludeSuffixPaths,
     required this.lcovFilePath,
     required this.showUncoveredCode,
     required this.outputMode,
+    required this.fractionalDigits,
     this.minimumCoverageRate,
     this.maximumUncoveredLines,
     this.useColorfulOutput = true,

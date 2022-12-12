@@ -5,10 +5,12 @@ import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_tex
 class CliOutputGenerator implements OutputGenerator {
   final ColorizeCliText colorizeText;
   final bool reportFullyCoveredFiles;
+  final int fractionalDigits;
 
   const CliOutputGenerator({
     required this.colorizeText,
     required this.reportFullyCoveredFiles,
+    required this.fractionalDigits,
   });
 
   @override
@@ -65,7 +67,7 @@ class CliOutputGenerator implements OutputGenerator {
       outputBuilder.writeln();
     }
 
-    outputBuilder.write("\t- ${analysisResult.coverageRate * 100}% of coverage. ");
+    outputBuilder.write("\t- ${(analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits)}% of coverage. ");
 
     if (minimumCoverageRate != null) {
       if (analysisResult.coverageRate < (minimumCoverageRate / 100)) {

@@ -60,6 +60,10 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
       defaultsTo: "cli",
       allowed: ["cli", "markdown"],
     );
+    argParser.addOption(
+      "fraction-digits",
+      defaultsTo: "2",
+    );
   }
 
   @override
@@ -79,6 +83,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
           useColorfulOutput: result["use-colorful-output"] == "true",
           reportFullyCoveredFiles: result["report-fully-covered-files"] == "true",
           outputMode: result["output-mode"] == "markdown" ? OutputMode.markdown : OutputMode.cli,
+          fractionalDigits: int.tryParse(result["fraction-digits"]) ?? 2,
         ),
       );
     } catch (e) {

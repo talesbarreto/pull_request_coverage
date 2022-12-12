@@ -1,7 +1,11 @@
+## 0.0.5
+- new `fraction-digits` param
+
 ## 0.0.4
 
 - ⚠️ "use-colorful-font" replaced by "use-colorful-output", since it depends on the output type now
 - New markdown output type
+
 
 ## 0.0.3+2
 

@@ -48,11 +48,13 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
       return CliOutputGenerator(
         colorizeText: colorizeText,
         reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
+        fractionalDigits: userOptions.fractionalDigits,
       );
     case OutputMode.markdown:
       return MarkdownOutputGenerator(
         reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
         useColorfulOutput: userOptions.useColorfulOutput,
+        fractionalDigits: userOptions.fractionalDigits,
       );
   }
 }
