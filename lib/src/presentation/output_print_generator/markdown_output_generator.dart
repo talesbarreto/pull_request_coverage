@@ -27,7 +27,7 @@ class MarkdownOutputGenerator implements OutputGenerator {
   String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount) {
     if (uncoveredLinesCount == 0) {
       if (reportFullyCoveredFiles) {
-        return " - `$filePath` is fully covered (${"+$totalNewLinesCount"})\n";
+        return " - `$filePath` is fully covered (${"+$totalNewLinesCount"})";
       }
       return null;
     }

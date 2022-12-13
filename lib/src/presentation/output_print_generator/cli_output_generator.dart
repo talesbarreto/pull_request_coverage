@@ -26,7 +26,7 @@ class CliOutputGenerator implements OutputGenerator {
   String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount) {
     if (uncoveredLinesCount == 0) {
       if (reportFullyCoveredFiles) {
-        return "$filePath is fully covered (${colorizeText("+$totalNewLinesCount", TextColor.green)})\n";
+        return "$filePath is fully covered (${colorizeText("+$totalNewLinesCount", TextColor.green)})";
       }
       return null;
     }
