@@ -1,19 +1,20 @@
 import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 
 class MarkdownOutputGenerator implements OutputGenerator {
   final bool reportFullyCoveredFiles;
-  final bool useColorfulOutput;
+  final MarkdownMode markdownMode;
   final int fractionalDigits;
 
   const MarkdownOutputGenerator({
     required this.reportFullyCoveredFiles,
-    required this.useColorfulOutput,
+    required this.markdownMode,
     required this.fractionalDigits,
   });
 
   @override
-  String? getSourceCodeHeader() => useColorfulOutput ? "```diff\n" : "```dart\n";
+  String? getSourceCodeHeader() => markdownMode == MarkdownMode.diff ? "```diff\n" : "```dart\n";
 
   @override
   String? getSourceCodeFooter() => "```";
@@ -37,13 +38,13 @@ class MarkdownOutputGenerator implements OutputGenerator {
   @override
   String? getLine(String line, int lineNumber, bool isANewLine, bool isUncovered) {
     if (isANewLine && isUncovered) {
-      if (useColorfulOutput) {
+      if (markdownMode == MarkdownMode.diff) {
         return "${"- $lineNumber: $line"}\n";
       } else {
         return "$line\t// <- MISSING TEST AT LINE $lineNumber\n";
       }
     } else {
-      if (useColorfulOutput) {
+      if (markdownMode == MarkdownMode.diff) {
         return "  $lineNumber: $line\n";
       } else {
         return "$line\n";
@@ -57,7 +58,7 @@ class MarkdownOutputGenerator implements OutputGenerator {
       return "This pull request has no new lines";
     }
 
-    final boldSurrounding = useColorfulOutput ? "**" : "";
+    const boldSurrounding = "**";
 
     final outputBuilder = StringBuffer();
 

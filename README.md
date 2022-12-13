@@ -96,6 +96,10 @@ Check example out to see how this params can change the output
     - cli: The output format intent to be read on a terminal
     - markdown: The output formatted using markdown syntax. This is useful to be used on a pull request comment, posted by a bot, for example.
 
+- **markdown-mode** (`diff`): The markdown output format (see example)
+    - diff: Use diff syntax to highlight the uncovered lines
+    - dart: use the dart syntax to show codes, adding a comment at the and of uncovered lines
+
 - **report-fully-covered-files** (`true`): The file path of each fully covered file will be printed, as a celebrating message =)
 
 - **show-uncovered-code** (`true`): The source code of the uncovered lines will be printed, with a red font color, to make it easier to identify the missing tests.

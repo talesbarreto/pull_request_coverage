@@ -1,5 +1,6 @@
 ## 0.0.5
 - new `fraction-digits` param
+- new `markdown-mode` param
 
 ## 0.0.4
 

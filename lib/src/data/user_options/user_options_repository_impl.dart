@@ -1,5 +1,6 @@
 import 'package:args/args.dart';
 import 'package:pull_request_coverage/src/domain/common/result.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
@@ -61,6 +62,11 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
       allowed: ["cli", "markdown"],
     );
     argParser.addOption(
+      "markdown-mode",
+      defaultsTo: "cli",
+      allowed: ["diff", "dart"],
+    );
+    argParser.addOption(
       "fraction-digits",
       defaultsTo: "2",
     );
@@ -84,6 +90,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
           reportFullyCoveredFiles: result["report-fully-covered-files"] == "true",
           outputMode: result["output-mode"] == "markdown" ? OutputMode.markdown : OutputMode.cli,
           fractionalDigits: int.tryParse(result["fraction-digits"]) ?? 2,
+          markdownMode: result["markdown-mode"] == "dart" ? MarkdownMode.dart : MarkdownMode.diff,
         ),
       );
     } catch (e) {

@@ -1,3 +1,4 @@
+import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 
 class UserOptions {
@@ -10,6 +11,7 @@ class UserOptions {
   final bool useColorfulOutput;
   final bool reportFullyCoveredFiles;
   final OutputMode outputMode;
+  final MarkdownMode markdownMode;
   final int fractionalDigits;
 
   /// [fractionalDigits] how many digits after the decimal point to show on coverage rate
@@ -20,6 +22,7 @@ class UserOptions {
     required this.showUncoveredCode,
     required this.outputMode,
     required this.fractionalDigits,
+    required this.markdownMode,
     this.minimumCoverageRate,
     this.maximumUncoveredLines,
     this.useColorfulOutput = true,

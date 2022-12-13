@@ -53,7 +53,7 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
     case OutputMode.markdown:
       return MarkdownOutputGenerator(
         reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
-        useColorfulOutput: userOptions.useColorfulOutput,
+        markdownMode: userOptions.markdownMode,
         fractionalDigits: userOptions.fractionalDigits,
       );
   }
