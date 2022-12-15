@@ -45,23 +45,21 @@ class CliOutputGenerator implements OutputGenerator {
   @override
   String? getResume(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
     if (analysisResult.totalOfNewLines == 0) {
-      return "This pull request has no new lines";
+      return "This pull request has no new lines under `/lib`";
     }
 
     final outputBuilder = StringBuffer();
 
     outputBuilder.writeln("------------------------------------");
     outputBuilder.writeln("After ignoring excluded files, this pull request has:");
-    outputBuilder.write("\t- ${analysisResult.totalOfNewLines} new lines, ");
+    outputBuilder.write("\t- ${analysisResult.totalOfNewLines} new lines under `/lib`, ");
     if (analysisResult.totalOfUncoveredNewLines == 0) {
       outputBuilder.writeln(colorizeText("ALL of them are covered by tests", TextColor.green));
     } else {
       outputBuilder.write(colorizeText("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ", TextColor.yellow));
       if (maximumUncoveredLines != null) {
         if (analysisResult.totalOfUncoveredNewLines > maximumUncoveredLines) {
-          outputBuilder.write(colorizeText("You can only have up to $maximumUncoveredLines uncovered lines", TextColor.red));
-        } else {
-          outputBuilder.write(colorizeText("But....it's enough to pass the test =D", TextColor.green));
+          outputBuilder.write(colorizeText("You can have at most $maximumUncoveredLines uncovered lines", TextColor.red));
         }
       }
       outputBuilder.writeln();

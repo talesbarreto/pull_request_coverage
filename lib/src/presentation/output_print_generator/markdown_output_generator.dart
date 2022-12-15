@@ -55,7 +55,7 @@ class MarkdownOutputGenerator implements OutputGenerator {
   @override
   String? getResume(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
     if (analysisResult.totalOfNewLines == 0) {
-      return "This pull request has no new lines";
+      return "This pull request has no new lines under `/lib`";
     }
 
     const boldSurrounding = "**";
@@ -64,7 +64,7 @@ class MarkdownOutputGenerator implements OutputGenerator {
 
     outputBuilder.writeln("------------------------------------");
     outputBuilder.writeln("After ignoring excluded files, this pull request has:");
-    outputBuilder.write(" - ${analysisResult.totalOfNewLines} new lines, ");
+    outputBuilder.write(" - ${analysisResult.totalOfNewLines} new lines under `/lib`, ");
     if (analysisResult.totalOfUncoveredNewLines == 0) {
       outputBuilder.writeln("ALL of them are covered by tests");
     } else {
@@ -72,10 +72,8 @@ class MarkdownOutputGenerator implements OutputGenerator {
       if (maximumUncoveredLines != null) {
         if (analysisResult.totalOfUncoveredNewLines > maximumUncoveredLines) {
           outputBuilder.write(
-            "${boldSurrounding}You can only have up to $maximumUncoveredLines uncovered lines$boldSurrounding",
+            "${boldSurrounding}You can have at most $maximumUncoveredLines uncovered lines$boldSurrounding",
           );
-        } else {
-          outputBuilder.write("But....it's enough to pass the test =D");
         }
       }
       outputBuilder.writeln();
