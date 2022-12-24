@@ -1,0 +1,224 @@
+diff --git a/bin/pull_request_coverage.dart b/bin/pull_request_coverage.dart
+index cadf81e..5fc1f6d 100644
+--- a/bin/pull_request_coverage.dart
++++ b/bin/pull_request_coverage.dart
+@@ -81,7 +81,7 @@ Future<void> main(List<String> arguments) async {
+
+   final result = await analyzeUseCase();
+
+-  print(outputGenerator.getResume(result, userOptions.minimumCoverageRate, userOptions.maximumUncoveredLines));
++  print(outputGenerator.getReport(result, userOptions.minimumCoverageRate, userOptions.maximumUncoveredLines));
+
+   exit(GetExitCode()(result, userOptions));
+ }
+diff --git a/lib/src/presentation/output_print_generator/cli_output_generator.dart b/lib/src/presentation/output_print_generator/cli_output_generator.dart
+index b28fbfc..c6352e5 100644
+--- a/lib/src/presentation/output_print_generator/cli_output_generator.dart
++++ b/lib/src/presentation/output_print_generator/cli_output_generator.dart
+@@ -1,4 +1,5 @@
+ import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
++import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_table_builder.dart';
+ import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+ import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
+
+@@ -20,7 +21,7 @@ class CliOutputGenerator implements OutputGenerator {
+   String? getSourceCodeFooter() => null;
+
+   @override
+-  String? getSourceCodeBlocDivider() => "......\n";
++  String? getSourceCodeBlocDivider() => "......\n\n";
+
+   @override
+   String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount) {
+@@ -43,39 +44,26 @@ class CliOutputGenerator implements OutputGenerator {
+   }
+
+   @override
+-  String? getResume(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
++  String? getReport(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
+     if (analysisResult.totalOfNewLines == 0) {
+       return "This pull request has no new lines under `/lib`";
+     }
+
+-    final outputBuilder = StringBuffer();
++    final currentCoverage = (analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits);
+
+-    outputBuilder.writeln("------------------------------------");
+-    outputBuilder.writeln("After ignoring excluded files, this pull request has:");
+-    outputBuilder.write("\t- ${analysisResult.totalOfNewLines} new lines under `/lib`, ");
+-    if (analysisResult.totalOfUncoveredNewLines == 0) {
+-      outputBuilder.writeln(colorizeText("ALL of them are covered by tests", TextColor.green));
+-    } else {
+-      outputBuilder.write(colorizeText("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ", TextColor.yellow));
+-      if (maximumUncoveredLines != null) {
+-        if (analysisResult.totalOfUncoveredNewLines > maximumUncoveredLines) {
+-          outputBuilder.write(colorizeText("You can have at most $maximumUncoveredLines uncovered lines", TextColor.red));
+-        }
+-      }
+-      outputBuilder.writeln();
+-    }
++    String result(bool success) => success ? "Success" : "FAIL!";
+
+-    outputBuilder.write("\t- ${(analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits)}% of coverage. ");
++    final linesResult = maximumUncoveredLines == null ? "-" : result(analysisResult.totalOfUncoveredNewLines <= maximumUncoveredLines);
++    final lineThreshold = maximumUncoveredLines == null ? "-" : "$maximumUncoveredLines";
++    final rateResult = minimumCoverageRate == null ? "-" : result(analysisResult.coverageRate >= (minimumCoverageRate / 100));
++    final rateThreshold = minimumCoverageRate == null ? "-" : "$minimumCoverageRate%";
+
+-    if (minimumCoverageRate != null) {
+-      if (analysisResult.coverageRate < (minimumCoverageRate / 100)) {
+-        outputBuilder.write(colorizeText("You need at least $minimumCoverageRate% of coverage", TextColor.red));
+-      } else {
+-        outputBuilder.write(colorizeText("This is above the limit of $minimumCoverageRate%", TextColor.green));
+-      }
+-    } else {
+-      outputBuilder.writeln();
+-    }
+-    return outputBuilder.toString();
++    final tableBuilder = CliTableBuilder(columnsLength: 4, header: ["Report", "Current value", "Threshold", "Result"]);
++
++    tableBuilder.addLine(["New lines under  `/lib`", analysisResult.totalOfNewLines.toString(), "", ""]);
++    tableBuilder.addLine(["Uncovered new lines", analysisResult.totalOfUncoveredNewLines.toString(), lineThreshold, linesResult]);
++    tableBuilder.addLine(["Coverage rate", "$currentCoverage%", rateThreshold, rateResult]);
++
++    return "\n${tableBuilder.build()}";
+   }
+ }
+diff --git a/lib/src/presentation/output_print_generator/cli_table_builder.dart b/lib/src/presentation/output_print_generator/cli_table_builder.dart
+new file mode 100644
+index 0000000..179cf6b
+--- /dev/null
++++ b/lib/src/presentation/output_print_generator/cli_table_builder.dart
+@@ -0,0 +1,59 @@
++class CliTableBuilder {
++  static const headerDivider = "-";
++  static const columnDivider = "|";
++
++  final int columnsLength;
++  final List<String>? header;
++
++  CliTableBuilder({required this.columnsLength, this.header});
++
++  final List<List<String>> table = [];
++
++  void addLine(List<String> columns) {
++    if (columns.length != columnsLength) {
++      throw Exception("line length is not equal to the declared one");
++    }
++    table.add(columns);
++  }
++
++  String _createContent(String content, int minLength, String filler) {
++    final remaining = content.length > minLength ? 0 : minLength - content.length;
++    final suffix = remaining % 2 == 0 ? "" : filler;
++    return "$filler${filler * (remaining ~/ 2)}$content${filler * (remaining ~/ 2)}$suffix$filler";
++  }
++
++  String build() {
++    final stringBuffer = StringBuffer();
++    final columnSize = List.generate(columnsLength, (index) => 0);
++    for (var columnIndex = 0; columnIndex < columnsLength; columnIndex++) {
++      for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
++        if (table[lineIndex][columnIndex].length > columnSize[columnIndex]) {
++          columnSize[columnIndex] = table[lineIndex][columnIndex].length;
++        }
++      }
++    }
++    final header = this.header;
++    if (header != null) {
++      for (var i = 0; i < header.length; i++) {
++        if (header[i].length > columnSize[i]) {
++          columnSize[i] = header[i].length;
++        }
++        stringBuffer.write(_createContent(header[i], columnSize[i], " "));
++        stringBuffer.write(columnDivider);
++      }
++      stringBuffer.writeln();
++      for (var i = 0; i < header.length; i++) {
++        stringBuffer.write(_createContent("", columnSize[i], "-"));
++        stringBuffer.write(columnDivider);
++      }
++    }
++    for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
++      stringBuffer.writeln();
++      for (var columnIndex = 0; columnIndex < columnsLength; columnIndex++) {
++        stringBuffer.write(_createContent(table[lineIndex][columnIndex], columnSize[columnIndex], " "));
++        stringBuffer.write(columnDivider);
++      }
++    }
++    return stringBuffer.toString();
++  }
++}
+diff --git a/lib/src/presentation/output_print_generator/markdown_output_generator.dart b/lib/src/presentation/output_print_generator/markdown_output_generator.dart
+index e69f870..1800048 100644
+--- a/lib/src/presentation/output_print_generator/markdown_output_generator.dart
++++ b/lib/src/presentation/output_print_generator/markdown_output_generator.dart
+@@ -53,43 +53,28 @@ class MarkdownOutputGenerator implements OutputGenerator {
+   }
+
+   @override
+-  String? getResume(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
++  String? getReport(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
+     if (analysisResult.totalOfNewLines == 0) {
+       return "This pull request has no new lines under `/lib`";
+     }
+
+-    const boldSurrounding = "**";
+-
+     final outputBuilder = StringBuffer();
++    final currentCoverage = (analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits);
+
+-    outputBuilder.writeln("------------------------------------");
+-    outputBuilder.writeln("After ignoring excluded files, this pull request has:");
+-    outputBuilder.write(" - ${analysisResult.totalOfNewLines} new lines under `/lib`, ");
+-    if (analysisResult.totalOfUncoveredNewLines == 0) {
+-      outputBuilder.writeln("ALL of them are covered by tests");
+-    } else {
+-      outputBuilder.write("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ");
+-      if (maximumUncoveredLines != null) {
+-        if (analysisResult.totalOfUncoveredNewLines > maximumUncoveredLines) {
+-          outputBuilder.write(
+-            "${boldSurrounding}You can have at most $maximumUncoveredLines uncovered lines$boldSurrounding",
+-          );
+-        }
+-      }
+-      outputBuilder.writeln();
+-    }
++    String result(bool success) => success ? "Success" : "**FAIL**";
+
+-    outputBuilder.write(" - ${(analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits)}% of coverage. ");
++    final linesResult = maximumUncoveredLines == null ? "-" : result(analysisResult.totalOfUncoveredNewLines <= maximumUncoveredLines);
++    final lineThreshold = maximumUncoveredLines == null ? "-" : "$maximumUncoveredLines";
++    final rateResult = minimumCoverageRate == null ? "-" : result(analysisResult.coverageRate >= (minimumCoverageRate / 100));
++    final rateThreshold = minimumCoverageRate == null ? "-" : "$minimumCoverageRate%";
++
++    outputBuilder.writeln("### Report");
++    outputBuilder.writeln("|                         | Current value                                   | Threshold      | Result        |");
++    outputBuilder.writeln("|-------------------------|-------------------------------------------------|----------------|---------------|");
++    outputBuilder.writeln("| New lines under  `/lib` | ${analysisResult.totalOfNewLines}               |                |               |");
++    outputBuilder.writeln("| Uncovered new lines     | ${analysisResult.totalOfUncoveredNewLines}      | $lineThreshold | $linesResult  |");
++    outputBuilder.writeln("| Coverage rate           | $currentCoverage%                               | $rateThreshold | $rateResult   |");
+
+-    if (minimumCoverageRate != null) {
+-      if (analysisResult.coverageRate < (minimumCoverageRate / 100)) {
+-        outputBuilder.write("${boldSurrounding}You need at least $minimumCoverageRate% of coverage$boldSurrounding");
+-      } else {
+-        outputBuilder.write("This is above the limit of $minimumCoverageRate%");
+-      }
+-    } else {
+-      outputBuilder.writeln();
+-    }
+     return outputBuilder.toString();
+   }
+ }
+diff --git a/lib/src/presentation/output_print_generator/output_generator.dart b/lib/src/presentation/output_print_generator/output_generator.dart
+index e373ac7..c94f4cf 100644
+--- a/lib/src/presentation/output_print_generator/output_generator.dart
++++ b/lib/src/presentation/output_print_generator/output_generator.dart
+@@ -12,5 +12,5 @@ abstract class OutputGenerator {
+
+   String? getSourceCodeFooter();
+
+-  String? getResume(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines);
++  String? getReport(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines);
+ }

@@ -6,10 +6,10 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 
 CLI is the default output-mode. It is not necessary to specify it.
+<img width="828" alt="Screenshot 2022-12-24 at 13 56 42" src="https://user-images.githubusercontent.com/7644323/209445046-3a71832c-4082-44e6-8b86-53465d130170.png">
+
 
 You can disable the colors using `--use-colorful-output false`
-
-<img width="758" alt="Screenshot 2022-12-10 at 10 43 18" src="https://user-images.githubusercontent.com/7644323/206858399-4b5f0261-c832-428b-acf5-7e0ad74c5d60.png">
 
 ____
 ### Markdown output
@@ -20,20 +20,38 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 
 #### Output example
-- `lib/src/presentation/use_case/print_analyze_result.dart` has 1 uncovered lines (+3)
+- `lib/src/presentation/output_print_generator/cli_output_generator.dart` is fully covered (+16)
+- `lib/src/presentation/output_print_generator/cli_table_builder.dart` has 6 uncovered lines (+59)
 ```diff
-  10:  
-  11:    void call(AnalysisResult analysisResult, UserOptions userOptions) {
-  12:      if (analysisResult.totalOfNewLines == 0) {
-- 13:       print("This pull request has no new lines");
-  14:        return;
-  15:      }
-  16:  
+  25:   String build() {
+  26:     final stringBuffer = StringBuffer();
+  27:     final columnSize = List.generate(columnsLength, (index) => 0);
+- 28:     for (var columnIndex = 0; columnIndex < columnsLength; columnIndex++) {
+- 29:       for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
+- 30:         if (table[lineIndex][columnIndex].length > columnSize[columnIndex]) {
+- 31:           columnSize[columnIndex] = table[lineIndex][columnIndex].length;
+  32:         }
+  33:       }
+  34:     }
 ```
-
-After ignoring excluded files, this pull request has:
-- 236 new lines, 94 of them are NOT covered by tests. **You can only have up to 5 uncovered lines**
-- 60.16949152542372% of coverage. **You need at least 99.0% of coverage**
+```diff
+  43:       }
+  44:       stringBuffer.writeln();
+  45:       for (var i = 0; i < header.length; i++) {
+- 46:         stringBuffer.write(_createContent("", columnSize[i], "-"));
+- 47:         stringBuffer.write(columnDivider);
+  48:       }
+  49:     }
+  50:     for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
+```
+- `lib/src/presentation/output_print_generator/markdown_output_generator.dart` is fully covered (+14)
+- `lib/src/presentation/output_print_generator/output_generator.dart` is fully covered (+1)
+### Report
+|                         | Current value | Threshold | Result   |
+|-------------------------|---------------|-----------|----------|
+| New lines under  `/lib` | 89            |           |          |
+| Uncovered new lines     | 6             | 5         | **FAIL** |
+| Coverage rate           | 93.26%        | 99.0%     | **FAIL** |
 
 ____
 ### Markdown output using `dart` mode
@@ -44,20 +62,38 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 
 #### Output example
-- `lib/src/presentation/use_case/print_analyze_result.dart` has 1 uncovered lines (+3)
 
+- `lib/src/presentation/output_print_generator/cli_output_generator.dart` is fully covered (+16)
+- `lib/src/presentation/output_print_generator/cli_table_builder.dart` has 6 uncovered lines (+59)
 ```dart
-
-void call(AnalysisResult analysisResult, UserOptions userOptions) {
-  if (analysisResult.totalOfNewLines == 0) {
-    print("This pull request has no new lines");	// <- MISSING TEST AT LINE 13
-    return;
+  String build() {
+  final stringBuffer = StringBuffer();
+  final columnSize = List.generate(columnsLength, (index) => 0);
+  for (var columnIndex = 0; columnIndex < columnsLength; columnIndex++) {	// <- MISSING TEST AT LINE 28
+    for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {	// <- MISSING TEST AT LINE 29
+      if (table[lineIndex][columnIndex].length > columnSize[columnIndex]) {	// <- MISSING TEST AT LINE 30
+        columnSize[columnIndex] = table[lineIndex][columnIndex].length;	// <- MISSING TEST AT LINE 31
+      }
+    }
   }
-
 ```
-
-After ignoring excluded files, this pull request has:
-- 236 new lines, 94 of them are NOT covered by tests. You can only have up to 5 uncovered lines
-- 60.16949152542372% of coverage. You need at least 99.0% of coverage
+```dart
+      }
+stringBuffer.writeln();
+for (var i = 0; i < header.length; i++) {
+stringBuffer.write(_createContent("", columnSize[i], "-"));	// <- MISSING TEST AT LINE 46
+stringBuffer.write(columnDivider);	// <- MISSING TEST AT LINE 47
+}
+}
+for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
+```
+- `lib/src/presentation/output_print_generator/markdown_output_generator.dart` is fully covered (+14)
+- `lib/src/presentation/output_print_generator/output_generator.dart` is fully covered (+1)
+### Report
+|                         | Current value | Threshold | Result   |
+|-------------------------|---------------|-----------|----------|
+| New lines under  `/lib` | 89            |           |          |
+| Uncovered new lines     | 6             | 5         | **FAIL** |
+| Coverage rate           | 93.26%        | 99.0%     | **FAIL** |
 
 ____

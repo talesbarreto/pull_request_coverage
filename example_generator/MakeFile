@@ -1,0 +1,8 @@
+generate-cli-example:
+	cat diff_example.diff | dart ../bin/pull_request_coverage.dart --lcov-file lcov_example.info  --maximum-uncovered-lines 5 --minimum-coverage 99
+
+generate-markdown-example:
+	cat diff_example.diff | dart ../bin/pull_request_coverage.dart --lcov-file lcov_example.info  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown
+
+generate-markdown-dart-example:
+	cat diff_example.diff | dart ../bin/pull_request_coverage.dart --lcov-file lcov_example.info  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown --markdown-mode dart
