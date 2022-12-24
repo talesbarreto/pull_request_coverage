@@ -1,3 +1,6 @@
+## 0.0.6
+- Ending report is now a table
+
 ## 0.0.5
 - new `fraction-digits` param
 - new `markdown-mode` param
