@@ -1,4 +1,5 @@
 import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_table_builder.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 
@@ -48,34 +49,21 @@ class CliOutputGenerator implements OutputGenerator {
       return "This pull request has no new lines under `/lib`";
     }
 
-    final outputBuilder = StringBuffer();
+    final currentCoverage = (analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits);
 
-    outputBuilder.writeln("------------------------------------");
-    outputBuilder.writeln("After ignoring excluded files, this pull request has:");
-    outputBuilder.write("\t- ${analysisResult.totalOfNewLines} new lines under `/lib`, ");
-    if (analysisResult.totalOfUncoveredNewLines == 0) {
-      outputBuilder.writeln(colorizeText("ALL of them are covered by tests", TextColor.green));
-    } else {
-      outputBuilder.write(colorizeText("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ", TextColor.yellow));
-      if (maximumUncoveredLines != null) {
-        if (analysisResult.totalOfUncoveredNewLines > maximumUncoveredLines) {
-          outputBuilder.write(colorizeText("You can have at most $maximumUncoveredLines uncovered lines", TextColor.red));
-        }
-      }
-      outputBuilder.writeln();
-    }
+    String result(bool success) => success ? "Success" : "FAIL!";
 
-    outputBuilder.write("\t- ${(analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits)}% of coverage. ");
+    final linesResult = maximumUncoveredLines == null ? "-" : result(analysisResult.totalOfUncoveredNewLines <= maximumUncoveredLines);
+    final lineThreshold = maximumUncoveredLines == null ? "-" : "$maximumUncoveredLines";
+    final rateResult = minimumCoverageRate == null ? "-" : result(analysisResult.coverageRate >= (minimumCoverageRate / 100));
+    final rateThreshold = minimumCoverageRate == null ? "-" : "$minimumCoverageRate%";
 
-    if (minimumCoverageRate != null) {
-      if (analysisResult.coverageRate < (minimumCoverageRate / 100)) {
-        outputBuilder.write(colorizeText("You need at least $minimumCoverageRate% of coverage", TextColor.red));
-      } else {
-        outputBuilder.write(colorizeText("This is above the limit of $minimumCoverageRate%", TextColor.green));
-      }
-    } else {
-      outputBuilder.writeln();
-    }
-    return outputBuilder.toString();
+    final tableBuilder = CliTableBuilder(columnsLength: 4, header: ["Report", "Current value", "Threshold", "Result"]);
+
+    tableBuilder.addLine(["New lines under  `/lib`", analysisResult.totalOfNewLines.toString(), "", ""]);
+    tableBuilder.addLine(["Uncovered new lines", analysisResult.totalOfUncoveredNewLines.toString(), lineThreshold, linesResult]);
+    tableBuilder.addLine(["Coverage rate", "$currentCoverage%", rateThreshold, rateResult]);
+
+    return "\n${tableBuilder.build()}";
   }
 }
