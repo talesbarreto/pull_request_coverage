@@ -1,3 +1,6 @@
+## 0.0.6+1
+- Updating readme 💃
+
 ## 0.0.6
 - Ending report is now a table
 

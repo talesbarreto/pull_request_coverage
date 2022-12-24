@@ -51,16 +51,7 @@ You can feed the STDIN using bash's `|` operator, like this:
 git diff repository/main | flutter pub run pull_request_coverage
 ```
 
-#### Output example:
-
-<img width="1080" alt="Screenshot 2022-12-10 at 11 01 24" src="https://user-images.githubusercontent.com/7644323/206859090-7ee7b784-1b2d-47f3-8bd2-0c4f7a85b698.png">
-
-
-Example with thresholds set and not showing uncovered lines:
-
-```bash
-git diff repository/main | flutter pub run pull_request_coverage --minimum-coverage 95 --maximum-uncovered-lines 5 --hide-uncovered-lines
-```
+See [Example](https://github.com/talesbarreto/pull_request_coverage/tree/main/example) tab to check an output examples out
 
 ## Exit code
 
@@ -90,15 +81,15 @@ Default value within parenthesis
 
 #### Presentation
 
-Check example out to see how this params can change the output
+Check [example](https://github.com/talesbarreto/pull_request_coverage/tree/main/example) out to see how this params can change the output
 
 - **output-mode** (`cli`): The output format
-    - cli: The output format intent to be read on a terminal
-    - markdown: The output formatted using markdown syntax. This is useful to be used on a pull request comment, posted by a bot, for example.
+  - cli: The output format intent to be read on a terminal
+  - markdown: The output formatted using markdown syntax. This is useful to be used on a pull request comment, posted by a bot, for example.
 
 - **markdown-mode** (`diff`): The markdown output format (see example)
-    - diff: Use diff syntax to highlight the uncovered lines
-    - dart: use the dart syntax to show codes, adding a comment at the and of uncovered lines
+  - diff: Use diff syntax to highlight the uncovered lines
+  - dart: use the dart syntax to show codes, adding a comment at the and of uncovered lines
 
 - **report-fully-covered-files** (`true`): The file path of each fully covered file will be printed, as a celebrating message =)
 
