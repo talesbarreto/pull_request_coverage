@@ -81,7 +81,7 @@ Future<void> main(List<String> arguments) async {
 
   final result = await analyzeUseCase();
 
-  print(outputGenerator.getResume(result, userOptions.minimumCoverageRate, userOptions.maximumUncoveredLines));
+  print(outputGenerator.getReport(result, userOptions.minimumCoverageRate, userOptions.maximumUncoveredLines));
 
   exit(GetExitCode()(result, userOptions));
 }

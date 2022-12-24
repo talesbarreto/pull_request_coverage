@@ -53,43 +53,28 @@ class MarkdownOutputGenerator implements OutputGenerator {
   }
 
   @override
-  String? getResume(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
+  String? getReport(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
     if (analysisResult.totalOfNewLines == 0) {
       return "This pull request has no new lines under `/lib`";
     }
 
-    const boldSurrounding = "**";
-
     final outputBuilder = StringBuffer();
+    final currentCoverage = (analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits);
 
-    outputBuilder.writeln("------------------------------------");
-    outputBuilder.writeln("After ignoring excluded files, this pull request has:");
-    outputBuilder.write(" - ${analysisResult.totalOfNewLines} new lines under `/lib`, ");
-    if (analysisResult.totalOfUncoveredNewLines == 0) {
-      outputBuilder.writeln("ALL of them are covered by tests");
-    } else {
-      outputBuilder.write("${analysisResult.totalOfUncoveredNewLines} of them are NOT covered by tests. ");
-      if (maximumUncoveredLines != null) {
-        if (analysisResult.totalOfUncoveredNewLines > maximumUncoveredLines) {
-          outputBuilder.write(
-            "${boldSurrounding}You can have at most $maximumUncoveredLines uncovered lines$boldSurrounding",
-          );
-        }
-      }
-      outputBuilder.writeln();
-    }
+    String result(bool success) => success ? "Success" : "**FAIL**";
 
-    outputBuilder.write(" - ${(analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits)}% of coverage. ");
+    final linesResult = maximumUncoveredLines == null ? "-" : result(analysisResult.totalOfUncoveredNewLines <= maximumUncoveredLines);
+    final lineThreshold = maximumUncoveredLines == null ? "-" : "$maximumUncoveredLines";
+    final rateResult = minimumCoverageRate == null ? "-" : result(analysisResult.coverageRate >= (minimumCoverageRate / 100));
+    final rateThreshold = minimumCoverageRate == null ? "-" : "$minimumCoverageRate%";
 
-    if (minimumCoverageRate != null) {
-      if (analysisResult.coverageRate < (minimumCoverageRate / 100)) {
-        outputBuilder.write("${boldSurrounding}You need at least $minimumCoverageRate% of coverage$boldSurrounding");
-      } else {
-        outputBuilder.write("This is above the limit of $minimumCoverageRate%");
-      }
-    } else {
-      outputBuilder.writeln();
-    }
+    outputBuilder.writeln("### Report");
+    outputBuilder.writeln("|                         | Current value                                   | Threshold      | Result        |");
+    outputBuilder.writeln("|-------------------------|-------------------------------------------------|----------------|---------------|");
+    outputBuilder.writeln("| New lines under  `/lib` | ${analysisResult.totalOfNewLines}               |                |               |");
+    outputBuilder.writeln("| Uncovered new lines     | ${analysisResult.totalOfUncoveredNewLines}      | $lineThreshold | $linesResult  |");
+    outputBuilder.writeln("| Coverage rate           | $currentCoverage%                               | $rateThreshold | $rateResult   |");
+
     return outputBuilder.toString();
   }
 }

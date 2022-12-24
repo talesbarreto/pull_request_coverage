@@ -20,7 +20,7 @@ class CliOutputGenerator implements OutputGenerator {
   String? getSourceCodeFooter() => null;
 
   @override
-  String? getSourceCodeBlocDivider() => "......\n";
+  String? getSourceCodeBlocDivider() => "......\n\n";
 
   @override
   String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount) {
@@ -43,7 +43,7 @@ class CliOutputGenerator implements OutputGenerator {
   }
 
   @override
-  String? getResume(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
+  String? getReport(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
     if (analysisResult.totalOfNewLines == 0) {
       return "This pull request has no new lines under `/lib`";
     }
