@@ -51,7 +51,7 @@ class CliOutputGenerator implements OutputGenerator {
 
     final currentCoverage = (analysisResult.coverageRate * 100).toStringAsFixed(fractionalDigits);
 
-    String result(bool success) => success ? "Success" : "FAIL!";
+    String result(bool success) => success ? colorizeText("Success",TextColor.green) : colorizeText("FAIL",TextColor.red);
 
     final linesResult = maximumUncoveredLines == null ? "-" : result(analysisResult.totalOfUncoveredNewLines <= maximumUncoveredLines);
     final lineThreshold = maximumUncoveredLines == null ? "-" : "$maximumUncoveredLines";
@@ -60,7 +60,7 @@ class CliOutputGenerator implements OutputGenerator {
 
     final tableBuilder = CliTableBuilder(columnsLength: 4, header: ["Report", "Current value", "Threshold", "Result"]);
 
-    tableBuilder.addLine(["New lines under  `/lib`", analysisResult.totalOfNewLines.toString(), "", ""]);
+    tableBuilder.addLine(["New lines under `/lib`", analysisResult.totalOfNewLines.toString(), "", ""]);
     tableBuilder.addLine(["Uncovered new lines", analysisResult.totalOfUncoveredNewLines.toString(), lineThreshold, linesResult]);
     tableBuilder.addLine(["Coverage rate", "$currentCoverage%", rateThreshold, rateResult]);
 

@@ -1,3 +1,5 @@
+import 'package:pull_request_coverage/src/extensions/string.dart';
+
 class CliTableBuilder {
   static const headerDivider = "-";
   static const columnDivider = "|";
@@ -27,8 +29,8 @@ class CliTableBuilder {
     final columnSize = List.generate(columnsLength, (index) => 0);
     for (var columnIndex = 0; columnIndex < columnsLength; columnIndex++) {
       for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
-        if (table[lineIndex][columnIndex].length > columnSize[columnIndex]) {
-          columnSize[columnIndex] = table[lineIndex][columnIndex].length;
+        if (table[lineIndex][columnIndex].getLengthWithNoColor() > columnSize[columnIndex]) {
+          columnSize[columnIndex] = table[lineIndex][columnIndex].getLengthWithNoColor();
         }
       }
     }
@@ -39,19 +41,25 @@ class CliTableBuilder {
           columnSize[i] = header[i].length;
         }
         stringBuffer.write(_createContent(header[i], columnSize[i], " "));
-        stringBuffer.write(columnDivider);
+        if (i != header.length - 1) {
+          stringBuffer.write(columnDivider);
+        }
       }
       stringBuffer.writeln();
       for (var i = 0; i < header.length; i++) {
         stringBuffer.write(_createContent("", columnSize[i], "-"));
-        stringBuffer.write(columnDivider);
+        if (i != header.length - 1) {
+          stringBuffer.write(columnDivider);
+        }
       }
     }
     for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
       stringBuffer.writeln();
       for (var columnIndex = 0; columnIndex < columnsLength; columnIndex++) {
         stringBuffer.write(_createContent(table[lineIndex][columnIndex], columnSize[columnIndex], " "));
-        stringBuffer.write(columnDivider);
+        if (columnIndex < columnsLength - 1) {
+          stringBuffer.write(columnDivider);
+        }
       }
     }
     return stringBuffer.toString();

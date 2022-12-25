@@ -2,12 +2,11 @@
 
 ```bash
 flutter test --coverage
-git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode cli    
+git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-lines 5 --minimum-coverage 99    
 ```
+#### Output example
 
-CLI is the default output-mode. It is not necessary to specify it.
-<img width="828" alt="Screenshot 2022-12-24 at 13 56 42" src="https://user-images.githubusercontent.com/7644323/209445046-3a71832c-4082-44e6-8b86-53465d130170.png">
-
+<img width="828" alt="Screenshot 2022-12-25 at 10 16 38" src="https://user-images.githubusercontent.com/7644323/209469466-2644e705-a0ed-440f-9651-8994d9db6e6a.png">
 
 You can disable the colors using `--use-colorful-output false`
 
@@ -47,11 +46,11 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 - `lib/src/presentation/output_print_generator/markdown_output_generator.dart` is fully covered (+14)
 - `lib/src/presentation/output_print_generator/output_generator.dart` is fully covered (+1)
 ### Report
-|                         | Current value | Threshold | Result   |
-|-------------------------|---------------|-----------|----------|
-| New lines under  `/lib` | 89            |           |          |
-| Uncovered new lines     | 6             | 5         | **FAIL** |
-| Coverage rate           | 93.26%        | 99.0%     | **FAIL** |
+|                        | Current value | Threshold | Result   |
+|------------------------|---------------|-----------|----------|
+| New lines under `/lib` | 89            |           |          |
+| Uncovered new lines    | 6             | 5         | **FAIL** |
+| Coverage rate          | 93.26%        | 99.0%     | **FAIL** |
 
 ____
 ### Markdown output using `dart` mode
@@ -62,38 +61,37 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 
 #### Output example
-
 - `lib/src/presentation/output_print_generator/cli_output_generator.dart` is fully covered (+16)
 - `lib/src/presentation/output_print_generator/cli_table_builder.dart` has 6 uncovered lines (+59)
 ```dart
   String build() {
-  final stringBuffer = StringBuffer();
-  final columnSize = List.generate(columnsLength, (index) => 0);
-  for (var columnIndex = 0; columnIndex < columnsLength; columnIndex++) {	// <- MISSING TEST AT LINE 28
-    for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {	// <- MISSING TEST AT LINE 29
-      if (table[lineIndex][columnIndex].length > columnSize[columnIndex]) {	// <- MISSING TEST AT LINE 30
-        columnSize[columnIndex] = table[lineIndex][columnIndex].length;	// <- MISSING TEST AT LINE 31
+    final stringBuffer = StringBuffer();
+    final columnSize = List.generate(columnsLength, (index) => 0);
+    for (var columnIndex = 0; columnIndex < columnsLength; columnIndex++) {	// <- MISSING TEST AT LINE 28
+      for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {	// <- MISSING TEST AT LINE 29
+        if (table[lineIndex][columnIndex].length > columnSize[columnIndex]) {	// <- MISSING TEST AT LINE 30
+          columnSize[columnIndex] = table[lineIndex][columnIndex].length;	// <- MISSING TEST AT LINE 31
+        }
       }
     }
-  }
 ```
 ```dart
       }
-stringBuffer.writeln();
-for (var i = 0; i < header.length; i++) {
-stringBuffer.write(_createContent("", columnSize[i], "-"));	// <- MISSING TEST AT LINE 46
-stringBuffer.write(columnDivider);	// <- MISSING TEST AT LINE 47
-}
-}
-for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
+      stringBuffer.writeln();
+      for (var i = 0; i < header.length; i++) {
+        stringBuffer.write(_createContent("", columnSize[i], "-"));	// <- MISSING TEST AT LINE 46
+        stringBuffer.write(columnDivider);	// <- MISSING TEST AT LINE 47
+      }
+    }
+    for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
 ```
 - `lib/src/presentation/output_print_generator/markdown_output_generator.dart` is fully covered (+14)
 - `lib/src/presentation/output_print_generator/output_generator.dart` is fully covered (+1)
 ### Report
-|                         | Current value | Threshold | Result   |
-|-------------------------|---------------|-----------|----------|
-| New lines under  `/lib` | 89            |           |          |
-| Uncovered new lines     | 6             | 5         | **FAIL** |
-| Coverage rate           | 93.26%        | 99.0%     | **FAIL** |
+|                        | Current value | Threshold | Result   |
+|------------------------|---------------|-----------|----------|
+| New lines under `/lib` | 89            |           |          |
+| Uncovered new lines    | 6             | 5         | **FAIL** |
+| Coverage rate          | 93.26%        | 99.0%     | **FAIL** |
 
 ____
