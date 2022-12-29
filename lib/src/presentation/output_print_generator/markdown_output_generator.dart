@@ -71,7 +71,6 @@ class MarkdownOutputGenerator implements OutputGenerator {
     outputBuilder.writeln("### Report");
     outputBuilder.writeln("|                         | Current value                                   | Threshold      | Result        |");
     outputBuilder.writeln("|-------------------------|-------------------------------------------------|----------------|---------------|");
-    outputBuilder.writeln("| New lines under `/lib`  | ${analysisResult.totalOfNewLines}               |                |               |");
     outputBuilder.writeln("| Uncovered new lines     | ${analysisResult.totalOfUncoveredNewLines}      | $lineThreshold | $linesResult  |");
     outputBuilder.writeln("| Coverage rate           | $currentCoverage%                               | $rateThreshold | $rateResult   |");
 

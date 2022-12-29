@@ -7,7 +7,7 @@ This is a tool intended to analyze the coverage rate of a pull request, ignoring
 The coverage rate threshold on CI tools is a common approach to encourage developers to write tests and keep improving the whole project's quality. Unfortunately, judging a pull request coverage by
 analyzing the coverage of the entire project is not always fair, especially on big refactor tasks, witch may naturally decrease the coverage rate.
 
-This package tries a different approach to analyse the test coverage. We only analyse lines that have been added in the pull request. The coverage rate will be calculated by dividing the number of
+This package tries a different approach to analyse the test coverage: we only check lines that have been added in the pull request. The coverage rate will be calculated by dividing the number of
 uncovered new lines by the number of new lines.
 
 You can set thresholds to make tests fail on a CI. This package can also print those lines that were not covered, making it easier to identify the missing tests.
@@ -51,7 +51,7 @@ You can feed the STDIN using bash's `|` operator, like this:
 git diff repository/main | flutter pub run pull_request_coverage
 ```
 
-See [Example](https://github.com/talesbarreto/pull_request_coverage/tree/main/example) tab to check an output examples out
+See [Example](https://github.com/talesbarreto/pull_request_coverage/tree/main/example) tab to check an output example out
 
 ## Exit code
 
@@ -69,13 +69,13 @@ Default value within parenthesis
 
 ### Threshold
 
-- **minimum-coverage** : Fail the test if the coverage rate is below this value
-
-- **maximum-uncovered-lines** : Fail the test if the the number of uncovered lines is greater than this value
+- **minimum-coverage** : Fail test if the coverage rate is below this value
+g
+- **maximum-uncovered-lines** : Fail the if the the number of uncovered lines is greater than this value
 
 ### File filter
 
-- **exclude-suffix** (`.g.dart,.pb.dart,.pbenum.dart,.pbserver.dart,.pbjson.dart`): Exclude all file paths that ends with those suffixes, separated by commas
+- **exclude-suffix** (`.g.dart,.pb.dart,.pbenum.dart,.pbserver.dart,.pbjson.dart`): Exclude all file paths that end with those suffixes, separated by commas
 
 - **exclude-prefix** : Exclude all paths that start with those prefixes, separated by commas
 

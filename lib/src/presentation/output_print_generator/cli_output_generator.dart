@@ -60,7 +60,6 @@ class CliOutputGenerator implements OutputGenerator {
 
     final tableBuilder = CliTableBuilder(columnsLength: 4, header: ["Report", "Current value", "Threshold", "Result"]);
 
-    tableBuilder.addLine(["New lines under `/lib`", analysisResult.totalOfNewLines.toString(), "", ""]);
     tableBuilder.addLine(["Uncovered new lines", analysisResult.totalOfUncoveredNewLines.toString(), lineThreshold, linesResult]);
     tableBuilder.addLine(["Coverage rate", "$currentCoverage%", rateThreshold, rateResult]);
 
