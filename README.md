@@ -71,11 +71,11 @@ Default value within parenthesis
 
 - **minimum-coverage** : Fail the test if the coverage rate is below this value
 
-- **maximum-uncovered-lines** : Fail the test if the the number of uncovered lines is less than this value
+- **maximum-uncovered-lines** : Fail the test if the the number of uncovered lines is greater than this value
 
 ### File filter
 
-- **exclude-suffix** (`.g.dart,.pb.dart,.pbenum.dart,.pbserver.dart,.pbjson.dart`): Exclude all file paths that start with those suffixes, separated by commas
+- **exclude-suffix** (`.g.dart,.pb.dart,.pbenum.dart,.pbserver.dart,.pbjson.dart`): Exclude all file paths that ends with those suffixes, separated by commas
 
 - **exclude-prefix** : Exclude all paths that start with those prefixes, separated by commas
 
