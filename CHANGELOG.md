@@ -1,3 +1,7 @@
+## 1.0.1
+- Removing total of new lines from output because it is a completely useless information 
+- Fixes on readme
+
 ## 1.0.0
 - Stable release
 
