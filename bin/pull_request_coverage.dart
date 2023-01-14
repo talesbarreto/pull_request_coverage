@@ -33,11 +33,13 @@ UserOptions _getOrFailUserOptions(List<String> arguments) {
   }
 }
 
-Future<List<String>> _getOrFailLcovLines(String filePath) {
+Future<List<String>> _getOrFailLcovLines(String filePath) async {
   try {
-    return File(filePath).readAsLines();
+    final lines = await File(filePath).readAsLines();
+    return lines;
   } catch (e) {
     print("Error reading lcov.info file: $e");
+    print("\tDid you run `flutter test --coverage`?");
     exit(ExitCode.error);
   }
 }
