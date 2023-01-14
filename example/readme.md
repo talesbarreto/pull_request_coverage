@@ -6,7 +6,7 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 #### Output example
 
-<img width="828" alt="Screenshot 2022-12-25 at 10 16 38" src="https://user-images.githubusercontent.com/7644323/209469466-2644e705-a0ed-440f-9651-8994d9db6e6a.png">
+<img width="827" alt="Screenshot 2023-01-14 at 11 05 26" src="https://user-images.githubusercontent.com/7644323/212476070-6e4d3c02-de8f-4771-9f9a-33ff854fee8e.png">
 
 You can disable the colors using `--use-colorful-output false`
 
@@ -46,11 +46,11 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 - `lib/src/presentation/output_print_generator/markdown_output_generator.dart` is fully covered (+14)
 - `lib/src/presentation/output_print_generator/output_generator.dart` is fully covered (+1)
 ### Report
-|                        | Current value | Threshold | Result   |
-|------------------------|---------------|-----------|----------|
-| New lines under `/lib` | 89            |           |          |
-| Uncovered new lines    | 6             | 5         | **FAIL** |
-| Coverage rate          | 93.26%        | 99.0%     | **FAIL** |
+|                                          | Current value | Threshold | Result   |
+|------------------------------------------|---------------|-----------|----------|
+| Lines that should be tested under `/lib` | 89            |           |          |
+| Uncovered new lines                      | 6             | 5         | **FAIL** |
+| Coverage rate                            | 93.26%        | 99.0%     | **FAIL** |
 
 ____
 ### Markdown output using `dart` mode
@@ -88,10 +88,10 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 - `lib/src/presentation/output_print_generator/markdown_output_generator.dart` is fully covered (+14)
 - `lib/src/presentation/output_print_generator/output_generator.dart` is fully covered (+1)
 ### Report
-|                        | Current value | Threshold | Result   |
-|------------------------|---------------|-----------|----------|
-| New lines under `/lib` | 89            |           |          |
-| Uncovered new lines    | 6             | 5         | **FAIL** |
-| Coverage rate          | 93.26%        | 99.0%     | **FAIL** |
+|                                          | Current value | Threshold | Result   |
+|------------------------------------------|---------------|-----------|----------|
+| Lines that should be tested under `/lib` | 89            |           |          |
+| Uncovered new lines                      | 6             | 5         | **FAIL** |
+| Coverage rate                            | 93.26%        | 99.0%     | **FAIL** |
 
 ____

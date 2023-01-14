@@ -69,10 +69,11 @@ class MarkdownOutputGenerator implements OutputGenerator {
     final rateThreshold = minimumCoverageRate == null ? "-" : "$minimumCoverageRate%";
 
     outputBuilder.writeln("### Report");
-    outputBuilder.writeln("|                         | Current value                                   | Threshold      | Result        |");
-    outputBuilder.writeln("|-------------------------|-------------------------------------------------|----------------|---------------|");
-    outputBuilder.writeln("| Uncovered new lines     | ${analysisResult.totalOfUncoveredNewLines}      | $lineThreshold | $linesResult  |");
-    outputBuilder.writeln("| Coverage rate           | $currentCoverage%                               | $rateThreshold | $rateResult   |");
+    outputBuilder.writeln("|                                           | Current value                                   | Threshold      | Result        |");
+    outputBuilder.writeln("|-------------------------------------------|-------------------------------------------------|----------------|---------------|");
+    outputBuilder.writeln("| Lines that should be tested under `/lib`  | ${analysisResult.totalOfNewLines}               |                |               |");
+    outputBuilder.writeln("| Uncovered new lines                       | ${analysisResult.totalOfUncoveredNewLines}      | $lineThreshold | $linesResult  |");
+    outputBuilder.writeln("| Coverage rate                             | $currentCoverage%                               | $rateThreshold | $rateResult   |");
 
     return outputBuilder.toString();
   }
