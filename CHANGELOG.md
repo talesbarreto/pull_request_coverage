@@ -1,6 +1,10 @@
+## 1.0.2
+- Adding "Number of lines that should be tested under `/lib`"
+
 ## 1.0.1
-- Removing total of new lines from output because it is a completely useless information 
+- Removing total of new lines from output because it is a completely useless information
 - Fixes on readme
+
 
 ## 1.0.0
 - Stable release
