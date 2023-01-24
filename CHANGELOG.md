@@ -1,3 +1,6 @@
+## 1.0.2+1
+- Updating example
+
 ## 1.0.2
 - Adding "Number of lines that should be tested under `/lib`"
 
