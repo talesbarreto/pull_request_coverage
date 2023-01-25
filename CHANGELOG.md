@@ -1,3 +1,6 @@
+## 1.0.3
+- `fully-tested-message` param: you can now set a custom output message to be displayed when there is no untested lines
+
 ## 1.0.2+1
 - Updating example
 

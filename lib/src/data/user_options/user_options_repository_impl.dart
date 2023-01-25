@@ -70,6 +70,9 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
       "fraction-digits",
       defaultsTo: "2",
     );
+    argParser.addOption(
+      "fully-tested-message",
+    );
   }
 
   @override
@@ -91,6 +94,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
           outputMode: result["output-mode"] == "markdown" ? OutputMode.markdown : OutputMode.cli,
           fractionalDigits: int.tryParse(result["fraction-digits"]) ?? 2,
           markdownMode: result["markdown-mode"] == "dart" ? MarkdownMode.dart : MarkdownMode.diff,
+          fullyTestedMessage: result["fully-tested-message"],
         ),
       );
     } catch (e) {

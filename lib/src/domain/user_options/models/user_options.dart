@@ -5,6 +5,7 @@ class UserOptions {
   final List<String> excludePrefixPaths;
   final List<String> excludeSuffixPaths;
   final String lcovFilePath;
+  final String? fullyTestedMessage;
   final double? minimumCoverageRate;
   final int? maximumUncoveredLines;
   final bool showUncoveredCode;
@@ -23,6 +24,7 @@ class UserOptions {
     required this.outputMode,
     required this.fractionalDigits,
     required this.markdownMode,
+    this.fullyTestedMessage,
     this.minimumCoverageRate,
     this.maximumUncoveredLines,
     this.useColorfulOutput = true,

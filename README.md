@@ -100,3 +100,5 @@ Check [example](https://github.com/talesbarreto/pull_request_coverage/tree/main/
 
 - **fraction-digits** (`2`): The number of digits after the decimal point to be used on the coverage rate
 
+- **fully-tested-message** : Set a custom output message to be displayed when there is no untested lines
+

@@ -49,14 +49,11 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
     case OutputMode.cli:
       return CliOutputGenerator(
         colorizeText: colorizeText,
-        reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
-        fractionalDigits: userOptions.fractionalDigits,
+        userOptions: userOptions,
       );
     case OutputMode.markdown:
       return MarkdownOutputGenerator(
-        reportFullyCoveredFiles: userOptions.reportFullyCoveredFiles,
-        markdownMode: userOptions.markdownMode,
-        fractionalDigits: userOptions.fractionalDigits,
+        userOptions: userOptions,
       );
   }
 }
