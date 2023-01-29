@@ -1,4 +1,4 @@
-import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_hub_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
 import 'package:test/test.dart';
 
 void main() {
