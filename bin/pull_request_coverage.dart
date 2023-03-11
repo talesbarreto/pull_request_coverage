@@ -16,13 +16,13 @@ import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_ca
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
 import 'package:pull_request_coverage/src/domain/io/use_case/read_line_from_stdin.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/markdown_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
-import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
 
 UserOptions _getOrFailUserOptions(List<String> arguments) {
   final UserOptionsRepository argsRepository = UserOptionsRepositoryImpl(ArgParser());
@@ -62,7 +62,7 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
 }
 
 Future<void> main(List<String> arguments) async {
-  final ioRepository = IoRepositoryImpl(LocalFileSystem());
+  final ioRepository = IoRepositoryImpl(LocalFileSystem(),stdin);
 
   final userOptions = _getOrFailUserOptions(arguments);
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath);

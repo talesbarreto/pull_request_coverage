@@ -7,12 +7,15 @@ import 'package:pull_request_coverage/src/domain/io/repository/io_repository.dar
 import 'package:pull_request_coverage/src/extensions/file.dart';
 
 class IoRepositoryImpl implements IoRepository {
-  static final Stream<String> _stdinLineStreamBroadcaster =
+  static const gitFileName = ".git";
+
+  late final Stream<String> _stdinLineStreamBroadcaster =
       stdin.transform(utf8.decoder).transform(const LineSplitter()).asBroadcastStream();
 
   final FileSystem fileSystem;
+  final Stdin stdin;
 
-  const IoRepositoryImpl(this.fileSystem);
+  IoRepositoryImpl(this.fileSystem, this.stdin);
 
   @override
   Future<String?> readStdinLine() async {
@@ -31,7 +34,7 @@ class IoRepositoryImpl implements IoRepository {
     do {
       final children = await currentDirectory.list().toList();
       for (final child in children) {
-        if (child.path.endsWith("${Platform.pathSeparator}.git")) {
+        if (child.path.endsWith("${Platform.pathSeparator}$gitFileName") || child.path == gitFileName) {
           return relativePath;
         }
       }
