@@ -23,6 +23,7 @@ import 'package:pull_request_coverage/src/presentation/output_print_generator/ma
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_for_unexpected_file_structre.dart';
 
 UserOptions _getOrFailUserOptions(List<String> arguments) {
   final UserOptionsRepository argsRepository = UserOptionsRepositoryImpl(ArgParser());
@@ -62,15 +63,20 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
 }
 
 Future<void> main(List<String> arguments) async {
-  final ioRepository = IoRepositoryImpl(LocalFileSystem(),stdin);
-
+  final ioRepository = IoRepositoryImpl(LocalFileSystem(), stdin);
+  final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
   final userOptions = _getOrFailUserOptions(arguments);
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath);
   final colorizeText = ColorizeCliText(userOptions.useColorfulOutput);
   final outputGenerator = _getOutputGenerator(userOptions, colorizeText);
 
+  PrintWarningsForUnexpectedFileStructure(print, colorizeText)(
+    gitRootRelativePath: gitRootRelativePath,
+    isLibDirPresent: await ioRepository.doesLibDirectoryExist(),
+  );
+
   final analyzeUseCase = Analyze(
-    parseGitDiff: ParseGitDiff(RemoveGitRootRelativePath(await ioRepository.getGitRootRelativePath())),
+    parseGitDiff: ParseGitDiff(RemoveGitRootRelativePath(gitRootRelativePath)),
     forEachFileOnGitDiff: ForEachFileOnGitDiff(ReadLineFromStdin(ioRepository).call),
     lcovLines: lcovLines,
     shouldAnalyseThisFile: ShouldAnalyseThisFile(userOptions),

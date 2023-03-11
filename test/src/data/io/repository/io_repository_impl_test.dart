@@ -41,13 +41,25 @@ void main() {
       expect(result, "projects/project/");
     });
   });
+
+  group("when `doesLibDirectoryExist` is invoked", () {
+    test("return `true` if `/lib` is present in current directory", () async {
+      final fileSystem = MemoryFileSystem();
+      final repository = IoRepositoryImpl(fileSystem, _MockStdin());
+
+      await fileSystem.currentDirectory.childDirectory("lib").create(recursive: true);
+
+      expect(await repository.doesLibDirectoryExist(), isTrue);
+    });
+    test("return `false` if `/lib` is not present in current directory", () async {
+      final fileSystem = MemoryFileSystem();
+      final repository = IoRepositoryImpl(fileSystem, _MockStdin());
+
+      expect(await repository.doesLibDirectoryExist(), isFalse);
+    });
+  });
 }
 
 class _MockStdin extends Mock implements Stdin {
   _MockStdin();
-
-  factory _MockStdin.dummy() {
-    final mock = _MockStdin();
-    return mock;
-  }
 }

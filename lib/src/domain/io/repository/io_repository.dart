@@ -3,4 +3,6 @@ abstract class IoRepository {
   Future<String?> readStdinLine();
 
   Future<String?> getGitRootRelativePath();
+
+  Future<bool> doesLibDirectoryExist();
 }

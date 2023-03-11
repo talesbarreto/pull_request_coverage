@@ -43,4 +43,14 @@ class IoRepositoryImpl implements IoRepository {
     } while (currentDirectory.path != currentDirectory.parent.path);
     return null;
   }
+
+  @override
+  Future<bool> doesLibDirectoryExist() async {
+    for (final child in await fileSystem.currentDirectory.list().toList()) {
+      if (child is Directory && child.name == "lib") {
+        return true;
+      }
+    }
+    return false;
+  }
 }
