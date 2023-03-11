@@ -1,3 +1,8 @@
+## 1.0.4
+- Fix analysis not working when project was not in the root of git repository
+- Warnings messages when `.git` or `/lib` ware not found
+- `stdin-timeout` argument
+
 ## 1.0.3+1
 - readme fixes
 
