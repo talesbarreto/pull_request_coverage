@@ -9,8 +9,7 @@ import 'package:pull_request_coverage/src/extensions/file.dart';
 class IoRepositoryImpl implements IoRepository {
   static const gitFileName = ".git";
 
-  late final Stream<String> _stdinLineStreamBroadcaster =
-      stdin.transform(utf8.decoder).transform(const LineSplitter()).asBroadcastStream();
+  late final Stream<String> _stdinLineStreamBroadcaster = stdin.transform(utf8.decoder).transform(const LineSplitter()).asBroadcastStream();
 
   final FileSystem fileSystem;
   final Stdin stdin;
