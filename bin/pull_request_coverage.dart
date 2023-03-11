@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:args/args.dart';
+import 'package:file/local.dart';
+import 'package:pull_request_coverage/src/data/io/repository/io_repository_impl.dart';
 import 'package:pull_request_coverage/src/data/user_options/user_options_repository_impl.dart';
 import 'package:pull_request_coverage/src/domain/analyser/models/exit_code.dart';
 import 'package:pull_request_coverage/src/domain/analyser/use_case/analyze.dart';
@@ -10,16 +12,18 @@ import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analys
 import 'package:pull_request_coverage/src/domain/common/result.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/remove_git_root_relative_path.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
+import 'package:pull_request_coverage/src/domain/io/use_case/read_line_from_stdin.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/markdown_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
-import 'package:pull_request_coverage/src/domain/stdin_reader/use_case/read_line_from_stdin.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
-import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_for_unexpected_file_structre.dart';
 
 UserOptions _getOrFailUserOptions(List<String> arguments) {
   final UserOptionsRepository argsRepository = UserOptionsRepositoryImpl(ArgParser());
@@ -59,14 +63,21 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
 }
 
 Future<void> main(List<String> arguments) async {
+  final ioRepository = IoRepositoryImpl(LocalFileSystem(), stdin);
+  final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
   final userOptions = _getOrFailUserOptions(arguments);
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath);
   final colorizeText = ColorizeCliText(userOptions.useColorfulOutput);
   final outputGenerator = _getOutputGenerator(userOptions, colorizeText);
 
+  PrintWarningsForUnexpectedFileStructure(print, colorizeText)(
+    gitRootRelativePath: gitRootRelativePath,
+    isLibDirPresent: await ioRepository.doesLibDirectoryExist(),
+  );
+
   final analyzeUseCase = Analyze(
-    parseGitDiff: ParseGitDiff(),
-    forEachFileOnGitDiff: ForEachFileOnGitDiff(ReadLineFromStdin().call),
+    parseGitDiff: ParseGitDiff(RemoveGitRootRelativePath(gitRootRelativePath)),
+    forEachFileOnGitDiff: ForEachFileOnGitDiff(ReadLineFromStdin(ioRepository).call),
     lcovLines: lcovLines,
     shouldAnalyseThisFile: ShouldAnalyseThisFile(userOptions),
     setUncoveredLines: SetUncoveredLinesOnFileDiff(),
