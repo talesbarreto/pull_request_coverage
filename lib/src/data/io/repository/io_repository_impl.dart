@@ -9,17 +9,23 @@ import 'package:pull_request_coverage/src/extensions/file.dart';
 class IoRepositoryImpl implements IoRepository {
   static const gitFileName = ".git";
 
-  late final Stream<String> _stdinLineStreamBroadcaster = stdin.transform(utf8.decoder).transform(const LineSplitter()).asBroadcastStream();
+  late final Stream<String> _stdinLineStreamBroadcaster =
+      stdin.transform(utf8.decoder).transform(const LineSplitter()).asBroadcastStream();
 
   final FileSystem fileSystem;
   final Stdin stdin;
+  final Duration stdinTimeout;
 
-  IoRepositoryImpl(this.fileSystem, this.stdin);
+  IoRepositoryImpl({
+    required this.fileSystem,
+    required this.stdin,
+    required this.stdinTimeout,
+  });
 
   @override
   Future<String?> readStdinLine() async {
     try {
-      final line = await _stdinLineStreamBroadcaster.first.timeout(Duration(seconds: 1));
+      final line = await _stdinLineStreamBroadcaster.first.timeout(stdinTimeout);
       return line;
     } catch (e) {
       return null;

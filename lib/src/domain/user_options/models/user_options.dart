@@ -14,6 +14,7 @@ class UserOptions {
   final OutputMode outputMode;
   final MarkdownMode markdownMode;
   final int fractionalDigits;
+  final Duration stdinTimeout;
 
   /// [fractionalDigits] how many digits after the decimal point to show on coverage rate
   const UserOptions({
@@ -29,5 +30,6 @@ class UserOptions {
     this.maximumUncoveredLines,
     this.useColorfulOutput = true,
     this.reportFullyCoveredFiles = true,
+    this.stdinTimeout = const Duration(seconds: 1),
   });
 }

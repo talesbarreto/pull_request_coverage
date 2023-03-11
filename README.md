@@ -61,7 +61,7 @@ See [Example](https://github.com/talesbarreto/pull_request_coverage/tree/main/ex
 | 1    | Tests failed (only when thresholds are set).      |
 | 255  | Execution has failed and tests were not executed. |
 
-## Parameters
+## Arguments
 
 Default value within parenthesis
 
@@ -102,3 +102,6 @@ Check [example](https://github.com/talesbarreto/pull_request_coverage/tree/main/
 
 - **fully-tested-message** : Set a custom output message to be displayed when there is no untested lines
 
+#### Under the hood
+
+- **stdin-timeout** (`1`): `pull_request_coverage` read diff from stdin. In some cases, it never closes and the analysis will be stuck. By default, if no data comes in one second, `pull_request_coverage` will assume that it reached `EOF`  

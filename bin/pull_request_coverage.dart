@@ -63,9 +63,13 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
 }
 
 Future<void> main(List<String> arguments) async {
-  final ioRepository = IoRepositoryImpl(LocalFileSystem(), stdin);
-  final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
   final userOptions = _getOrFailUserOptions(arguments);
+  final ioRepository = IoRepositoryImpl(
+    fileSystem: LocalFileSystem(),
+    stdin: stdin,
+    stdinTimeout: userOptions.stdinTimeout,
+  );
+  final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath);
   final colorizeText = ColorizeCliText(userOptions.useColorfulOutput);
   final outputGenerator = _getOutputGenerator(userOptions, colorizeText);

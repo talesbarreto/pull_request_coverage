@@ -71,6 +71,10 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
       defaultsTo: "2",
     );
     argParser.addOption(
+      "stdin-timeout",
+      defaultsTo: "1",
+    );
+    argParser.addOption(
       "fully-tested-message",
     );
   }
@@ -87,7 +91,8 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
           excludeSuffixPaths: result["exclude-suffix"]?.toLowerCase().split(",").toList(growable: false) ?? [],
           lcovFilePath: result["lcov-file"],
           minimumCoverageRate: result["minimum-coverage"] != null ? double.tryParse(result["minimum-coverage"]) : null,
-          maximumUncoveredLines: result["maximum-uncovered-lines"] != null ? int.tryParse(result["maximum-uncovered-lines"]) : null,
+          maximumUncoveredLines:
+              result["maximum-uncovered-lines"] != null ? int.tryParse(result["maximum-uncovered-lines"]) : null,
           showUncoveredCode: result["show-uncovered-code"] == "true",
           useColorfulOutput: result["use-colorful-output"] == "true",
           reportFullyCoveredFiles: result["report-fully-covered-files"] == "true",
@@ -95,6 +100,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
           fractionalDigits: int.tryParse(result["fraction-digits"]) ?? 2,
           markdownMode: result["markdown-mode"] == "dart" ? MarkdownMode.dart : MarkdownMode.diff,
           fullyTestedMessage: result["fully-tested-message"],
+          stdinTimeout: Duration(seconds: int.tryParse(result["stdin-timeout"]) ?? 1),
         ),
       );
     } catch (e) {
