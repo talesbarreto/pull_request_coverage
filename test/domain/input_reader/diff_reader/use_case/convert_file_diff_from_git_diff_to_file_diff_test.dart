@@ -2,10 +2,10 @@ import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_ca
 import 'package:test/test.dart';
 
 void main() {
-
+  String defaultPathTransformer(String path) => path;
   group("When file1 content is mapped", () {
     final fileLines = _file1Content.split("\n");
-    final useCase = ParseGitDiff();
+    final useCase = ParseGitDiff(defaultPathTransformer);
 
     final result = useCase(fileLines)!;
 
@@ -16,20 +16,22 @@ void main() {
     );
     test(
       "line 55 is `    image: cirrusci/flutter:3.3.7`",
-      () => expect(result.lines.firstWhere((element) => element.lineNumber == 55).line, "    image: cirrusci/flutter:3.3.7"),
+      () => expect(
+          result.lines.firstWhere((element) => element.lineNumber == 55).line, "    image: cirrusci/flutter:3.3.7"),
     );
   });
 
   // bugfix
   group("When file2 content is mapped", () {
     final fileLines = _file2Content.split("\n");
-    final useCase = ParseGitDiff();
+    final useCase = ParseGitDiff(defaultPathTransformer);
 
     final result = useCase(fileLines)!;
 
     test(
       "expect that line 17 is `     commands:`",
-      () => expect(result.lines.firstWhere((element) => element.lineNumber == 2).line, "import 'package:flutter_svg/flutter_svg.dart';"),
+      () => expect(result.lines.firstWhere((element) => element.lineNumber == 2).line,
+          "import 'package:flutter_svg/flutter_svg.dart';"),
     );
   });
 }
@@ -85,7 +87,8 @@ index 170b94f65..74cb4811c 100644
        - flutter test --no-pub --coverage -r expanded
 ''';
 
-const _file2Content = r'''diff --git a/lib/presentation/widgets/download_all_modal.dart b/lib/presentation/widgets/download_all_modal.dart
+const _file2Content =
+    r'''diff --git a/lib/presentation/widgets/download_all_modal.dart b/lib/presentation/widgets/download_all_modal.dart
 new file mode 100644
 index 000000000..13ebb664b
 --- /dev/null

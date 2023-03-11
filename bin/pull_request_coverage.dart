@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:args/args.dart';
+import 'package:file/local.dart';
 import 'package:pull_request_coverage/src/data/io/repository/io_repository_impl.dart';
 import 'package:pull_request_coverage/src/data/user_options/user_options_repository_impl.dart';
 import 'package:pull_request_coverage/src/domain/analyser/models/exit_code.dart';
@@ -11,6 +12,7 @@ import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analys
 import 'package:pull_request_coverage/src/domain/common/result.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/remove_git_root_relative_path.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
 import 'package:pull_request_coverage/src/domain/io/use_case/read_line_from_stdin.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
@@ -60,14 +62,16 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
 }
 
 Future<void> main(List<String> arguments) async {
+  final ioRepository = IoRepositoryImpl(LocalFileSystem());
+
   final userOptions = _getOrFailUserOptions(arguments);
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath);
   final colorizeText = ColorizeCliText(userOptions.useColorfulOutput);
   final outputGenerator = _getOutputGenerator(userOptions, colorizeText);
 
   final analyzeUseCase = Analyze(
-    parseGitDiff: ParseGitDiff(),
-    forEachFileOnGitDiff: ForEachFileOnGitDiff(ReadLineFromStdin(IoRepositoryImpl()).call),
+    parseGitDiff: ParseGitDiff(RemoveGitRootRelativePath(await ioRepository.getGitRootRelativePath())),
+    forEachFileOnGitDiff: ForEachFileOnGitDiff(ReadLineFromStdin(ioRepository).call),
     lcovLines: lcovLines,
     shouldAnalyseThisFile: ShouldAnalyseThisFile(userOptions),
     setUncoveredLines: SetUncoveredLinesOnFileDiff(),
