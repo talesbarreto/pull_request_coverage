@@ -75,9 +75,9 @@ Default value within parenthesis
 
 ### File filter
 
-- **exclude-suffix** (`.g.dart,.pb.dart,.pbenum.dart,.pbserver.dart,.pbjson.dart`): Exclude all file paths that end with those suffixes, separated by commas
+- **exclude**: exclude files that matches with the [widely-known Bash glob syntax](https://pub.dev/packages/glob#syntax), separated by commas. Ex: `--exclude '/lib/di/**','**/gen.dart'`.
 
-- **exclude-prefix** : Exclude all paths that start with those prefixes, separated by commas
+- **exclude-known-generated-files** (`true`) : Exclude file paths that ends with `.g.dart`, `.pb.dart`, `.pbenum.dart`, `.pbserver.dart` or `.pbjson.dart`
 
 #### Presentation
 

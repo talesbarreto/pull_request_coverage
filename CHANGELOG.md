@@ -1,44 +1,59 @@
+## 1.1.0
+
+- ⚠️ Breaking change: `exclude-suffix` arg no longer has a default values with generated files pattern.
+- New `exclude-known-generated-files` arg.
+- New `exclude` arg, that uses [Glob syntax](https://pub.dev/packages/glob#syntax), replacing `exclude-suffix`
+  and `exclude-prefix` args
+- `exclude-suffix` and `exclude-prefix` no longer listed as args. Any usage of them will print a warning message
+
 ## 1.0.4
+
 - Fix analysis not working when project was not in the root of git repository
 - Warnings messages when `.git` or `/lib` ware not found
 - `stdin-timeout` argument
 
 ## 1.0.3+1
+
 - readme fixes
 
 ## 1.0.3
-- `fully-tested-message` param: you can now set a custom output message to be displayed when there is no untested lines
 
+- `fully-tested-message` arg: you can now set a custom output message to be displayed when there is no untested lines
 
 ## 1.0.2+1
+
 - Updating example
 
 ## 1.0.2
+
 - Adding "Number of lines that should be tested under `/lib`"
 
 ## 1.0.1
+
 - Removing total of new lines from output because it is a completely useless information
 - Fixes on readme
 
-
 ## 1.0.0
+
 - Stable release
 
 ## 0.0.6+1
+
 - Updating readme 💃
 
 ## 0.0.6
+
 - Ending report is now a table
 
 ## 0.0.5
-- new `fraction-digits` param
-- new `markdown-mode` param
+
+- new `fraction-digits` arg
+- new `markdown-mode` arg
 
 ## 0.0.4
 
 - ⚠️ "use-colorful-font" replaced by "use-colorful-output", since it depends on the output type now
 - New markdown output type
-
 
 ## 0.0.3+2
 
@@ -51,9 +66,9 @@
 
 ## 0.0.3
 
-- ⚠️ "hide-uncovered-lines" param replaced by "show-uncovered-code", which is now a boolean
-- new "use-colorful-font" param.
-- new "report-fully-covered-files" param.
+- ⚠️ "hide-uncovered-lines" arg replaced by "show-uncovered-code", which is now a boolean
+- new "use-colorful-font" arg.
+- new "report-fully-covered-files" arg.
 - removed emojis from the output
 
 ## 0.0.2+1
