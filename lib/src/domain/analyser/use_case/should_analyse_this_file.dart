@@ -3,9 +3,11 @@ import 'package:pull_request_coverage/src/domain/user_options/models/user_option
 class ShouldAnalyseThisFile {
   final UserOptions userOptions;
 
-  ShouldAnalyseThisFile(this.userOptions);
+  const ShouldAnalyseThisFile(this.userOptions);
 
   bool call(String filePath) {
-    return filePath.endsWith(".dart") && filePath.startsWith("lib/") && !userOptions.excludePrefixPaths.any(filePath.startsWith) && !userOptions.excludeSuffixPaths.any(filePath.endsWith);
+    return filePath.endsWith(".dart") &&
+        filePath.startsWith("lib/") &&
+        !userOptions.excludeFile.any((glob) => glob.matches(filePath));
   }
 }
