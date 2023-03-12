@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
 
       - name: checkout
         run: |
@@ -29,7 +29,7 @@ jobs:
         run: dart ci/generate_coverage_helper.dart
 
       - name: Test
-        run: dart test --coverage
+        run: flutter test --coverage
 
       - name: Format
         run: dart format -l 200 .
@@ -38,4 +38,4 @@ jobs:
         run: dart pub global activate pull_request_coverage
 
       - name: pull_request_coverage
-        run: git diff origin/master | flutter pub run pull_request_coverage
+        run: git diff origin/main | flutter pub run pull_request_coverage
