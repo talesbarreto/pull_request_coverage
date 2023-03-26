@@ -102,7 +102,10 @@ class UserOptionsArgs<T> {
     name: "fully-tested-message",
     defaultValue: null,
   );
-  static const yamlConfigFilePath = UserOptionsArgs(name: "config-file", defaultValue: "pull_request_coverage.yaml");
+  static const yamlConfigFilePath = UserOptionsArgs(
+    name: "config-file",
+    defaultValue: "pull_request_coverage.yaml",
+  );
 }
 
 enum UserOptionsArgType {
