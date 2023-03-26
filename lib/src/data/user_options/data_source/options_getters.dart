@@ -1,11 +1,11 @@
 import 'package:pull_request_coverage/src/data/user_options/data_source/user_option_data_source.dart';
 import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
 
-class ArgGetters implements UserOptionDataSource {
+class OptionsGetters implements UserOptionDataSource {
   List<UserOptionDataSource> sources = const [];
 
   /// [setDataSources] sets a set of data sources sorted by priority: on each getter, the first source
-  /// wil be used and, if null, [ArgGetters] will try the next one and so on
+  /// wil be used and, if null, [OptionsGetters] will try the next one and so on
   void setDataSources(List<UserOptionDataSource> sources) => this.sources = sources;
 
   T? _tryGetOnEachSource<T>(T? Function(UserOptionDataSource source) on) {

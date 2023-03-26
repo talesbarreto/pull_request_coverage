@@ -9,11 +9,11 @@ import 'package:pull_request_coverage/src/domain/user_options/models/output_mode
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
 
-import 'data_source/arg_getters.dart';
+import 'data_source/options_getters.dart';
 
 class UserOptionsRepositoryImpl implements UserOptionsRepository {
   final FileSystem fileSystem;
-  final ArgGetters argGetters;
+  final OptionsGetters argGetters;
   final ArgDataSource argDataSource;
   final YamlDataSource yamlDataSource;
 
