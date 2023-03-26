@@ -27,7 +27,6 @@ import 'package:pull_request_coverage/src/presentation/output_print_generator/cl
 import 'package:pull_request_coverage/src/presentation/output_print_generator/markdown_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/print_deprecated_args_warnning.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_for_unexpected_file_structre.dart';
 
@@ -85,8 +84,6 @@ Future<void> main(List<String> arguments) async {
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath, fileSystem);
   final colorizeText = ColorizeCliText(userOptions.useColorfulOutput);
   final outputGenerator = _getOutputGenerator(userOptions, colorizeText);
-
-  PrintDeprecatedArgsWarning(print, colorizeText)(userOptions);
 
   PrintWarningsForUnexpectedFileStructure(print, colorizeText)(
     gitRootRelativePath: gitRootRelativePath,
