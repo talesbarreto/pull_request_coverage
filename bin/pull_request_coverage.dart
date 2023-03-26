@@ -22,6 +22,7 @@ import 'package:pull_request_coverage/src/domain/io/use_case/read_line_from_stdi
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
+import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/markdown_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
@@ -32,7 +33,7 @@ import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_f
 
 UserOptions _getOrFailUserOptions(List<String> arguments, FileSystem fileSystem) {
   final UserOptionsRepository argsRepository = UserOptionsRepositoryImpl(
-    argDataSource: ArgDataSource(ArgParser()),
+    argDataSource: ArgDataSource(ArgParser(), UserOptionsArgs.options),
     yamlDataSource: YamlDataSource(),
     argGetters: ArgGetters(),
     fileSystem: fileSystem,

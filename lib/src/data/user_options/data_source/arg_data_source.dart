@@ -3,9 +3,11 @@ import 'package:pull_request_coverage/src/data/user_options/data_source/user_opt
 import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
 
 class ArgDataSource implements UserOptionDataSource {
+  final List<UserOptionsArgs> availableOptions;
+
   final ArgParser argParser;
 
-  ArgDataSource(this.argParser);
+  ArgDataSource(this.argParser, this.availableOptions);
 
   ArgResults? _argResultsComputation;
 
@@ -17,7 +19,7 @@ class ArgDataSource implements UserOptionDataSource {
   }
 
   void parse(List<String> arguments) {
-    for (final option in UserOptionsArgs.options) {
+    for (final option in availableOptions) {
       argParser.addOption(
         option.name,
         help: option.description,
