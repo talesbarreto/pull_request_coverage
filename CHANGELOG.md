@@ -1,3 +1,8 @@
+## 1.2.0
+
+- ⚠️ Breaking change: deprecated args `exclude-suffix` and `exclude-prefix` no longer available
+- Support for `yaml` configuration file
+
 ## 1.1.0
 
 - ⚠️ Breaking change: `exclude-suffix` arg no longer has a default values with generated files pattern.
