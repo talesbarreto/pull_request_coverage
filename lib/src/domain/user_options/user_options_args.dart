@@ -54,7 +54,7 @@ class UserOptionsArgs<T> {
   );
   static const exclude = UserOptionsArgs(
     name: "exclude",
-    description: "Exclude files path that matches with Glob pattern, separate by comma",
+    description: "Exclude files path that matches with Glob pattern",
     userOptionsArgType: UserOptionsArgType.list,
     defaultValue: null,
   );

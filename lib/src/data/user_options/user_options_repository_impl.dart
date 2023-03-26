@@ -34,9 +34,8 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
 
   void _setArgGetters(List<String> arguments) {
     argDataSource.parse(arguments);
-
-    final yamlFilePath =
-        argDataSource.getString(UserOptionsArgs.yamlConfigFilePath) ?? UserOptionsArgs.yamlConfigFilePath.defaultValue;
+    final yamlConfig = UserOptionsArgs.yamlConfigFilePath;
+    final yamlFilePath = argDataSource.getString(yamlConfig) ?? yamlConfig.defaultValue;
     final yamlFile = fileSystem.file(yamlFilePath);
     if (yamlFile.existsSync()) {
       yamlDataSource.parse(yamlFile.readAsStringSync());
@@ -52,7 +51,9 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
     try {
       _setArgGetters(arguments);
       final excludesFileList = arg.getStringList(UserOptionsArgs.exclude);
-      final excludeKnownGeneratedFiles = arg.getString(UserOptionsArgs.excludeKnownGeneratedFiles) == "true";
+      final excludeKnownGeneratedFiles = arg.getBooleanOrDefault(
+        UserOptionsArgs.excludeKnownGeneratedFiles,
+      );
 
       return ResultSuccess(
         UserOptions(
@@ -65,7 +66,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
           maximumUncoveredLines: arg.getInt(UserOptionsArgs.maximumUncoveredLines),
           showUncoveredCode: arg.getBooleanOrDefault(UserOptionsArgs.showUncoveredCode),
           useColorfulOutput: arg.getBooleanOrDefault(UserOptionsArgs.useColorfulOutput),
-          reportFullyCoveredFiles: arg.getBoolean(UserOptionsArgs.reportFullyCoveredFiles) == true,
+          reportFullyCoveredFiles: arg.getBooleanOrDefault(UserOptionsArgs.reportFullyCoveredFiles),
           outputMode: arg.getString(UserOptionsArgs.outputMode) == "markdown" ? OutputMode.markdown : OutputMode.cli,
           fractionalDigits: arg.getInt(UserOptionsArgs.fractionDigits) ?? 2,
           markdownMode: arg.getString(UserOptionsArgs.markdownMode) == "dart" ? MarkdownMode.dart : MarkdownMode.diff,
