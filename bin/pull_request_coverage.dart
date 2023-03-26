@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:args/args.dart';
+import 'package:file/file.dart';
 import 'package:file/local.dart';
 import 'package:pull_request_coverage/src/data/io/repository/io_repository_impl.dart';
+import 'package:pull_request_coverage/src/data/user_options/data_source/arg_data_source.dart';
+import 'package:pull_request_coverage/src/data/user_options/data_source/options_getters.dart';
+import 'package:pull_request_coverage/src/data/user_options/data_source/yaml_data_source.dart';
 import 'package:pull_request_coverage/src/data/user_options/user_options_repository_impl.dart';
 import 'package:pull_request_coverage/src/domain/analyser/models/exit_code.dart';
 import 'package:pull_request_coverage/src/domain/analyser/use_case/analyze.dart';
@@ -18,6 +22,7 @@ import 'package:pull_request_coverage/src/domain/io/use_case/read_line_from_stdi
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
+import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/markdown_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
@@ -26,8 +31,13 @@ import 'package:pull_request_coverage/src/presentation/use_case/print_deprecated
 import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_for_unexpected_file_structre.dart';
 
-UserOptions _getOrFailUserOptions(List<String> arguments) {
-  final UserOptionsRepository argsRepository = UserOptionsRepositoryImpl(ArgParser());
+UserOptions _getOrFailUserOptions(List<String> arguments, FileSystem fileSystem) {
+  final UserOptionsRepository argsRepository = UserOptionsRepositoryImpl(
+    argDataSource: ArgDataSource(ArgParser(), UserOptionsArgs.options),
+    yamlDataSource: YamlDataSource(),
+    argGetters: OptionsGetters(),
+    fileSystem: fileSystem,
+  );
   final userOptions = argsRepository.getUserOptions(arguments);
   if (userOptions is ResultSuccess<UserOptions>) {
     return userOptions.data;
@@ -38,9 +48,9 @@ UserOptions _getOrFailUserOptions(List<String> arguments) {
   }
 }
 
-Future<List<String>> _getOrFailLcovLines(String filePath) async {
+Future<List<String>> _getOrFailLcovLines(String filePath, FileSystem fileSystem) async {
   try {
-    final lines = await File(filePath).readAsLines();
+    final lines = await fileSystem.file(filePath).readAsLines();
     return lines;
   } catch (e) {
     print("Error reading lcov.info file: $e");
@@ -64,14 +74,15 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
 }
 
 Future<void> main(List<String> arguments) async {
-  final userOptions = _getOrFailUserOptions(arguments);
+  final fileSystem = LocalFileSystem();
+  final userOptions = _getOrFailUserOptions(arguments, fileSystem);
   final ioRepository = IoRepositoryImpl(
-    fileSystem: LocalFileSystem(),
+    fileSystem: fileSystem,
     stdin: stdin,
     stdinTimeout: userOptions.stdinTimeout,
   );
   final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
-  final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath);
+  final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath, fileSystem);
   final colorizeText = ColorizeCliText(userOptions.useColorfulOutput);
   final outputGenerator = _getOutputGenerator(userOptions, colorizeText);
 
