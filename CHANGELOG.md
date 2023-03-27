@@ -1,3 +1,6 @@
+## 1.2.0+1
+- Readme fix
+
 ## 1.2.0
 
 - ⚠️ Breaking change: deprecated args `exclude-suffix` and `exclude-prefix` no longer available
