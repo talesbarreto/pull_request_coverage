@@ -15,7 +15,7 @@ class _DataSource extends Fake implements UserOptionDataSource {
 
 void main() {
   group("when `getInt` is invoked", () {
-    const userOptionsArgs = UserOptionsArgs(name: 'ha', defaultValue: null);
+    const userOptionsArgs = UserOptionsArgs(names: ['ha'], defaultValue: null);
     test("return result from the first data source when it is not null", () {
       final arg = OptionsGetters();
       arg.setDataSources([_DataSource("1"), _DataSource("2"), _DataSource("3")]);

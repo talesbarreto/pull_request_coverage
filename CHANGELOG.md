@@ -1,3 +1,6 @@
+## 1.2.1
+- `exclude` now is an alias for `ignore`
+
 ## 1.2.0+1
 - Readme fix
 

@@ -64,13 +64,13 @@ Both methods have the same settings available. If the same setting is set on bot
 #### Examples
 ##### CLI args
 ```bash
-git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-lines 5 --exclude '/lib/di/**','**/gen.dart'
+git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-lines 5 --ignore '/lib/di/**','**/gen.dart'
 ```
 
 ##### yaml config file
 ```yaml
 maximum-uncovered-lines: 5
-exclude:
+ignore:
   - /lib/di/**
   - "**/gen.dart"
 ```
@@ -91,9 +91,9 @@ Default value within parenthesis
 
 ### File filter
 
-- **exclude**: exclude files that matches with the [widely-known Bash glob syntax](https://pub.dev/packages/glob#syntax), separated by commas. Ex: `--exclude '/lib/di/**','**/gen.dart'`.
+- **ignore**: list of files that should be ignored, using the [widely-known Bash glob syntax](https://pub.dev/packages/glob#syntax).
 
-- **exclude-known-generated-files** (`true`) : Exclude file paths that ends with `.g.dart`, `.pb.dart`, `.pbenum.dart`, `.pbserver.dart` or `.pbjson.dart`
+- **ignore-known-generated-files** (`true`) : Ignore file paths that ends with `.g.dart`, `.pb.dart`, `.pbenum.dart`, `.pbserver.dart` or `.pbjson.dart`
 
 #### Presentation
 

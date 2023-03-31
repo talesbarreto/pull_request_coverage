@@ -16,6 +16,20 @@ class YamlDataSource implements UserOptionDataSource {
     _yamlMapComputation = loadYaml(yaml);
   }
 
+  T? _get<T>(UserOptionsArgs userOptionsArgs) {
+    for (final name in userOptionsArgs.names) {
+      final value = _yamlMap[name];
+      if (value != null) {
+        if (value is T) {
+          return value;
+        } else {
+          throw Exception("Expect `$name` of type ${T.toString()} but `$value` is ${value.runtimeType}");
+        }
+      }
+    }
+    return null;
+  }
+
   @override
   T? get<T>(UserOptionsArgs userOptionsArgs, T Function(String text) transform) {
     final result = getString(userOptionsArgs);
@@ -27,41 +41,46 @@ class YamlDataSource implements UserOptionDataSource {
 
   @override
   String? getString(UserOptionsArgs userOptionsArgs) {
-    return _yamlMap[userOptionsArgs.name];
+    return _get<String>(userOptionsArgs);
   }
 
   @override
   List<String>? getStringList(UserOptionsArgs userOptionsArgs) {
-    final result = _yamlMap[userOptionsArgs.name];
+    final result = _get<YamlList>(userOptionsArgs);
     if (result == null) {
       return null;
     }
-    if (result is YamlList) {
-      return result.toList(growable: false).whereType<String>().toList(growable: false);
-    }
-    throw Exception("Fail to parse yaml ${userOptionsArgs.name}: $result");
+    return result.toList(growable: false).whereType<String>().toList(growable: false);
   }
 
   @override
   bool? getBoolean(UserOptionsArgs userOptionsArgs) {
-    return _yamlMap[userOptionsArgs.name];
+    return _get<bool>(userOptionsArgs);
   }
 
   @override
   double? getDouble(UserOptionsArgs userOptionsArgs) {
-    final result = _yamlMap[userOptionsArgs.name];
+    final result = _get<Object>(userOptionsArgs);
+    if (result is double) {
+      return result;
+    }
     if (result is int) {
       return result.toDouble();
     }
-    return _yamlMap[userOptionsArgs.name];
+
+    return null;
   }
 
   @override
   int? getInt(UserOptionsArgs userOptionsArgs) {
-    final result = _yamlMap[userOptionsArgs.name];
+    final result = _get<Object>(userOptionsArgs);
+    if (result is int) {
+      return result;
+    }
     if (result is double) {
       return result.toInt();
     }
-    return _yamlMap[userOptionsArgs.name];
+
+    return null;
   }
 }

@@ -20,18 +20,26 @@ class ArgDataSource implements UserOptionDataSource {
 
   void parse(List<String> arguments) {
     for (final option in availableOptions) {
-      argParser.addOption(
-        option.name,
-        help: option.description,
-        allowed: option.allowed,
-      );
+      for (final name in option.names) {
+        argParser.addOption(
+          name,
+          help: option.description,
+          allowed: option.allowed,
+        );
+      }
     }
     _argResultsComputation = argParser.parse(arguments);
   }
 
   @override
   String? getString(UserOptionsArgs userOptionsArgs) {
-    return _argResults[userOptionsArgs.name];
+    for (final name in userOptionsArgs.names) {
+      final value = _argResults[name];
+      if (value != null) {
+        return value;
+      }
+    }
+    return null;
   }
 
   @override
