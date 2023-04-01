@@ -1,13 +1,16 @@
 import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/get_result_table.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 
 class MarkdownOutputGenerator implements OutputGenerator {
   final UserOptions userOptions;
+  final GetResultTable getResultTable;
 
   const MarkdownOutputGenerator({
     required this.userOptions,
+    required this.getResultTable,
   });
 
   @override
@@ -50,31 +53,10 @@ class MarkdownOutputGenerator implements OutputGenerator {
   }
 
   @override
-  String? getReport(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines) {
-    if (analysisResult.totalOfNewLines == 0) {
-      return "This pull request has no new lines under `/lib`";
-    }
+  String? getReport(AnalysisResult analysisResult) {
     if (analysisResult.totalOfUncoveredNewLines == 0 && userOptions.fullyTestedMessage != null) {
       return userOptions.fullyTestedMessage;
     }
-
-    final outputBuilder = StringBuffer();
-    final currentCoverage = (analysisResult.coverageRate * 100).toStringAsFixed(userOptions.fractionalDigits);
-
-    String result(bool success) => success ? "Success" : "**FAIL**";
-
-    final linesResult = maximumUncoveredLines == null ? "-" : result(analysisResult.totalOfUncoveredNewLines <= maximumUncoveredLines);
-    final lineThreshold = maximumUncoveredLines == null ? "-" : "$maximumUncoveredLines";
-    final rateResult = minimumCoverageRate == null ? "-" : result(analysisResult.coverageRate >= (minimumCoverageRate / 100));
-    final rateThreshold = minimumCoverageRate == null ? "-" : "$minimumCoverageRate%";
-
-    outputBuilder.writeln("### Report");
-    outputBuilder.writeln("|                              | Current value                                   | Threshold      | Result        |");
-    outputBuilder.writeln("|------------------------------|-------------------------------------------------|----------------|---------------|");
-    outputBuilder.writeln("| Lines that should be tested  | ${analysisResult.totalOfNewLines}               |                |               |");
-    outputBuilder.writeln("| Uncovered new lines          | ${analysisResult.totalOfUncoveredNewLines}      | $lineThreshold | $linesResult  |");
-    outputBuilder.writeln("| Coverage rate                | $currentCoverage%                               | $rateThreshold | $rateResult   |");
-
-    return outputBuilder.toString();
+    return "\n${getResultTable(analysisResult)}";
   }
 }

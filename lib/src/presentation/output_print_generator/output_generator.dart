@@ -12,5 +12,5 @@ abstract class OutputGenerator {
 
   String? getSourceCodeFooter();
 
-  String? getReport(AnalysisResult analysisResult, double? minimumCoverageRate, int? maximumUncoveredLines);
+  String? getReport(AnalysisResult analysisResult);
 }

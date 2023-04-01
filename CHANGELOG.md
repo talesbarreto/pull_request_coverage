@@ -1,5 +1,7 @@
 ## 1.2.1
 -  new `ignore-lines` option
+-  Showing total of `Ignored untested lines` no table result
+-  Removing "This pull request has no new lines under `/lib`" message
 - `exclude` now is an alias for `ignore`
 
 ## 1.2.0+1

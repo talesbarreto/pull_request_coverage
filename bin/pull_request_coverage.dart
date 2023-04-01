@@ -26,8 +26,10 @@ import 'package:pull_request_coverage/src/domain/user_options/models/user_option
 import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
 import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/get_result_table.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/markdown_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/table_builder.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_for_unexpected_file_structre.dart';
@@ -61,15 +63,18 @@ Future<List<String>> _getOrFailLcovLines(String filePath, FileSystem fileSystem)
 }
 
 OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText colorizeText) {
+  final getResultTable = GetResultTable(TableBuilder(), colorizeText, userOptions);
   switch (userOptions.outputMode) {
     case OutputMode.cli:
       return CliOutputGenerator(
         colorizeText: colorizeText,
         userOptions: userOptions,
+        getResultTable: getResultTable,
       );
     case OutputMode.markdown:
       return MarkdownOutputGenerator(
         userOptions: userOptions,
+        getResultTable: getResultTable,
       );
   }
 }
@@ -84,7 +89,7 @@ Future<void> main(List<String> arguments) async {
   );
   final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
   final lcovLines = await _getOrFailLcovLines(userOptions.lcovFilePath, fileSystem);
-  final colorizeText = ColorizeCliText(userOptions.useColorfulOutput);
+  final colorizeText = ColorizeCliText(userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli);
   final outputGenerator = _getOutputGenerator(userOptions, colorizeText);
 
   PrintWarningsForUnexpectedFileStructure(print, colorizeText)(
@@ -109,7 +114,7 @@ Future<void> main(List<String> arguments) async {
 
   final result = await analyzeUseCase();
 
-  print(outputGenerator.getReport(result, userOptions.minimumCoverageRate, userOptions.maximumUncoveredLines));
+  print(outputGenerator.getReport(result));
 
   exit(GetExitCode()(result, userOptions));
 }
