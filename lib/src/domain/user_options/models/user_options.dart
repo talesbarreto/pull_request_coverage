@@ -3,7 +3,7 @@ import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mo
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 
 class UserOptions {
-  final List<Glob> excludeFile;
+  final List<Glob> fileFilters;
   final String lcovFilePath;
   final String? fullyTestedMessage;
   final double? minimumCoverageRate;
@@ -20,7 +20,7 @@ class UserOptions {
 
   /// [fractionalDigits] how many digits after the decimal point to show on coverage rate
   const UserOptions({
-    required this.excludeFile,
+    required this.fileFilters,
     required this.lcovFilePath,
     required this.showUncoveredCode,
     required this.outputMode,

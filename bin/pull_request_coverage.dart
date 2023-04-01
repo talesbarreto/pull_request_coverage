@@ -11,7 +11,8 @@ import 'package:pull_request_coverage/src/data/user_options/user_options_reposit
 import 'package:pull_request_coverage/src/domain/analyzer/models/exit_code.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_exit_code.dart';
-import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_uncoverd_lines_on_file_diff.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_file_from_project.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_file_line_result_data.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_file.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_line.dart';
 import 'package:pull_request_coverage/src/domain/common/result.dart';
@@ -96,13 +97,14 @@ Future<void> main(List<String> arguments) async {
     forEachFileOnGitDiff: ForEachFileOnGitDiff(ReadLineFromStdin(ioRepository).call),
     lcovLines: lcovLines,
     shouldAnalyzeThisFile: ShouldAnalyzeThisFile(userOptions),
-    setUncoveredLines: SetUncoveredLinesOnFileDiff(ShouldAnalyzeThisLine(userOptions.lineFilters)),
+    setUncoveredLines: SetFileLineResultData(ShouldAnalyzeThisLine(userOptions.lineFilters)),
     getUncoveredFileLines: GetUncoveredFileLines(),
     printResultForFile: PrintResultForFile(
       print: print,
       outputGenerator: outputGenerator,
       showUncoveredLines: userOptions.showUncoveredCode,
     ),
+    isAFileFromProject: IsAFileFromProject(),
   );
 
   final result = await analyzeUseCase();

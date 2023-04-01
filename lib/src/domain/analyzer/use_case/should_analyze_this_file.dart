@@ -8,6 +8,6 @@ class ShouldAnalyzeThisFile {
   bool call(String filePath) {
     return filePath.endsWith(".dart") &&
         filePath.startsWith("lib/") &&
-        !userOptions.excludeFile.any((glob) => glob.matches(filePath));
+        !userOptions.fileFilters.any((glob) => glob.matches(filePath));
   }
 }

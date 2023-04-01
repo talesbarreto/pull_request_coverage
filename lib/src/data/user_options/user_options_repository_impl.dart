@@ -70,7 +70,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
 
       return ResultSuccess(
         UserOptions(
-          excludeFile: [
+          fileFilters: [
             if (excludesFileList != null) ..._parseGlob(excludesFileList),
             if (excludeKnownGeneratedFiles) ..._parseGlob(UserOptionsArgs.knownGeneratedFiles),
           ],

@@ -1,6 +1,7 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
-import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_uncoverd_lines_on_file_diff.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_file_from_project.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_file_line_result_data.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_file.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_line.dart';
@@ -15,47 +16,34 @@ void main() {
     registerFallbackValue(FileDiff(path: '', lines: []));
   });
 
-  test('do not analyse file if `shouldAnalyseThisFile` returns false', () {
+  test('do not analyze file if `IsAFileFromProject` returns false', () {
     final getUncoveredFileLines = _MockGetUncoveredFileLines();
-    final analyze = Analyze(
-      parseGitDiff: _MockParseGitHubDiff(),
-      forEachFileOnGitDiff: _MockForEachFileOnGitDiff.dummy([
-        ["aho"]
-      ]),
-      lcovLines: [],
-      shouldAnalyzeThisFile: _MockShouldAnalyseThisFile.dummy(false),
-      setUncoveredLines: _MockSetUncoveredLinesOnFileDiff(),
-      getUncoveredFileLines: getUncoveredFileLines,
-      printResultForFile: _MockPrintResultForFile(),
-    );
+    final analyze = _getAnalyze(isAFileFromProject: _FakeIsAFileFromProject(response: false));
 
     analyze();
 
     verifyNever(() => getUncoveredFileLines.call(any(), any()));
   });
 
-  group('When there is three files, each one has two new lines ans one of them is uncovered', () {
+  group('When there is three files, each one has two new lines and one of them is uncovered', () {
     const totalOfFilesOnDiff = 3;
     // To simplify the test, all files are equal
     final linesOfEachFile = [
-      FileLine(line: "int main(){", lineNumber: 1, isANewLine: true, isUncovered: true),
-      FileLine(line: "   print(\"oba\")", lineNumber: 2, isANewLine: true, isUncovered: false),
-      FileLine(line: "   return 0", lineNumber: 3, isANewLine: false, isUncovered: true),
+      FileLine(line: "int main(){", lineNumber: 1, isANewLine: true, isUncovered: true, ignored: false),
+      FileLine(line: "   print(\"oba\")", lineNumber: 2, isANewLine: true, isUncovered: false, ignored: false),
+      FileLine(line: "   return 0", lineNumber: 3, isANewLine: false, isUncovered: true, ignored: false),
     ];
 
     final setUncoveredLines = _MockSetUncoveredLinesOnFileDiff();
 
-    final analyze = Analyze(
-      parseGitDiff: _MockParseGitHubDiff(
+    final analyze = _getAnalyze(
+      mockParseGitHubDiff: _MockParseGitHubDiff(
         answer: FileDiff(path: '/var/tmp/ha.dart', lines: linesOfEachFile),
       ),
-      forEachFileOnGitDiff:
+      mockForEachFileOnGitDiff:
           _MockForEachFileOnGitDiff.dummy(List.generate(totalOfFilesOnDiff, (index) => ["file$index"])),
-      lcovLines: [],
-      shouldAnalyzeThisFile: _MockShouldAnalyseThisFile.dummy(true),
-      setUncoveredLines: setUncoveredLines,
-      getUncoveredFileLines: _MockGetUncoveredFileLines.dummy([1, 3]),
-      printResultForFile: _MockPrintResultForFile(),
+      mockGetUncoveredFileLines: _MockGetUncoveredFileLines.dummy([1, 3]),
+      mockSetUncoveredLinesOnFileDiff: setUncoveredLines,
     );
 
     final analysisResult = analyze();
@@ -70,6 +58,50 @@ void main() {
       verify(() => setUncoveredLines.call(any(), any())).called(totalOfFilesOnDiff);
     });
   });
+
+  test(
+    "ignored lines should count for totalOfIgnoredLinesMissingTests but not for totalOfNewLines nor totalOfUncoveredNewLines",
+    () async {
+      final linesOfEachFile = [
+        FileLine(line: "int main(){", lineNumber: 1, isANewLine: true, isUncovered: true, ignored: true),
+        FileLine(line: "   print(\"oba\")", lineNumber: 2, isANewLine: true, isUncovered: false, ignored: true),
+        FileLine(line: "   return 0", lineNumber: 3, isANewLine: true, isUncovered: true, ignored: true),
+        FileLine(line: "   return 0", lineNumber: 4, isANewLine: true, isUncovered: true, ignored: false),
+      ];
+      final analyze = _getAnalyze(
+        mockParseGitHubDiff: _MockParseGitHubDiff(
+          answer: FileDiff(path: '/var/tmp/ha.dart', lines: linesOfEachFile),
+        ),
+        mockGetUncoveredFileLines: _MockGetUncoveredFileLines.dummy([1, 2, 3, 4]),
+      );
+      final analyzeResult = await analyze();
+      expect(analyzeResult.totalOfNewLines, 1);
+      expect(analyzeResult.totalOfIgnoredLinesMissingTests, 2);
+      expect(analyzeResult.totalOfUncoveredNewLines, 1);
+    },
+  );
+}
+
+Analyze _getAnalyze({
+  _MockParseGitHubDiff? mockParseGitHubDiff,
+  _FakeIsAFileFromProject? isAFileFromProject,
+  _MockGetUncoveredFileLines? mockGetUncoveredFileLines,
+  _MockForEachFileOnGitDiff? mockForEachFileOnGitDiff,
+  _MockSetUncoveredLinesOnFileDiff? mockSetUncoveredLinesOnFileDiff,
+}) {
+  return Analyze(
+    parseGitDiff: mockParseGitHubDiff ?? _MockParseGitHubDiff(),
+    forEachFileOnGitDiff: mockForEachFileOnGitDiff ??
+        _MockForEachFileOnGitDiff.dummy([
+          ["aho"]
+        ]),
+    lcovLines: [],
+    shouldAnalyzeThisFile: _MockShouldAnalyzeThisFile.dummy(true),
+    setUncoveredLines: mockSetUncoveredLinesOnFileDiff ?? _MockSetUncoveredLinesOnFileDiff(),
+    getUncoveredFileLines: mockGetUncoveredFileLines ?? _MockGetUncoveredFileLines(),
+    printResultForFile: _MockPrintResultForFile(),
+    isAFileFromProject: isAFileFromProject ?? _FakeIsAFileFromProject(),
+  );
 }
 
 class _MockParseGitHubDiff extends Mock implements ParseGitDiff {
@@ -96,17 +128,17 @@ class _MockForEachFileOnGitDiff extends Mock implements ForEachFileOnGitDiff {
   }
 }
 
-class _MockShouldAnalyseThisFile extends Mock implements ShouldAnalyzeThisFile {
-  _MockShouldAnalyseThisFile();
+class _MockShouldAnalyzeThisFile extends Mock implements ShouldAnalyzeThisFile {
+  _MockShouldAnalyzeThisFile();
 
-  factory _MockShouldAnalyseThisFile.dummy(bool answer) {
-    final mock = _MockShouldAnalyseThisFile();
+  factory _MockShouldAnalyzeThisFile.dummy(bool answer) {
+    final mock = _MockShouldAnalyzeThisFile();
     when(() => mock.call(any())).thenReturn(answer);
     return mock;
   }
 }
 
-class _MockSetUncoveredLinesOnFileDiff extends Mock implements SetUncoveredLinesOnFileDiff {}
+class _MockSetUncoveredLinesOnFileDiff extends Mock implements SetFileLineResultData {}
 
 class _MockGetUncoveredFileLines extends Mock implements GetUncoveredFileLines {
   _MockGetUncoveredFileLines();
@@ -119,3 +151,12 @@ class _MockGetUncoveredFileLines extends Mock implements GetUncoveredFileLines {
 }
 
 class _MockPrintResultForFile extends Mock implements PrintResultForFile {}
+
+class _FakeIsAFileFromProject extends Fake implements IsAFileFromProject {
+  final bool response;
+
+  _FakeIsAFileFromProject({this.response = true});
+
+  @override
+  bool call(String path) => response;
+}

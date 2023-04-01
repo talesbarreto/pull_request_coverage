@@ -28,11 +28,11 @@ class PrintResultForFile {
       write(outputGenerator.getSourceCodeHeader());
       for (int i = 0; i < fileDiff.lines.length; i++) {
         final line = fileDiff.lines[i];
-        var shouldPrint = line.isAnUncoveredNewLine;
+        var shouldPrint = line.isTestMissing;
         if (!shouldPrint) {
           // printing [printCodeWindow] codes after and before the uncovered line
           for (int j = max(i - printCodeWindow, 0); j < fileDiff.lines.length && j < printCodeWindow + i + 1; j++) {
-            if (fileDiff.lines[j].isAnUncoveredNewLine) {
+            if (fileDiff.lines[j].isTestMissing) {
               shouldPrint = true;
               break;
             }
@@ -43,7 +43,7 @@ class PrintResultForFile {
             write(outputGenerator.getSourceCodeBlocDivider());
           }
           lastPrintedLineNumber = line.lineNumber;
-          write(outputGenerator.getLine(line.line, line.lineNumber, line.isANewLine, line.isUncovered));
+          write(outputGenerator.getLine(line.line, line.lineNumber, line.isANewLine, line.isTestMissing));
         }
       }
       write(outputGenerator.getSourceCodeFooter());
