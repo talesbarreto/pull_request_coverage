@@ -5,10 +5,10 @@ class FileDiff {
   final String path;
   final List<FileLine> lines;
 
-  bool get hasUncoveredLines => lines.any((line) => line.isAnUncoveredNewLine);
+  bool get hasUncoveredLines => lines.any((line) => line.isTestMissing);
 
   int get newLinesCount => lines.where((line) => line.isANewLine).length;
-  int get uncoveredNewLinesCount => lines.where((line) => line.isAnUncoveredNewLine).length;
+  int get uncoveredNewLinesCount => lines.where((line) => line.isTestMissing).length;
 
   const FileDiff({
     required this.path,

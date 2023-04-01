@@ -6,17 +6,21 @@ class FileLine {
   final String line;
   final int lineNumber;
   final bool isANewLine;
-  bool isUncovered;
+  bool? isUncovered;
+  bool? ignored;
 
   FileLine({
     required this.line,
     required this.lineNumber,
     required this.isANewLine,
-    this.isUncovered = false,
+    this.isUncovered,
+    this.ignored,
   });
 
-  bool get isAnUncoveredNewLine => isANewLine && isUncovered;
+  bool get isANewNotIgnoredLine => isANewLine && ignored == false;
+
+  bool get isTestMissing => isANewLine && isUncovered == true && ignored == false;
 
   @override
-  String toString() => "$lineNumber ${isAnUncoveredNewLine ? "💃" : "👍"}: $line";
+  String toString() => "$lineNumber ${isTestMissing ? "💃" : "👍"}: $line";
 }

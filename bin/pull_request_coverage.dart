@@ -8,11 +8,13 @@ import 'package:pull_request_coverage/src/data/user_options/data_source/arg_data
 import 'package:pull_request_coverage/src/data/user_options/data_source/options_getters.dart';
 import 'package:pull_request_coverage/src/data/user_options/data_source/yaml_data_source.dart';
 import 'package:pull_request_coverage/src/data/user_options/user_options_repository_impl.dart';
-import 'package:pull_request_coverage/src/domain/analyser/models/exit_code.dart';
-import 'package:pull_request_coverage/src/domain/analyser/use_case/analyze.dart';
-import 'package:pull_request_coverage/src/domain/analyser/use_case/get_exit_code.dart';
-import 'package:pull_request_coverage/src/domain/analyser/use_case/set_uncoverd_lines_on_file_diff.dart';
-import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyse_this_file.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/models/exit_code.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_exit_code.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_file_from_project.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_file_line_result_data.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_file.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_line.dart';
 import 'package:pull_request_coverage/src/domain/common/result.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
@@ -94,14 +96,15 @@ Future<void> main(List<String> arguments) async {
     parseGitDiff: ParseGitDiff(RemoveGitRootRelativePath(gitRootRelativePath)),
     forEachFileOnGitDiff: ForEachFileOnGitDiff(ReadLineFromStdin(ioRepository).call),
     lcovLines: lcovLines,
-    shouldAnalyseThisFile: ShouldAnalyseThisFile(userOptions),
-    setUncoveredLines: SetUncoveredLinesOnFileDiff(),
+    shouldAnalyzeThisFile: ShouldAnalyzeThisFile(userOptions),
+    setUncoveredLines: SetFileLineResultData(ShouldAnalyzeThisLine(userOptions.lineFilters)),
     getUncoveredFileLines: GetUncoveredFileLines(),
     printResultForFile: PrintResultForFile(
       print: print,
       outputGenerator: outputGenerator,
       showUncoveredLines: userOptions.showUncoveredCode,
     ),
+    isAFileFromProject: IsAFileFromProject(),
   );
 
   final result = await analyzeUseCase();

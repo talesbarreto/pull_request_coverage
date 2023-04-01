@@ -1,4 +1,4 @@
-import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
 
 abstract class OutputGenerator {
   String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount);

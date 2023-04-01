@@ -29,6 +29,7 @@ class UserOptionsArgs<T> {
     lcovFile,
     excludeKnownGeneratedFiles,
     exclude,
+    ignoreLines,
     minimumCoverage,
     maximumUncoveredLines,
     useColorfulOutput,
@@ -53,7 +54,7 @@ class UserOptionsArgs<T> {
     defaultValue: true,
   );
   static const exclude = UserOptionsArgs(
-    names: ["ignore" ,"exclude"],
+    names: ["ignore", "exclude"],
     description: "Exclude files path that matches with Glob pattern",
     userOptionsArgType: UserOptionsArgType.list,
     defaultValue: null,
@@ -105,6 +106,11 @@ class UserOptionsArgs<T> {
   static const yamlConfigFilePath = UserOptionsArgs(
     names: ["config-file"],
     defaultValue: "pull_request_coverage.yaml",
+  );
+  static const ignoreLines = UserOptionsArgs(
+    names: ["ignore-lines"],
+    userOptionsArgType: UserOptionsArgType.list,
+    defaultValue: null,
   );
 }
 

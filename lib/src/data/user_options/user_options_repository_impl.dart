@@ -45,6 +45,19 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
     }
   }
 
+  List<RegExp> _parseRegex(List<String>? expressions) {
+    return expressions?.map(
+          (expression) {
+            try {
+              return RegExp(expression);
+            } catch (e) {
+              throw Exception("Fail to parse regex `$expression` : $e");
+            }
+          },
+        ).toList(growable: false) ??
+        const [];
+  }
+
   @override
   Result<UserOptions> getUserOptions(List<String> arguments) {
     final arg = argGetters;
@@ -57,7 +70,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
 
       return ResultSuccess(
         UserOptions(
-          excludeFile: [
+          fileFilters: [
             if (excludesFileList != null) ..._parseGlob(excludesFileList),
             if (excludeKnownGeneratedFiles) ..._parseGlob(UserOptionsArgs.knownGeneratedFiles),
           ],
@@ -73,6 +86,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
           fullyTestedMessage: arg.getString(UserOptionsArgs.fullyTestedMessage),
           stdinTimeout: Duration(seconds: arg.getInt(UserOptionsArgs.stdinTimeout) ?? 1),
           deprecatedFilterSet: false,
+          lineFilters: _parseRegex(arg.getStringList(UserOptionsArgs.ignoreLines)),
         ),
       );
     } catch (e) {

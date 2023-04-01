@@ -1,5 +1,5 @@
-import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
-import 'package:pull_request_coverage/src/domain/analyser/models/exit_code.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/models/exit_code.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 
 class GetExitCode {
