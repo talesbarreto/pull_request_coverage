@@ -1,6 +1,6 @@
 import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/domain/analyser/use_case/set_uncoverd_lines_on_file_diff.dart';
-import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyse_this_file.dart';
+import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyze_this_file.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
@@ -11,7 +11,7 @@ import 'package:pull_request_coverage/src/presentation/use_case/print_result_for
 class Analyze {
   final ParseGitDiff parseGitDiff;
   final ForEachFileOnGitDiff forEachFileOnGitDiff;
-  final ShouldAnalyseThisFile shouldAnalyseThisFile;
+  final ShouldAnalyzeThisFile shouldAnalyzeThisFile;
   final SetUncoveredLinesOnFileDiff setUncoveredLines;
   final GetUncoveredFileLines getUncoveredFileLines;
   final PrintResultForFile printResultForFile;
@@ -21,7 +21,7 @@ class Analyze {
     required this.parseGitDiff,
     required this.forEachFileOnGitDiff,
     required this.lcovLines,
-    required this.shouldAnalyseThisFile,
+    required this.shouldAnalyzeThisFile,
     required this.setUncoveredLines,
     required this.getUncoveredFileLines,
     required this.printResultForFile,
@@ -33,7 +33,7 @@ class Analyze {
 
     await forEachFileOnGitDiff((List<String> fileLines) {
       final FileDiff? fileDiff = parseGitDiff(fileLines);
-      if (fileDiff != null && shouldAnalyseThisFile(fileDiff.path)) {
+      if (fileDiff != null && shouldAnalyzeThisFile(fileDiff.path)) {
         final uncoveredLinesOnFile = getUncoveredFileLines(lcovLines, fileDiff.path);
         if (uncoveredLinesOnFile != null) {
           setUncoveredLines(fileDiff, uncoveredLinesOnFile);

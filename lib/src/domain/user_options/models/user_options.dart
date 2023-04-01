@@ -16,6 +16,7 @@ class UserOptions {
   final int fractionalDigits;
   final Duration stdinTimeout;
   final bool deprecatedFilterSet;
+  final List<RegExp> lineFilters;
 
   /// [fractionalDigits] how many digits after the decimal point to show on coverage rate
   const UserOptions({
@@ -32,5 +33,6 @@ class UserOptions {
     this.reportFullyCoveredFiles = true,
     this.stdinTimeout = const Duration(seconds: 1),
     this.deprecatedFilterSet = false,
+    this.lineFilters = const [],
   });
 }

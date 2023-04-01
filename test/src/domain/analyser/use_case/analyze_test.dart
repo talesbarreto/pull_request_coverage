@@ -1,7 +1,7 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:pull_request_coverage/src/domain/analyser/use_case/analyze.dart';
 import 'package:pull_request_coverage/src/domain/analyser/use_case/set_uncoverd_lines_on_file_diff.dart';
-import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyse_this_file.dart';
+import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyze_this_file.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_line.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
@@ -23,7 +23,7 @@ void main() {
         ["aho"]
       ]),
       lcovLines: [],
-      shouldAnalyseThisFile: _MockShouldAnalyseThisFile.dummy(false),
+      shouldAnalyzeThisFile: _MockShouldAnalyseThisFile.dummy(false),
       setUncoveredLines: _MockSetUncoveredLinesOnFileDiff(),
       getUncoveredFileLines: getUncoveredFileLines,
       printResultForFile: _MockPrintResultForFile(),
@@ -49,9 +49,10 @@ void main() {
       parseGitDiff: _MockParseGitHubDiff(
         answer: FileDiff(path: '/var/tmp/ha.dart', lines: linesOfEachFile),
       ),
-      forEachFileOnGitDiff: _MockForEachFileOnGitDiff.dummy(List.generate(totalOfFilesOnDiff, (index) => ["file$index"])),
+      forEachFileOnGitDiff:
+          _MockForEachFileOnGitDiff.dummy(List.generate(totalOfFilesOnDiff, (index) => ["file$index"])),
       lcovLines: [],
-      shouldAnalyseThisFile: _MockShouldAnalyseThisFile.dummy(true),
+      shouldAnalyzeThisFile: _MockShouldAnalyseThisFile.dummy(true),
       setUncoveredLines: setUncoveredLines,
       getUncoveredFileLines: _MockGetUncoveredFileLines.dummy([1, 3]),
       printResultForFile: _MockPrintResultForFile(),
@@ -95,7 +96,7 @@ class _MockForEachFileOnGitDiff extends Mock implements ForEachFileOnGitDiff {
   }
 }
 
-class _MockShouldAnalyseThisFile extends Mock implements ShouldAnalyseThisFile {
+class _MockShouldAnalyseThisFile extends Mock implements ShouldAnalyzeThisFile {
   _MockShouldAnalyseThisFile();
 
   factory _MockShouldAnalyseThisFile.dummy(bool answer) {

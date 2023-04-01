@@ -1,9 +1,9 @@
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 
-class ShouldAnalyseThisFile {
+class ShouldAnalyzeThisFile {
   final UserOptions userOptions;
 
-  const ShouldAnalyseThisFile(this.userOptions);
+  const ShouldAnalyzeThisFile(this.userOptions);
 
   bool call(String filePath) {
     return filePath.endsWith(".dart") &&
