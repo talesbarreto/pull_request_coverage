@@ -1,5 +1,5 @@
-import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyze_this_file.dart';
-import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyze_this_line.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_file.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_line.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
 
 class SetUncoveredLinesOnFileDiff {

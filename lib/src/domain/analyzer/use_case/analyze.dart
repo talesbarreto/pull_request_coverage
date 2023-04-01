@@ -1,6 +1,6 @@
-import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
-import 'package:pull_request_coverage/src/domain/analyser/use_case/set_uncoverd_lines_on_file_diff.dart';
-import 'package:pull_request_coverage/src/domain/analyser/use_case/should_analyze_this_file.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_uncoverd_lines_on_file_diff.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_file.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';

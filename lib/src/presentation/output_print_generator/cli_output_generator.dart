@@ -1,4 +1,4 @@
-import 'package:pull_request_coverage/src/domain/analyser/models/analysis_result.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_table_builder.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
