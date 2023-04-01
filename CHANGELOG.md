@@ -1,4 +1,5 @@
 ## 1.2.1
+-  new `ignore-lines` option
 - `exclude` now is an alias for `ignore`
 
 ## 1.2.0+1
