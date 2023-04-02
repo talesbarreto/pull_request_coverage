@@ -28,10 +28,9 @@ import 'package:pull_request_coverage/src/domain/user_options/user_options_args.
 import 'package:pull_request_coverage/src/presentation/output_print_generator/cli_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/get_result_table.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/markdown_output_generator.dart';
-import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/plain_text_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/table_builder.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_for_unexpected_file_structre.dart';
 
 UserOptions _getOrFailUserOptions(List<String> arguments, FileSystem fileSystem) {
@@ -62,7 +61,7 @@ Future<List<String>> _getOrFailLcovLines(String filePath, FileSystem fileSystem)
   }
 }
 
-OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText colorizeText) {
+PlainTextOutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText colorizeText) {
   final getResultTable = GetResultTable(TableBuilder(), colorizeText, userOptions);
   switch (userOptions.outputMode) {
     case OutputMode.cli:
@@ -70,11 +69,13 @@ OutputGenerator _getOutputGenerator(UserOptions userOptions, ColorizeCliText col
         colorizeText: colorizeText,
         userOptions: userOptions,
         getResultTable: getResultTable,
+        print: print,
       );
     case OutputMode.markdown:
       return MarkdownOutputGenerator(
         userOptions: userOptions,
         getResultTable: getResultTable,
+        print: print,
       );
   }
 }
@@ -104,11 +105,7 @@ Future<void> main(List<String> arguments) async {
     shouldAnalyzeThisFile: ShouldAnalyzeThisFile(userOptions),
     setUncoveredLines: SetFileLineResultData(ShouldAnalyzeThisLine(userOptions.lineFilters)),
     getUncoveredFileLines: GetUncoveredFileLines(),
-    printResultForFile: PrintResultForFile(
-      print: print,
-      outputGenerator: outputGenerator,
-      showUncoveredLines: userOptions.showUncoveredCode,
-    ),
+    outputGenerator: outputGenerator,
     isAFileFromProject: IsAFileFromProject(),
   );
 

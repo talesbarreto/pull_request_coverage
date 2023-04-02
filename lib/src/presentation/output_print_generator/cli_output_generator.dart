@@ -1,10 +1,10 @@
 import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/get_result_table.dart';
-import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/plain_text_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 
-class CliOutputGenerator implements OutputGenerator {
+class CliOutputGenerator with PlainTextOutputGenerator {
   final ColorizeCliText colorizeText;
   final UserOptions userOptions;
   final GetResultTable getResultTable;
@@ -13,7 +13,14 @@ class CliOutputGenerator implements OutputGenerator {
     required this.colorizeText,
     required this.userOptions,
     required this.getResultTable,
+    required this.print,
   });
+
+  @override
+  final void Function(String message) print;
+
+  @override
+  bool get showUncoveredCode => userOptions.showUncoveredCode;
 
   @override
   String? getSourceCodeHeader() => null;
@@ -45,9 +52,9 @@ class CliOutputGenerator implements OutputGenerator {
   }
 
   @override
-  String? getReport(AnalysisResult analysisResult) {
+  String getReport(AnalysisResult analysisResult) {
     if (analysisResult.totalOfUncoveredNewLines == 0 && userOptions.fullyTestedMessage != null) {
-      return userOptions.fullyTestedMessage;
+      return userOptions.fullyTestedMessage!;
     }
 
     return "\n${getResultTable(analysisResult)}";

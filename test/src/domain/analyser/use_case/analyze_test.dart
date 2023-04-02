@@ -8,7 +8,7 @@ import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -99,7 +99,7 @@ Analyze _getAnalyze({
     shouldAnalyzeThisFile: _MockShouldAnalyzeThisFile.dummy(true),
     setUncoveredLines: mockSetUncoveredLinesOnFileDiff ?? _MockSetUncoveredLinesOnFileDiff(),
     getUncoveredFileLines: mockGetUncoveredFileLines ?? _MockGetUncoveredFileLines(),
-    printResultForFile: _MockPrintResultForFile(),
+    outputGenerator: _MockOutputGenerator(),
     isAFileFromProject: isAFileFromProject ?? _FakeIsAFileFromProject(),
   );
 }
@@ -150,7 +150,7 @@ class _MockGetUncoveredFileLines extends Mock implements GetUncoveredFileLines {
   }
 }
 
-class _MockPrintResultForFile extends Mock implements PrintResultForFile {}
+class _MockOutputGenerator extends Mock implements OutputGenerator {}
 
 class _FakeIsAFileFromProject extends Fake implements IsAFileFromProject {
   final bool response;

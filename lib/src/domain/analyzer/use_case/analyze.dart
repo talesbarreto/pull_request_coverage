@@ -6,7 +6,7 @@ import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/print_result_for_file.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
 
 /// [Analyze] is the main use case of the application.
 class Analyze {
@@ -16,7 +16,7 @@ class Analyze {
   final SetFileLineResultData setUncoveredLines;
   final GetUncoveredFileLines getUncoveredFileLines;
   final IsAFileFromProject isAFileFromProject;
-  final PrintResultForFile printResultForFile;
+  final OutputGenerator outputGenerator;
   final List<String> lcovLines;
 
   const Analyze({
@@ -26,7 +26,7 @@ class Analyze {
     required this.shouldAnalyzeThisFile,
     required this.setUncoveredLines,
     required this.getUncoveredFileLines,
-    required this.printResultForFile,
+    required this.outputGenerator,
     required this.isAFileFromProject,
   });
 
@@ -51,7 +51,7 @@ class Analyze {
           }).length;
         }
         if (!ignoreFile) {
-          printResultForFile(fileDiff);
+          outputGenerator.addFile(fileDiff);
         }
       }
     });

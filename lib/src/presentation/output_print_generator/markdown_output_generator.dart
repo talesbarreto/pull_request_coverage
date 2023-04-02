@@ -2,16 +2,22 @@ import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result
 import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/get_result_table.dart';
-import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/output_print_generator/plain_text_output_generator.dart';
 
-class MarkdownOutputGenerator implements OutputGenerator {
+class MarkdownOutputGenerator with PlainTextOutputGenerator {
   final UserOptions userOptions;
   final GetResultTable getResultTable;
-
   const MarkdownOutputGenerator({
     required this.userOptions,
     required this.getResultTable,
+    required this.print,
   });
+
+  @override
+  final void Function(String message) print;
+
+  @override
+  bool get showUncoveredCode => userOptions.showUncoveredCode;
 
   @override
   String? getSourceCodeHeader() => userOptions.markdownMode == MarkdownMode.diff ? "```diff\n" : "```dart\n";
@@ -53,9 +59,9 @@ class MarkdownOutputGenerator implements OutputGenerator {
   }
 
   @override
-  String? getReport(AnalysisResult analysisResult) {
+  String getReport(AnalysisResult analysisResult) {
     if (analysisResult.totalOfUncoveredNewLines == 0 && userOptions.fullyTestedMessage != null) {
-      return userOptions.fullyTestedMessage;
+      return userOptions.fullyTestedMessage!;
     }
     return "\n${getResultTable(analysisResult)}";
   }
