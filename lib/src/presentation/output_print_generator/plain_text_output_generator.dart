@@ -66,4 +66,9 @@ mixin PlainTextOutputGenerator implements OutputGenerator {
   void setReport(AnalysisResult analysisResult) {
     print(getReport(analysisResult));
   }
+
+  @override
+  void printFatalError(String msg, error, StackTrace? stackTrace) {
+    print("${error?.toString() ?? msg} ${stackTrace != null ? "\ntackTrace.toString()" : ""}");
+  }
 }

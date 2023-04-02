@@ -89,8 +89,8 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
           lineFilters: _parseRegex(arg.getStringList(UserOptionsArgs.ignoreLines)),
         ),
       );
-    } catch (e) {
-      return ResultError(e.toString());
+    } catch (e, s) {
+      return ResultError(e.toString(), e, s);
     }
   }
 }

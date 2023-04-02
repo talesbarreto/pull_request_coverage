@@ -1,0 +1,57 @@
+diff --git a/lib/main.dart b/lib/main.dart
+index 1af937d..d624584 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
+         // or simply save your changes to "hot reload" in a Flutter IDE).
+         // Notice that the counter didn't reset back to zero; the application
+         // is not restarted.
+-        primarySwatch: Colors.blue,
++        primarySwatch: Colors.red,
+       ),
+       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+     );
+diff --git a/lib/my_home_page.dart b/lib/my_home_page.dart
+index dfc02ef..f9523a0 100644
+--- a/lib/my_home_page.dart
++++ b/lib/my_home_page.dart
+@@ -1,6 +1,8 @@
++import 'package:coverage_sample/pair.dart';
+ import 'package:flutter/material.dart';
++
+ class MyHomePage extends StatefulWidget {
+-  const MyHomePage({super.key, required this.title});
++  const MyHomePage({super.key, required this.title, this.pair});
+ 
+   // This widget is the home page of your application. It is stateful, meaning
+   // that it has a State object (defined below) that contains fields that affect
+@@ -12,6 +14,7 @@ class MyHomePage extends StatefulWidget {
+   // always marked "final".
+ 
+   final String title;
++  final Pair? pair;
+ 
+   @override
+   State<MyHomePage> createState() => _MyHomePageState();
+diff --git a/lib/pair.dart b/lib/pair.dart
+index e69de29..41aada6 100644
+--- a/lib/pair.dart
++++ b/lib/pair.dart
+@@ -0,0 +1,17 @@
++class Pair<T, U> {
++  final T first;
++  final T second;
++
++  const Pair(this.first, this.second);
++
++  @override
++  bool operator ==(Object other) {
++    return other is Pair<T, U> && first == other.first && second == other.second;
++  }
++
++  @override
++  int get hashCode => Object.hashAll([first, second]);
++
++  @override
++  String toString() => "Pair($first,$second)";
++}

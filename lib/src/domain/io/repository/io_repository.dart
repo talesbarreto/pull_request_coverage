@@ -1,3 +1,5 @@
+import 'package:file/file.dart';
+
 abstract class IoRepository {
   /// Reads a single line from [stdin] asynchronously.
   Future<String?> readStdinLine();
@@ -13,4 +15,6 @@ abstract class IoRepository {
   /// pull_request_coverage should run in the root of a dart project.
   /// [doesLibDirectoryExist] is used to check if `./lib` exists
   Future<bool> doesLibDirectoryExist();
+
+  Future<List<String>> getLcovLines(String filePath, FileSystem fileSystem);
 }

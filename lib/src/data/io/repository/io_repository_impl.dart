@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:file/file.dart';
 
@@ -9,23 +8,21 @@ import 'package:pull_request_coverage/src/extensions/file.dart';
 class IoRepositoryImpl implements IoRepository {
   static const gitFileName = ".git";
 
-  late final Stream<String> _stdinLineStreamBroadcaster =
-      stdin.transform(utf8.decoder).transform(const LineSplitter()).asBroadcastStream();
+  final Stream<String> stdinStream;
 
   final FileSystem fileSystem;
-  final Stdin stdin;
   final Duration stdinTimeout;
 
-  IoRepositoryImpl({
+  const IoRepositoryImpl({
     required this.fileSystem,
-    required this.stdin,
+    required this.stdinStream,
     required this.stdinTimeout,
   });
 
   @override
   Future<String?> readStdinLine() async {
     try {
-      final line = await _stdinLineStreamBroadcaster.first.timeout(stdinTimeout);
+      final line = await stdinStream.first.timeout(stdinTimeout);
       return line;
     } catch (e) {
       return null;
@@ -57,5 +54,10 @@ class IoRepositoryImpl implements IoRepository {
       }
     }
     return false;
+  }
+
+  @override
+  Future<List<String>> getLcovLines(String filePath, FileSystem fileSystem) {
+    return fileSystem.file(filePath).readAsLines();
   }
 }
