@@ -12,7 +12,7 @@ index 1af937d..d624584 100644
        home: const MyHomePage(title: 'Flutter Demo Home Page'),
      );
 diff --git a/lib/my_home_page.dart b/lib/my_home_page.dart
-index dfc02ef..f9523a0 100644
+index dfc02ef..3e7bc42 100644
 --- a/lib/my_home_page.dart
 +++ b/lib/my_home_page.dart
 @@ -1,6 +1,8 @@
@@ -33,6 +33,17 @@ index dfc02ef..f9523a0 100644
  
    @override
    State<MyHomePage> createState() => _MyHomePageState();
+@@ -31,6 +34,10 @@ class _MyHomePageState extends State<MyHomePage> {
+     });
+   }
+ 
++  void someUntestedFunction(){
++    print("bazinga!");
++  }
++
+   @override
+   Widget build(BuildContext context) {
+     // This method is rerun every time setState is called, for instance as done
 diff --git a/lib/pair.dart b/lib/pair.dart
 index e69de29..41aada6 100644
 --- a/lib/pair.dart
