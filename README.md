@@ -93,11 +93,13 @@ Default value within parenthesis
 
 ### Filters
 
-- **ignore**: list of files that should be ignored, using the [widely-known Bash glob syntax](https://pub.dev/packages/glob#syntax).
+- **ignore**: list of files that should be ignored, using the [widely-known Bash glob syntax](https://pub.dev/packages/glob#syntax). The total of ignored files and lines will be shown on the report for statistics purposes only.
+
+- **ignore-lines**: list of regex expressions to filter lines on source code
 
 - **ignore-known-generated-files** (`true`) : Ignore file paths that ends with `.g.dart`, `.pb.dart`, `.pbenum.dart`, `.pbserver.dart` or `.pbjson.dart`
 
-- **ignore-lines**: list of regex expressions to filter lines on source code
+- **add-to-known-generated-files**: list of [glob matchers](https://pub.dev/packages/glob#syntax) to extend the given list on `ignore-known-generated-files`. Those lines, differently from `ignore`, will be completely ignored in the report.
 
 #### Presentation
 
