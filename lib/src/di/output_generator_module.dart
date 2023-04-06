@@ -11,14 +11,13 @@ import '../presentation/output_print_generator/output_generator.dart';
 class OutputGeneratorModule {
   const OutputGeneratorModule._();
 
-  
   static OutputGenerator providePlainTextOutputGenerator(UserOptions userOptions) {
     final colorizeText = ColorizeCliText(userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli);
     final getResultTable = GetResultTable(TableBuilder(), colorizeText, userOptions);
     switch (userOptions.outputMode) {
       case OutputMode.cli:
         return CliOutputGenerator(
-          colorizeText: colorizeText,
+          colorizeCliText: colorizeText,
           userOptions: userOptions,
           getResultTable: getResultTable,
           print: print,

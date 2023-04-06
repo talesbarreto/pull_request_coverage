@@ -6,12 +6,14 @@ import 'package:pull_request_coverage/src/presentation/output_print_generator/pl
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 
 class CliOutputGenerator with PlainTextOutputGenerator {
-  final ColorizeCliText colorizeText;
+  @override
+  final ColorizeCliText colorizeCliText;
+  @override
   final UserOptions userOptions;
   final GetResultTable getResultTable;
 
   const CliOutputGenerator({
-    required this.colorizeText,
+    required this.colorizeCliText,
     required this.userOptions,
     required this.getResultTable,
     required this.print,
@@ -37,20 +39,22 @@ class CliOutputGenerator with PlainTextOutputGenerator {
     final filePath = fileDiff.path;
     final uncoveredLinesCount = fileDiff.uncoveredNewLinesCount;
     final totalNewLinesCount = fileDiff.newLinesCount;
-    final ignoredMsg = fileDiff.ignoredUntestedLinesCount > 0 ? " / ${colorizeText("${fileDiff.ignoredUntestedLinesCount} untested and ignored",TextColor.magenta)}" : "";
+    final ignoredMsg = fileDiff.ignoredUntestedLinesCount > 0
+        ? " / ${colorizeCliText("${fileDiff.ignoredUntestedLinesCount} untested and ignored", TextColor.magenta)}"
+        : "";
     if (uncoveredLinesCount == 0) {
       if (userOptions.reportFullyCoveredFiles) {
-        return "$filePath is fully covered (${colorizeText("+$totalNewLinesCount", TextColor.green)}$ignoredMsg)";
+        return "$filePath is fully covered (${colorizeCliText("+$totalNewLinesCount", TextColor.green)}$ignoredMsg)";
       }
       return null;
     }
-    return "${colorizeText(filePath, TextColor.red)} has $uncoveredLinesCount uncovered lines (${colorizeText("+$totalNewLinesCount", TextColor.green)}$ignoredMsg)\n";
+    return "${colorizeCliText(filePath, TextColor.red)} has $uncoveredLinesCount uncovered lines (${colorizeCliText("+$totalNewLinesCount", TextColor.green)}$ignoredMsg)\n";
   }
 
   @override
   String? getLine(String line, int lineNumber, bool isANewLine, bool isUntested) {
     if (isANewLine && isUntested) {
-      return "${colorizeText("[$lineNumber]: ${line.replaceFirst("+", "→")}", TextColor.red)}\n";
+      return "${colorizeCliText("[$lineNumber]: ${line.replaceFirst("+", "→")}", TextColor.red)}\n";
     } else {
       return " $lineNumber : $line\n";
     }
@@ -64,4 +68,7 @@ class CliOutputGenerator with PlainTextOutputGenerator {
 
     return "\n${getResultTable(analysisResult)}";
   }
+
+  @override
+  String formatFileHeader(String text) => text;
 }
