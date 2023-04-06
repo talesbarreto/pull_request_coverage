@@ -17,18 +17,10 @@ class UserOptionsArgs<T> {
 
   // begin of consts
 
-  static const knownGeneratedFiles = [
-    '**.g.dart',
-    '**.pb.dart',
-    '**.pbenum.dart',
-    '**.pbserver.dart',
-    '**.pbjson.dart',
-  ];
-
   static const options = <UserOptionsArgs>[
     lcovFile,
     excludeKnownGeneratedFiles,
-    exclude,
+    ignore,
     ignoreLines,
     minimumCoverage,
     maximumUncoveredLines,
@@ -41,6 +33,9 @@ class UserOptionsArgs<T> {
     stdinTimeout,
     fullyTestedMessage,
     yamlConfigFilePath,
+    generatedFiles,
+    addToKnownGeneratedFiles,
+    knownGeneratedFiles,
   ];
 
   static const lcovFile = UserOptionsArgs<String>(
@@ -53,7 +48,7 @@ class UserOptionsArgs<T> {
     description: "Exclude generated files like `.g` or `.pb.dart`",
     defaultValue: true,
   );
-  static const exclude = UserOptionsArgs(
+  static const ignore = UserOptionsArgs(
     names: ["ignore", "exclude"],
     description: "Exclude files path that matches with Glob pattern",
     userOptionsArgType: UserOptionsArgType.list,
@@ -107,10 +102,32 @@ class UserOptionsArgs<T> {
     names: ["config-file"],
     defaultValue: "pull_request_coverage.yaml",
   );
-  static const ignoreLines = UserOptionsArgs(
+  static const ignoreLines = UserOptionsArgs<List<String>?>(
     names: ["ignore-lines"],
     userOptionsArgType: UserOptionsArgType.list,
     defaultValue: null,
+  );
+  static const generatedFiles = UserOptionsArgs<List<String>?>(
+    names: ["generated-files"],
+    userOptionsArgType: UserOptionsArgType.list,
+    defaultValue: null,
+  );
+
+  static const knownGeneratedFiles = UserOptionsArgs<List<String>>(
+    names: ["known-generated-files"],
+    userOptionsArgType: UserOptionsArgType.list,
+    defaultValue: [
+      '**.g.dart',
+      '**.pb.dart',
+      '**.pbenum.dart',
+      '**.pbserver.dart',
+      '**.pbjson.dart',
+    ],
+  );
+  static const addToKnownGeneratedFiles = UserOptionsArgs<List<String>>(
+    names: ["add-to-known-generated-files"],
+    userOptionsArgType: UserOptionsArgType.list,
+    defaultValue: [],
   );
 }
 

@@ -64,7 +64,7 @@ Both methods have the same settings available. If the same setting is set on bot
 #### Examples
 ##### CLI args
 ```bash
-git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-lines 5 --ignore '/lib/di/**','**/gen.dart' --ignore-lines "^.*@override.*$"
+git diff origin/main | flutter pub run pull_request_coverage  --maximum-uncovered-lines 5 --ignore '/lib/di/**','**/gen.dart' --ignore-lines "^.*@override.*$"
 ```
 
 ##### yaml config file

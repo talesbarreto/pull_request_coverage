@@ -28,7 +28,7 @@ class GetResultTable {
     final rateThreshold = minimumCoverageRate == null ? "-" : "$minimumCoverageRate%";
 
     tableBuilder.addLine(["Lines that should be tested", analysisResult.totalOfNewLines.toString(), "", ""]);
-    tableBuilder.addLine(["Ignored untested lines", analysisResult.totalOfIgnoredLinesMissingTests.toString(), "", ""]);
+    tableBuilder.addLine(["Uncovered lines that were ignored", analysisResult.totalOfIgnoredLinesMissingTests.toString(), "", ""]);
     tableBuilder.addLine(
         ["Untested new lines", analysisResult.totalOfUncoveredNewLines.toString(), lineThreshold, linesResult]);
     tableBuilder.addLine(["Coverage rate", "$currentCoverage%", rateThreshold, rateResult]);

@@ -1,8 +1,9 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_file_from_project.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_generated_file.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_an_ignored_file.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_file_line_result_data.dart';
-import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_file.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_line.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
@@ -96,11 +97,12 @@ Analyze _getAnalyze({
           ["aho"]
         ]),
     lcovLines: [],
-    shouldAnalyzeThisFile: _MockShouldAnalyzeThisFile.dummy(true),
     setUncoveredLines: mockSetUncoveredLinesOnFileDiff ?? _MockSetUncoveredLinesOnFileDiff(),
     getUncoveredFileLines: mockGetUncoveredFileLines ?? _MockGetUncoveredFileLines(),
     outputGenerator: _MockOutputGenerator(),
     isAFileFromProject: isAFileFromProject ?? _FakeIsAFileFromProject(),
+    isAGeneratedFile: _MockIsAGeneratedFile.dummy(false),
+    isAnIgnoredFile: _MockIsAnIgnoredFile.dummy(false),
   );
 }
 
@@ -128,11 +130,21 @@ class _MockForEachFileOnGitDiff extends Mock implements ForEachFileOnGitDiff {
   }
 }
 
-class _MockShouldAnalyzeThisFile extends Mock implements ShouldAnalyzeThisFile {
-  _MockShouldAnalyzeThisFile();
+class _MockIsAGeneratedFile extends Mock implements IsAGeneratedFile {
+  _MockIsAGeneratedFile();
 
-  factory _MockShouldAnalyzeThisFile.dummy(bool answer) {
-    final mock = _MockShouldAnalyzeThisFile();
+  factory _MockIsAGeneratedFile.dummy(bool answer) {
+    final mock = _MockIsAGeneratedFile();
+    when(() => mock.call(any())).thenReturn(answer);
+    return mock;
+  }
+}
+
+class _MockIsAnIgnoredFile extends Mock implements IsAnIgnoredFile {
+  _MockIsAnIgnoredFile();
+
+  factory _MockIsAnIgnoredFile.dummy(bool answer) {
+    final mock = _MockIsAnIgnoredFile();
     when(() => mock.call(any())).thenReturn(answer);
     return mock;
   }

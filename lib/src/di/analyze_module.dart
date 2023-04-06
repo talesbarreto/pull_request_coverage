@@ -3,8 +3,9 @@ import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart'
 import 'dart:async';
 import 'package:file/local.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_file_from_project.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_generated_file.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_an_ignored_file.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_file_line_result_data.dart';
-import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_file.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyze_this_line.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/for_each_file_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
@@ -24,6 +25,7 @@ class AnalyzeModule {
     required OutputGenerator outputGenerator,
     String? gitRootRelativePath,
   }) async {
+    final isAnIgnoredFile = IsAnIgnoredFile(userOptions);
     return Analyze(
       parseGitDiff: ParseGitDiff(
         RemoveGitRootRelativePath(
@@ -32,11 +34,12 @@ class AnalyzeModule {
       ),
       forEachFileOnGitDiff: ForEachFileOnGitDiff(ReadLineFromStdin(ioRepository).call),
       lcovLines: lcovLines,
-      shouldAnalyzeThisFile: ShouldAnalyzeThisFile(userOptions),
-      setUncoveredLines: SetFileLineResultData(ShouldAnalyzeThisLine(userOptions.lineFilters)),
+      setUncoveredLines: SetFileLineResultData(ShouldAnalyzeThisLine(userOptions.lineFilters), isAnIgnoredFile),
       getUncoveredFileLines: GetUncoveredFileLines(),
       outputGenerator: outputGenerator,
       isAFileFromProject: IsAFileFromProject(),
+      isAGeneratedFile: IsAGeneratedFile(userOptions),
+      isAnIgnoredFile: isAnIgnoredFile,
     );
   }
 }
