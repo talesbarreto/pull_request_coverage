@@ -10,7 +10,7 @@ class SetFileLineResultData {
 
   void call(FileDiff fileDiff, List<int> uncoveredLines) {
     for (final line in fileDiff.lines) {
-      line.isUncovered = uncoveredLines.contains(line.lineNumber);
+      line.isUntested = uncoveredLines.contains(line.lineNumber);
       line.ignored = !shouldAnalyzeThisLine(line.line) || isAnIgnoredFile(fileDiff.path);
     }
   }

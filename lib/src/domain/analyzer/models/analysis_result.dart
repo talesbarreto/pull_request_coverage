@@ -1,12 +1,12 @@
 class AnalysisResult {
-  final int totalOfNewLines;
-  final int totalOfUncoveredNewLines;
-  final int totalOfIgnoredLinesMissingTests;
+  final int linesShouldBeTested;
+  final int linesMissingTests;
+  final int ignoredLinesMissingTests;
   final double coverageRate;
 
   const AnalysisResult({
-    required this.totalOfNewLines,
-    required this.totalOfUncoveredNewLines,
-    required this.totalOfIgnoredLinesMissingTests,
-  }) : coverageRate = 1 - (totalOfUncoveredNewLines / totalOfNewLines);
+    required this.linesShouldBeTested,
+    required this.linesMissingTests,
+    required this.ignoredLinesMissingTests,
+  }) : coverageRate = 1 - (linesMissingTests / linesShouldBeTested);
 }

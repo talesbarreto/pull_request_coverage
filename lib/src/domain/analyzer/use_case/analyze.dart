@@ -50,7 +50,7 @@ class Analyze {
             uncoveredLines += fileDiff.lines.where((element) => element.isTestMissing).length;
           }
           ignoredUntestedLines += fileDiff.lines.where((element) {
-            return element.isANewLine == true && element.isUncovered == true && element.ignored == true;
+            return ignoreFile || element.isANewLine == true && element.isUntested == true && element.ignored == true;
           }).length;
         }
         if (!ignoreFile) {
@@ -59,9 +59,9 @@ class Analyze {
       }
     });
     final result = AnalysisResult(
-      totalOfNewLines: newLines,
-      totalOfUncoveredNewLines: uncoveredLines,
-      totalOfIgnoredLinesMissingTests: ignoredUntestedLines,
+      linesShouldBeTested: newLines,
+      linesMissingTests: uncoveredLines,
+      ignoredLinesMissingTests: ignoredUntestedLines,
     );
 
     outputGenerator.setReport(result);

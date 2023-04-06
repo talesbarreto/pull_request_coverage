@@ -60,7 +60,7 @@ class MarkdownOutputGenerator with PlainTextOutputGenerator {
 
   @override
   String getReport(AnalysisResult analysisResult) {
-    if (analysisResult.totalOfUncoveredNewLines == 0 && userOptions.fullyTestedMessage != null) {
+    if (analysisResult.linesMissingTests == 0 && userOptions.fullyTestedMessage != null) {
       return userOptions.fullyTestedMessage!;
     }
     return "\n${getResultTable(analysisResult)}";
