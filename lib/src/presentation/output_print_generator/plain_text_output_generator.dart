@@ -8,11 +8,11 @@ mixin PlainTextOutputGenerator implements OutputGenerator {
   void Function(String message) get print;
   bool get showUncoveredCode;
 
-  String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount);
+  String? getFileHeader(FileDiff fileDiff);
 
   String? getSourceCodeHeader();
 
-  String? getLine(String line, int lineNumber, bool isANewLine, bool isCovered);
+  String? getLine(String line, int lineNumber, bool isANewLine, bool isUntested);
 
   /// [getSourceCodeBlocDivider] is used to separate the source code blocs in the same file
   String? getSourceCodeBlocDivider();
@@ -30,7 +30,7 @@ mixin PlainTextOutputGenerator implements OutputGenerator {
     final outputBuilder = StringBuffer();
     void write(String? message) => message != null ? outputBuilder.write(message) : null;
 
-    write(getFileHeader(fileDiff.path, fileDiff.uncoveredNewLinesCount, fileDiff.newLinesCount));
+    write(getFileHeader(fileDiff));
     int? lastPrintedLineNumber;
 
     if (fileDiff.hasUncoveredLines && showUncoveredCode) {

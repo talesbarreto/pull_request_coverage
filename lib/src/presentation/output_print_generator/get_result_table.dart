@@ -29,7 +29,7 @@ class GetResultTable {
 
     tableBuilder
       ..addLine(["Lines that should be tested", analysisResult.linesShouldBeTested.toString(), "", ""])
-      ..addLine(["Untested lines that were ignored", analysisResult.ignoredLinesMissingTests.toString(), "", ""])
+      ..addLine(["Untested lines that were ignored", analysisResult.untestedIgnoredLines.toString(), "", ""])
       ..addLine(["", "", "", ""])
       ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
       ..addLine(["Coverage rate", "$currentCoverage%", rateThreshold, rateResult]);

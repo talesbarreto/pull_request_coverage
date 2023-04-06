@@ -36,7 +36,7 @@ class Analyze {
   Future<AnalysisResult> call() async {
     int newLines = 0;
     int uncoveredLines = 0;
-    int ignoredUntestedLines = 0;
+    int untestedIgnoredLines = 0;
 
     await forEachFileOnGitDiff((List<String> fileLines) {
       final FileDiff? fileDiff = parseGitDiff(fileLines);
@@ -49,19 +49,18 @@ class Analyze {
             newLines += fileDiff.lines.where((element) => element.isANewNotIgnoredLine).length;
             uncoveredLines += fileDiff.lines.where((element) => element.isTestMissing).length;
           }
-          ignoredUntestedLines += fileDiff.lines.where((element) {
-            return ignoreFile || element.isANewLine == true && element.isUntested == true && element.ignored == true;
+          untestedIgnoredLines += fileDiff.lines.where((element) {
+            return element.isANewLine == true && element.isUntested == true && (element.ignored == true || ignoreFile);
           }).length;
         }
-        if (!ignoreFile) {
-          outputGenerator.addFile(fileDiff);
-        }
+
+        outputGenerator.addFile(fileDiff);
       }
     });
     final result = AnalysisResult(
       linesShouldBeTested: newLines,
       linesMissingTests: uncoveredLines,
-      ignoredLinesMissingTests: ignoredUntestedLines,
+      untestedIgnoredLines: untestedIgnoredLines,
     );
 
     outputGenerator.setReport(result);

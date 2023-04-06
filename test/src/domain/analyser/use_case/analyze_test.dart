@@ -73,7 +73,7 @@ void main() {
     );
     final analyzeResult = await analyze();
     expect(analyzeResult.linesShouldBeTested, 0);
-    expect(analyzeResult.ignoredLinesMissingTests, 0);
+    expect(analyzeResult.untestedIgnoredLines, 0);
     expect(analyzeResult.linesMissingTests, 0);
   });
 
@@ -90,7 +90,7 @@ void main() {
     );
     final analyzeResult = await analyze();
     expect(analyzeResult.linesShouldBeTested, 0);
-    expect(analyzeResult.ignoredLinesMissingTests, 1);
+    expect(analyzeResult.untestedIgnoredLines, 1);
     expect(analyzeResult.linesMissingTests, 0);
   });
 
@@ -111,7 +111,7 @@ void main() {
       );
       final analyzeResult = await analyze();
       expect(analyzeResult.linesShouldBeTested, 1);
-      expect(analyzeResult.ignoredLinesMissingTests, 2);
+      expect(analyzeResult.untestedIgnoredLines, 2);
       expect(analyzeResult.linesMissingTests, 1);
     },
   );
