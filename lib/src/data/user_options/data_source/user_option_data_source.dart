@@ -5,7 +5,7 @@ abstract class UserOptionDataSource {
 
   T? get<T>(UserOptionsArgs<T> userOptionsArgs, T Function(String text) transform);
 
-  List<String>? getStringList(UserOptionsArgs<String?> userOptionsArgs);
+  List<String>? getStringList(UserOptionsArgs<List<String>?> userOptionsArgs);
 
   bool? getBoolean(UserOptionsArgs<bool?> userOptionsArgs);
 

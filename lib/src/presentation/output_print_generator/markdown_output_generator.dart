@@ -3,8 +3,10 @@ import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mo
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/get_result_table.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/plain_text_output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 
 class MarkdownOutputGenerator with PlainTextOutputGenerator {
+  @override
   final UserOptions userOptions;
   final GetResultTable getResultTable;
   const MarkdownOutputGenerator({
@@ -31,19 +33,11 @@ class MarkdownOutputGenerator with PlainTextOutputGenerator {
   }
 
   @override
-  String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount) {
-    if (uncoveredLinesCount == 0) {
-      if (userOptions.reportFullyCoveredFiles) {
-        return " - `$filePath` is fully covered (${"+$totalNewLinesCount"})";
-      }
-      return null;
-    }
-    return " - `$filePath` has $uncoveredLinesCount uncovered lines (${"+$totalNewLinesCount"})\n";
-  }
+  String formatFileHeader(String text) => " - `$text";
 
   @override
-  String? getLine(String line, int lineNumber, bool isANewLine, bool isUncovered) {
-    if (isANewLine && isUncovered) {
+  String? getLine(String line, int lineNumber, bool isANewLine, bool isUntested) {
+    if (isANewLine && isUntested) {
       if (userOptions.markdownMode == MarkdownMode.diff) {
         return "${"- $lineNumber: $line"}\n";
       } else {
@@ -60,9 +54,12 @@ class MarkdownOutputGenerator with PlainTextOutputGenerator {
 
   @override
   String getReport(AnalysisResult analysisResult) {
-    if (analysisResult.totalOfUncoveredNewLines == 0 && userOptions.fullyTestedMessage != null) {
+    if (analysisResult.linesMissingTests == 0 && userOptions.fullyTestedMessage != null) {
       return userOptions.fullyTestedMessage!;
     }
     return "\n${getResultTable(analysisResult)}";
   }
+
+  @override
+  ColorizeCliText? get colorizeCliText => null;
 }

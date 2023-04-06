@@ -21,17 +21,18 @@ class GetResultTable {
         success ? colorizeText("Success", TextColor.green) : colorizeText("FAIL", TextColor.red);
 
     final linesResult =
-        maximumUncoveredLines == null ? "-" : result(analysisResult.totalOfUncoveredNewLines <= maximumUncoveredLines);
+        maximumUncoveredLines == null ? "-" : result(analysisResult.linesMissingTests <= maximumUncoveredLines);
     final lineThreshold = maximumUncoveredLines == null ? "-" : "$maximumUncoveredLines";
     final rateResult =
         minimumCoverageRate == null ? "-" : result(analysisResult.coverageRate >= (minimumCoverageRate / 100));
     final rateThreshold = minimumCoverageRate == null ? "-" : "$minimumCoverageRate%";
 
-    tableBuilder.addLine(["Lines that should be tested", analysisResult.totalOfNewLines.toString(), "", ""]);
-    tableBuilder.addLine(["Ignored untested lines", analysisResult.totalOfIgnoredLinesMissingTests.toString(), "", ""]);
-    tableBuilder.addLine(
-        ["Untested new lines", analysisResult.totalOfUncoveredNewLines.toString(), lineThreshold, linesResult]);
-    tableBuilder.addLine(["Coverage rate", "$currentCoverage%", rateThreshold, rateResult]);
+    tableBuilder
+      ..addLine(["Lines that should be tested", analysisResult.linesShouldBeTested.toString(), "", ""])
+      ..addLine(["Untested lines that were ignored", analysisResult.untestedIgnoredLines.toString(), "", ""])
+      ..addLine(["", "", "", ""])
+      ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
+      ..addLine(["Coverage rate", "$currentCoverage%", rateThreshold, rateResult]);
 
     return "\n${tableBuilder.build(userOptions.outputMode == OutputMode.markdown)}";
   }
