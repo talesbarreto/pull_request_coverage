@@ -1,18 +1,22 @@
 import 'dart:math';
 import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 
 mixin PlainTextOutputGenerator implements OutputGenerator {
   static const printCodeWindow = 3;
   void Function(String message) get print;
+  UserOptions get userOptions;
   bool get showUncoveredCode;
+  ColorizeCliText? get colorizeCliText;
 
-  String? getFileHeader(String filePath, int uncoveredLinesCount, int totalNewLinesCount);
+  String formatFileHeader(String text);
 
   String? getSourceCodeHeader();
 
-  String? getLine(String line, int lineNumber, bool isANewLine, bool isCovered);
+  String? getLine(String line, int lineNumber, bool isANewLine, bool isUntested);
 
   /// [getSourceCodeBlocDivider] is used to separate the source code blocs in the same file
   String? getSourceCodeBlocDivider();
@@ -25,12 +29,31 @@ mixin PlainTextOutputGenerator implements OutputGenerator {
   @override
   void printOutput() {}
 
+  String colorizeText(String text, TextColor color) =>
+      colorizeCliText != null ? colorizeCliText!.call(text, color) : text;
+
+  String? getFileHeader(FileDiff fileDiff) {
+    final filePath = fileDiff.path;
+    final uncoveredLinesCount = fileDiff.uncoveredNewLinesCount;
+    final totalNewLinesCount = fileDiff.newLinesCount;
+    final ignoredMsg = fileDiff.ignoredUntestedLinesCount > 0
+        ? " / ${colorizeText("${fileDiff.ignoredUntestedLinesCount} untested and ignored", TextColor.magenta)}"
+        : "";
+    if (uncoveredLinesCount == 0) {
+      if (userOptions.reportFullyCoveredFiles) {
+        return "$filePath is fully covered (${colorizeText("+$totalNewLinesCount", TextColor.green)}$ignoredMsg)";
+      }
+      return null;
+    }
+    return "${colorizeText(filePath, TextColor.red)} has $uncoveredLinesCount uncovered lines (${colorizeText("+$totalNewLinesCount", TextColor.green)}$ignoredMsg)\n";
+  }
+
   @override
   void addFile(FileDiff fileDiff) {
     final outputBuilder = StringBuffer();
     void write(String? message) => message != null ? outputBuilder.write(message) : null;
 
-    write(getFileHeader(fileDiff.path, fileDiff.uncoveredNewLinesCount, fileDiff.newLinesCount));
+    write(getFileHeader(fileDiff));
     int? lastPrintedLineNumber;
 
     if (fileDiff.hasUncoveredLines && showUncoveredCode) {

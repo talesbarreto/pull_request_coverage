@@ -29,7 +29,7 @@ class OptionsGetters implements UserOptionDataSource {
   }
 
   @override
-  List<String>? getStringList(UserOptionsArgs<String?> userOptionsArgs) {
+  List<String>? getStringList(UserOptionsArgs<List<String>?> userOptionsArgs) {
     return _tryGetOnEachSource((source) => source.getStringList(userOptionsArgs));
   }
 

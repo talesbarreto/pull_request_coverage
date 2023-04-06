@@ -1,5 +1,7 @@
-## 1.2.1
+## 1.3.0
 -  new `ignore-lines` option
+-  new `add-to-known-generated-files` option
+-  More data being shown in the report
 -  Showing total of `Ignored untested lines` no table result
 -  Removing "This pull request has no new lines under `/lib`" message
 - `exclude` now is an alias for `ignore`
