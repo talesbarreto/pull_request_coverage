@@ -19,3 +19,6 @@ jobs:
 
       - name: Test
         run: dart test
+
+      - name: Integration test
+        run: dart test integration_test

@@ -1,16 +1,8 @@
-generate-coverage:
-	dart ci/generate_coverage_helper.dart
-	flutter test --coverage
+generate-cli-example:
+	cat input_samples/sample1/git.diff | dart bin/pull_request_coverage.dart --lcov-file input_samples/sample1/lcov.info  --maximum-uncovered-lines 5 --minimum-coverage 99
 
-run-cli-output: generate-coverage
-	git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode cli
+generate-markdown-example:
+	cat input_samples/sample1/git.diff | dart bin/pull_request_coverage.dart --lcov-file input_samples/sample1/lcov.info  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown
 
-
-run-cli-no-color-output: generate-coverage
-	git diff origin/main | dart bin/pull_request_coverage.dart --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode cli --use-colorful-output false
-
-run-markdown-output: generate-coverage
-	git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown
-
-run-markdown-no-color-output: generate-coverage
-	git diff origin/main | dart bin/pull_request_coverage.dart --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown --use-colorful-output false
+generate-markdown-dart-example:
+	cat input_samples/sample1/git.diff | dart bin/pull_request_coverage.dart --lcov-file input_samples/sample1/lcov.info  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown --markdown-mode dart
