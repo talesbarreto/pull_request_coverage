@@ -3,8 +3,8 @@ import 'package:test/test.dart';
 import 'integration_test_set.dart';
 
 void main() {
-  const lcovFileParam = ["--lcov-file", "input_samples/sample1/lcov.info"];
-  const diffFilePath = "input_samples/sample1/sample1.diff";
+  const lcovFileParam = ["--lcov-file", "input_samples/sample2/lcov.info"];
+  const diffFilePath = "input_samples/sample2/sample1.diff";
   group("when running with default settings", () {
     test("report 22 lines that should be tested", () async {
       final analyze = await getAnalyzeForIntegrationTest(
