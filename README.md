@@ -7,7 +7,7 @@ This is a tool intended to analyze the coverage rate of a pull request, ignoring
 The coverage rate threshold on CI tools is a common approach to encourage developers to write tests. Unfortunately, judging a pull request by
 analyzing the coverage rate of the entire project is not always fair, especially on big refactor tasks, witch may naturally decrease the coverage rate.
 
-This package tries a different approach to analyse the test coverage: we only check lines that have been added in the pull request. The coverage rate will be calculated by dividing the number of
+This package tries a different approach to analyze the test coverage: we only check lines that have been added in the pull request. The coverage rate will be calculated by dividing the number of
 uncovered new lines by the number of new lines.
 
 You can set thresholds to make tests fail on a CI tool. This package can also print those lines that were not covered by any test, making it easier to identify missing tests.
@@ -33,6 +33,8 @@ Run the following command to generate the `coverage/lcov.info` file:
 ```bash
 flutter test --coverage
 ```
+
+If you want to analyze a Dart project rather than Flutter, use the [coverage package](https://pub.dev/packages/coverage)
 
 ### Running pull_request_coverage
 
