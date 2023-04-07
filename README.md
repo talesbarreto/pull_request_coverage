@@ -14,14 +14,7 @@ You can set thresholds to make tests fail on a CI tool. This package can also pr
 
 ## Installing
 
-Add this line to your package's pubspec.yaml under the `dev_dependencies` section:
-
-```yaml
-dev_dependencies:
-  pull_request_coverage:
-```
-
-You should specify the version to avoid breaking changes
+There are two ways install this `pull_request_coverage`. Since it is a binary package, you can activate it from the command line using `dart pub global activate pull_request_coverage` and use it as an ordinary program on your CLI or you can add it to the `pubspec.yaml` of your project, on the `dev_dependencies` section.
 
 ## Usage
 
@@ -49,6 +42,11 @@ You can pipe the STDIN to `pull_request_coverage` using bash's `|` operator, lik
 
 ```bash
 git diff repository/main | flutter pub run pull_request_coverage
+```
+
+If you activate `pull_request_coverage` using `dart pub global activate`, you can invoke directly it:
+```bash
+git diff repository/main | pull_request_coverage
 ```
 
 See [Example](https://github.com/talesbarreto/pull_request_coverage/tree/main/example) tab to check an output example out
