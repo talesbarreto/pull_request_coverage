@@ -18,7 +18,6 @@ class GetOrFailLcovLines {
         )
         ..printInfo(
           msg: 'Did you run `flutter test --coverage`?',
-          origin: "",
           alwaysPrint: true,
         );
 

@@ -7,7 +7,7 @@ import 'package:pull_request_coverage/src/di/io_module.dart';
 import 'package:pull_request_coverage/src/di/user_options_module.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
 import 'package:pull_request_coverage/src/domain/user_options/use_case/get_or_fail_user_options.dart';
-import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
 
 import 'persistent_output_generator.dart';
 

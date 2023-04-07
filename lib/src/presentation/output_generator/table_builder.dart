@@ -1,12 +1,16 @@
 import 'package:pull_request_coverage/src/extensions/string.dart';
 
 class TableBuilder {
-  static const header = ["Report", "Current value", "Threshold", "Result"];
-  
+  List<String> _header = [];
+
   static const headerDivider = "-";
   static const columnDivider = "|";
-  
-  int get columnsLength => header.length;
+
+  void setHeader(List<String> header) {
+      _header = header;
+  }
+
+  int get columnsLength => _header.length;
 
   TableBuilder();
 
@@ -41,21 +45,21 @@ class TableBuilder {
       }
     }
     writeDividerOnBorder();
-    for (var i = 0; i < header.length; i++) {
-      if (header[i].length > columnSize[i]) {
-        columnSize[i] = header[i].length;
+    for (var i = 0; i < _header.length; i++) {
+      if (_header[i].length > columnSize[i]) {
+        columnSize[i] = _header[i].length;
       }
-      stringBuffer.write(_createContent(header[i], columnSize[i], " "));
-      if (i != header.length - 1) {
+      stringBuffer.write(_createContent(_header[i], columnSize[i], " "));
+      if (i != _header.length - 1) {
         stringBuffer.write(columnDivider);
       }
     }
     writeDividerOnBorder();
     stringBuffer.writeln();
     writeDividerOnBorder();
-    for (var i = 0; i < header.length; i++) {
+    for (var i = 0; i < _header.length; i++) {
       stringBuffer.write(_createContent("", columnSize[i], "-"));
-      if (i != header.length - 1) {
+      if (i != _header.length - 1) {
         stringBuffer.write(columnDivider);
       }
     }

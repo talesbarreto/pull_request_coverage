@@ -17,41 +17,41 @@ class Logger {
   });
 
   void printError({
-    required String origin,
     required String msg,
+    String? origin,
     StackTrace? stackTrace,
     bool alwaysPrint = false,
   }) {
     if (alwaysPrint || logLevel.index >= LogLevel.error.index) {
-      print("${colorizeCliText("[ERROR] $origin: $msg", TextColor.red)}\n $stackTrace");
+      print("${colorizeCliText("[ERROR] ${origin != null ? "$origin: " : ""}$msg", TextColor.red)}\n $stackTrace");
     }
   }
 
   void printWarning({
-    required String origin,
     required String msg,
+    String? origin,
   }) {
     if (logLevel.index >= LogLevel.warning.index) {
-      print(colorizeCliText("[WARNING] $origin: $msg", TextColor.yellow));
+      print(colorizeCliText("[WARNING] ${origin != null ? "$origin: " : ""}$msg", TextColor.yellow));
     }
   }
 
   void printInfo({
-    required String origin,
     required String msg,
+    String? origin,
     bool alwaysPrint = false,
   }) {
     if (alwaysPrint || logLevel.index >= LogLevel.info.index) {
-      print(colorizeCliText("$origin: $msg", TextColor.cyan));
+      print(colorizeCliText("${origin != null ? "$origin: " : ""}$msg", TextColor.cyan));
     }
   }
 
   void printVerbose({
-    required String origin,
     required String msg,
+    String? origin,
   }) {
     if (logLevel.index >= LogLevel.info.index) {
-      print(colorizeCliText("$origin: $msg", TextColor.white));
+      print(colorizeCliText("${origin != null ? "$origin: " : ""}$msg", TextColor.white));
     }
   }
 }

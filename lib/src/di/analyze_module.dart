@@ -14,7 +14,7 @@ import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_un
 import 'package:pull_request_coverage/src/domain/io/repository/io_repository.dart';
 import 'package:pull_request_coverage/src/domain/io/use_case/read_line_from_stdin.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
-import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
 
 class AnalyzeModule {
   const AnalyzeModule._();
