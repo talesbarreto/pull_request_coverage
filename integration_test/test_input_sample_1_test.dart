@@ -7,40 +7,40 @@ void main() {
   const diffFilePath = "input_samples/sample1/sample1.diff";
   group("when running with default settings", () {
     test("report 22 lines that should be tested", () async {
-      final testSet = await IntegrationTestSet.withSet(
+      final analyze = await getAnalyzeForIntegrationTest(
         arguments: lcovFileParam,
         diffFilePath: diffFilePath,
       );
-      final result = await testSet.analyze();
-      expect(result.totalOfNewLines, 26);
+      final result = await analyze();
+      expect(result.linesShouldBeTested, 26);
     });
 
     test("report 8 untested new lines", () async {
-      final testSet = await IntegrationTestSet.withSet(
+      final analyze = await getAnalyzeForIntegrationTest(
         arguments: lcovFileParam,
         diffFilePath: diffFilePath,
       );
-      final result = await testSet.analyze();
-      expect(result.totalOfUncoveredNewLines, 8);
+      final result = await analyze();
+      expect(result.linesMissingTests, 8);
     });
   });
 
   group("When `override` annotation is ignored", () {
     test("report 23 lines that should be tested", () async {
-      final testSet = await IntegrationTestSet.withSet(
+      final analyze = await getAnalyzeForIntegrationTest(
         arguments: [...lcovFileParam, "--ignore-lines", "^.*@override.*\$"],
         diffFilePath: diffFilePath,
       );
-      final result = await testSet.analyze();
-      expect(result.totalOfNewLines, 23);
+      final result = await analyze();
+      expect(result.linesShouldBeTested, 23);
     });
     test("report 3 untested ignored lines", () async {
-      final testSet = await IntegrationTestSet.withSet(
+      final analyze = await getAnalyzeForIntegrationTest(
         arguments: [...lcovFileParam, "--ignore-lines", "^.*@override.*\$"],
         diffFilePath: diffFilePath,
       );
-      final result = await testSet.analyze();
-      expect(result.totalOfIgnoredLinesMissingTests, 3);
+      final result = await analyze();
+      expect(result.untestedIgnoredLines, 3);
     });
   });
 }
