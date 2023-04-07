@@ -22,9 +22,9 @@ Future<void> main(List<String> arguments) async {
   final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
   final colorizeText = ColorizeCliText(userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli);
   final outputGenerator = OutputGeneratorModule.providePlainTextOutputGenerator(userOptions);
-  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines(outputGenerator: outputGenerator);
+  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines();
 
-  Logger.setGlobalLogger(Logger());
+  Logger.setGlobalLogger(Logger(colorizeCliText: colorizeText));
 
   PrintWarningsForUnexpectedFileStructure(print, colorizeText)(
     gitRootRelativePath: gitRootRelativePath,

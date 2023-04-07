@@ -1,23 +1,27 @@
 import 'dart:io';
 import 'package:file/file.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/models/exit_code.dart';
-import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 
 class GetOrFailLcovLines {
-  final OutputGenerator outputGenerator;
-
-  const GetOrFailLcovLines(this.outputGenerator);
-
   Future<List<String>> call(String filePath, FileSystem fileSystem) async {
     try {
       final lines = await fileSystem.file(filePath).readAsLines();
       return lines;
     } catch (e, s) {
-      outputGenerator.printFatalError(
-        "Error reading lcov.info file: $e\n\tDid you run `flutter test --coverage`?",
-        e,
-        s,
-      );
+      Logger.global
+        ?..printError(
+          origin: "Getting lcov.info lines",
+          msg: "Error reading lcov.info file: $e",
+          stackTrace: s,
+          alwaysPrint: true,
+        )
+        ..printInfo(
+          msg: 'Did you run `flutter test --coverage`?',
+          origin: "",
+          alwaysPrint: true,
+        );
+
       exit(ExitCode.error);
     }
   }

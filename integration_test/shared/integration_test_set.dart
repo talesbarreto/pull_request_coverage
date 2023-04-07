@@ -22,7 +22,7 @@ Future<Analyze> getAnalyzeForIntegrationTest({
     userOptionsRepository: UserOptionsModule.provideUserOptionsRepository(fileSystem: fileSystem),
   ).call(arguments);
   final outputGeneratorImpl = outputGenerator ?? PersistentOutputGenerator();
-  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines(outputGenerator: outputGeneratorImpl);
+  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines();
 
   return AnalyzeModule.provideAnalyzeUseCase(
     userOptions: userOptions,

@@ -1,0 +1,342 @@
+diff --git a/Makefile b/Makefile
+index 6ceee85..c2c6139 100644
+--- a/Makefile
++++ b/Makefile
+@@ -6,3 +6,11 @@ generate-markdown-example:
+ 
+ generate-markdown-dart-example:
+ 	cat input_samples/sample1/git.diff | dart bin/pull_request_coverage.dart --lcov-file input_samples/sample1/lcov.info  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown --markdown-mode dart
++
++gen-coverage:
++	dart ci/generate_coverage_helper.dart
++	dart pub global run coverage:test_with_coverage
++
++tests:
++	dart test
++	dart test integration_test
+\ No newline at end of file
+diff --git a/bin/pull_request_coverage.dart b/bin/pull_request_coverage.dart
+index 764f455..d5d850d 100644
+--- a/bin/pull_request_coverage.dart
++++ b/bin/pull_request_coverage.dart
+@@ -8,6 +8,7 @@ import 'package:pull_request_coverage/src/di/user_options_module.dart';
+ import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_exit_code.dart';
+ import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
+ import 'package:pull_request_coverage/src/domain/user_options/use_case/get_or_fail_user_options.dart';
++import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
+ import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
+ import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_for_unexpected_file_structure.dart';
+ 
+@@ -21,7 +22,9 @@ Future<void> main(List<String> arguments) async {
+   final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
+   final colorizeText = ColorizeCliText(userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli);
+   final outputGenerator = OutputGeneratorModule.providePlainTextOutputGenerator(userOptions);
+-  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines(outputGenerator: outputGenerator);
++  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines();
++
++  Logger.setGlobalLogger(Logger(colorizeCliText: colorizeText));
+ 
+   PrintWarningsForUnexpectedFileStructure(print, colorizeText)(
+     gitRootRelativePath: gitRootRelativePath,
+diff --git a/integration_test/shared/integration_test_set.dart b/integration_test/shared/integration_test_set.dart
+index 50b6aab..2b1c2d0 100644
+--- a/integration_test/shared/integration_test_set.dart
++++ b/integration_test/shared/integration_test_set.dart
+@@ -22,7 +22,7 @@ Future<Analyze> getAnalyzeForIntegrationTest({
+     userOptionsRepository: UserOptionsModule.provideUserOptionsRepository(fileSystem: fileSystem),
+   ).call(arguments);
+   final outputGeneratorImpl = outputGenerator ?? PersistentOutputGenerator();
+-  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines(outputGenerator: outputGeneratorImpl);
++  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines();
+ 
+   return AnalyzeModule.provideAnalyzeUseCase(
+     userOptions: userOptions,
+diff --git a/lib/src/di/io_module.dart b/lib/src/di/io_module.dart
+index 0853c87..4939f50 100644
+--- a/lib/src/di/io_module.dart
++++ b/lib/src/di/io_module.dart
+@@ -4,7 +4,6 @@ import 'package:file/file.dart';
+ import 'package:pull_request_coverage/src/data/io/repository/io_repository_impl.dart';
+ import 'package:pull_request_coverage/src/domain/io/repository/io_repository.dart';
+ import 'package:pull_request_coverage/src/domain/io/use_case/get_or_fail_lcov_lines.dart';
+-import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
+ 
+ class IoModule {
+   const IoModule._();
+@@ -21,9 +20,7 @@ class IoModule {
+     );
+   }
+ 
+-  static GetOrFailLcovLines provideGetOrFailLcovLines({
+-    required OutputGenerator outputGenerator,
+-  }) {
+-    return GetOrFailLcovLines(outputGenerator);
++  static GetOrFailLcovLines provideGetOrFailLcovLines() {
++    return GetOrFailLcovLines();
+   }
+ }
+diff --git a/lib/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart b/lib/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart
+index 55d6f20..8a6ca9b 100644
+--- a/lib/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart
++++ b/lib/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart
+@@ -1,10 +1,30 @@
++import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
++
+ /// [GetUncoveredFileLines] returns a list of line index that are not covered by tests.
+ class GetUncoveredFileLines {
++  bool _isSamePath(String filePath, String lcovFileHeader) {
++    if (lcovFileHeader.startsWith("SF:$filePath")) {
++      return true;
++    }
++
++    final indexOfLib = lcovFileHeader.indexOf("/lib/");
++    if (indexOfLib > 0 &&
++            !filePath.startsWith("/") // file path received on git diff is not absolute
++            &&
++            lcovFileHeader.startsWith("SF:/") //file path on lcov.info file is absolute
++            &&
++            lcovFileHeader.substring(indexOfLib + 1) == filePath //
++        ) {
++      return true;
++    }
++    return false;
++  }
++
+   List<int>? call(List<String> lcovInfoLines, String filePath) {
+     // most of this code was created by copilot. I'm scared 😰
+     for (var i = 0; i < lcovInfoLines.length; i++) {
+       final line = lcovInfoLines[i];
+-      if (line.startsWith("SF:$filePath")) {
++      if (_isSamePath(filePath, line)) {
+         final uncoveredLines = <int>[];
+         for (var j = i + 1; j < lcovInfoLines.length; j++) {
+           final line = lcovInfoLines[j];
+@@ -22,6 +42,10 @@ class GetUncoveredFileLines {
+         }
+       }
+     }
++    Logger.global?.printInfo(
++      origin: "GetUncoveredFileLines",
++      msg: "coverage info of `$filePath` not found in lcov.info",
++    );
+     return null;
+   }
+ }
+diff --git a/lib/src/domain/io/use_case/get_or_fail_lcov_lines.dart b/lib/src/domain/io/use_case/get_or_fail_lcov_lines.dart
+index 780623e..f8dd17b 100644
+--- a/lib/src/domain/io/use_case/get_or_fail_lcov_lines.dart
++++ b/lib/src/domain/io/use_case/get_or_fail_lcov_lines.dart
+@@ -1,23 +1,27 @@
+ import 'dart:io';
+ import 'package:file/file.dart';
+ import 'package:pull_request_coverage/src/domain/analyzer/models/exit_code.dart';
+-import 'package:pull_request_coverage/src/presentation/output_print_generator/output_generator.dart';
++import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
+ 
+ class GetOrFailLcovLines {
+-  final OutputGenerator outputGenerator;
+-
+-  const GetOrFailLcovLines(this.outputGenerator);
+-
+   Future<List<String>> call(String filePath, FileSystem fileSystem) async {
+     try {
+       final lines = await fileSystem.file(filePath).readAsLines();
+       return lines;
+     } catch (e, s) {
+-      outputGenerator.printFatalError(
+-        "Error reading lcov.info file: $e\n\tDid you run `flutter test --coverage`?",
+-        e,
+-        s,
+-      );
++      Logger.global
++        ?..printError(
++          origin: "Getting lcov.info lines",
++          msg: "Error reading lcov.info file: $e",
++          stackTrace: s,
++          alwaysPrint: true,
++        )
++        ..printInfo(
++          msg: 'Did you run `flutter test --coverage`?',
++          origin: "",
++          alwaysPrint: true,
++        );
++
+       exit(ExitCode.error);
+     }
+   }
+diff --git a/lib/src/presentation/logger/log_level.dart b/lib/src/presentation/logger/log_level.dart
+new file mode 100644
+index 0000000..32bbec0
+--- /dev/null
++++ b/lib/src/presentation/logger/log_level.dart
+@@ -0,0 +1,7 @@
++enum LogLevel {
++  none,
++  error,
++  warning,
++  info,
++  verbose,
++}
+diff --git a/lib/src/presentation/logger/logger.dart b/lib/src/presentation/logger/logger.dart
+new file mode 100644
+index 0000000..eece136
+--- /dev/null
++++ b/lib/src/presentation/logger/logger.dart
+@@ -0,0 +1,57 @@
++import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
++import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
++
++class Logger {
++  final ColorizeCliText colorizeCliText;
++  static Logger? _global;
++
++  static Logger? get global => _global;
++
++  static void setGlobalLogger(Logger logger) => _global = logger;
++
++  final LogLevel logLevel;
++
++  Logger({
++    this.logLevel = LogLevel.none,
++    required this.colorizeCliText,
++  });
++
++  void printError({
++    required String origin,
++    required String msg,
++    StackTrace? stackTrace,
++    bool alwaysPrint = false,
++  }) {
++    if (alwaysPrint || logLevel.index >= LogLevel.error.index) {
++      print("${colorizeCliText("[ERROR] $origin: $msg", TextColor.red)}\n $stackTrace");
++    }
++  }
++
++  void printWarning({
++    required String origin,
++    required String msg,
++  }) {
++    if (logLevel.index >= LogLevel.warning.index) {
++      print(colorizeCliText("[WARNING] $origin: $msg", TextColor.yellow));
++    }
++  }
++
++  void printInfo({
++    required String origin,
++    required String msg,
++    bool alwaysPrint = false,
++  }) {
++    if (alwaysPrint || logLevel.index >= LogLevel.info.index) {
++      print(colorizeCliText("$origin: $msg", TextColor.cyan));
++    }
++  }
++
++  void printVerbose({
++    required String origin,
++    required String msg,
++  }) {
++    if (logLevel.index >= LogLevel.info.index) {
++      print(colorizeCliText("$origin: $msg", TextColor.white));
++    }
++  }
++}
+diff --git a/lib/src/presentation/output_print_generator/get_result_table.dart b/lib/src/presentation/output_print_generator/get_result_table.dart
+index 34434d6..1732f24 100644
+--- a/lib/src/presentation/output_print_generator/get_result_table.dart
++++ b/lib/src/presentation/output_print_generator/get_result_table.dart
+@@ -15,7 +15,9 @@ class GetResultTable {
+     final maximumUncoveredLines = userOptions.maximumUncoveredLines;
+     final minimumCoverageRate = userOptions.minimumCoverageRate;
+ 
+-    final currentCoverage = (analysisResult.coverageRate * 100).toStringAsFixed(userOptions.fractionalDigits);
++    final coverage = (analysisResult.coverageRate * 100);
++    final coverageTxt =
++        coverage.isNaN ? "-" : "${coverage.toStringAsFixed(userOptions.fractionalDigits)}%";
+ 
+     String result(bool success) =>
+         success ? colorizeText("Success", TextColor.green) : colorizeText("FAIL", TextColor.red);
+@@ -32,7 +34,7 @@ class GetResultTable {
+       ..addLine(["Untested lines that were ignored", analysisResult.untestedIgnoredLines.toString(), "", ""])
+       ..addLine(["", "", "", ""])
+       ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
+-      ..addLine(["Coverage rate", "$currentCoverage%", rateThreshold, rateResult]);
++      ..addLine(["Coverage rate", coverageTxt, rateThreshold, rateResult]);
+ 
+     return "\n${tableBuilder.build(userOptions.outputMode == OutputMode.markdown)}";
+   }
+diff --git a/lib/src/presentation/output_print_generator/output_generator.dart b/lib/src/presentation/output_print_generator/output_generator.dart
+index 4f45daa..cd68f84 100644
+--- a/lib/src/presentation/output_print_generator/output_generator.dart
++++ b/lib/src/presentation/output_print_generator/output_generator.dart
+@@ -2,7 +2,6 @@ import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result
+ import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
+ 
+ abstract class OutputGenerator {
+-  void printFatalError(String msg, dynamic error, StackTrace? stackTrace);
+   void addFile(FileDiff fileDiff);
+   void setReport(AnalysisResult analysisResult);
+   void printOutput();
+diff --git a/lib/src/presentation/output_print_generator/plain_text_output_generator.dart b/lib/src/presentation/output_print_generator/plain_text_output_generator.dart
+index 0d3cabe..3d3522e 100644
+--- a/lib/src/presentation/output_print_generator/plain_text_output_generator.dart
++++ b/lib/src/presentation/output_print_generator/plain_text_output_generator.dart
+@@ -89,9 +89,4 @@ mixin PlainTextOutputGenerator implements OutputGenerator {
+   void setReport(AnalysisResult analysisResult) {
+     print(getReport(analysisResult));
+   }
+-
+-  @override
+-  void printFatalError(String msg, error, StackTrace? stackTrace) {
+-    print("${error?.toString() ?? msg} ${stackTrace != null ? "\ntackTrace.toString()" : ""}");
+-  }
+ }
+diff --git a/test/src/domain/input_reader/lcov_reader/get_uncovered_file_lines_test.dart b/test/src/domain/input_reader/lcov_reader/get_uncovered_file_lines_test.dart
+index 110352d..88b0bca 100644
+--- a/test/src/domain/input_reader/lcov_reader/get_uncovered_file_lines_test.dart
++++ b/test/src/domain/input_reader/lcov_reader/get_uncovered_file_lines_test.dart
+@@ -5,16 +5,25 @@ void main() {
+   group("When GetUncoveredFileLines is called", () {
+     test("should return the lines that are not covered by the lcov file", () {
+       final useCase = GetUncoveredFileLines();
+-      final result = useCase(content.split("\n"), "lib/extensions/iterable.dart");
++      final result = useCase(_content1.split("\n"), "lib/extensions/iterable.dart");
+ 
+       expect(result!.length, 2);
+       expect(result.first, 4);
+       expect(result.last, 6);
+     });
++
++    test("should return the lines that are not covered by the lcov file if it uses absolute paths", () {
++      final useCase = GetUncoveredFileLines();
++      final result = useCase(_content2.split("\n"), "lib/src/extensions/string.dart");
++
++      expect(result!.length, 4);
++      expect(result.first, 13);
++      expect(result.last, 18);
++    });
+   });
+ }
+ 
+-const content = r'''DA:22,2
++const _content1 = r'''DA:22,2
+ LF:2
+ LH:2
+ end_of_record
+@@ -37,3 +46,17 @@ DA:10,12
+ LF:4
+ LH:2
+ end_of_record''';
++
++const _content2 = '''
++SF:/Users/barreto/Projects/pull_request_coverage/lib/src/extensions/string.dart
++DA:4,1
++DA:5,1
++DA:6,1
++DA:13,0
++DA:15,0
++DA:16,0
++DA:18,0
++LF:7
++LH:3
++end_of_record
++''';
