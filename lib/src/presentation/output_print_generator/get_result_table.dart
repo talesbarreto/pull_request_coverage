@@ -15,7 +15,9 @@ class GetResultTable {
     final maximumUncoveredLines = userOptions.maximumUncoveredLines;
     final minimumCoverageRate = userOptions.minimumCoverageRate;
 
-    final currentCoverage = (analysisResult.coverageRate * 100).toStringAsFixed(userOptions.fractionalDigits);
+    final coverage = (analysisResult.coverageRate * 100);
+    final coverageTxt =
+        coverage.isNaN ? "-" : "${coverage.toStringAsFixed(userOptions.fractionalDigits)}%";
 
     String result(bool success) =>
         success ? colorizeText("Success", TextColor.green) : colorizeText("FAIL", TextColor.red);
@@ -32,7 +34,7 @@ class GetResultTable {
       ..addLine(["Untested lines that were ignored", analysisResult.untestedIgnoredLines.toString(), "", ""])
       ..addLine(["", "", "", ""])
       ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
-      ..addLine(["Coverage rate", "$currentCoverage%", rateThreshold, rateResult]);
+      ..addLine(["Coverage rate", coverageTxt, rateThreshold, rateResult]);
 
     return "\n${tableBuilder.build(userOptions.outputMode == OutputMode.markdown)}";
   }

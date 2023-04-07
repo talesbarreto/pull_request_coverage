@@ -7,21 +7,14 @@ This is a tool intended to analyze the coverage rate of a pull request, ignoring
 The coverage rate threshold on CI tools is a common approach to encourage developers to write tests. Unfortunately, judging a pull request by
 analyzing the coverage rate of the entire project is not always fair, especially on big refactor tasks, witch may naturally decrease the coverage rate.
 
-This package tries a different approach to analyse the test coverage: we only check lines that have been added in the pull request. The coverage rate will be calculated by dividing the number of
+This package tries a different approach to analyze the test coverage: we only check lines that have been added in the pull request. The coverage rate will be calculated by dividing the number of
 uncovered new lines by the number of new lines.
 
 You can set thresholds to make tests fail on a CI tool. This package can also print those lines that were not covered by any test, making it easier to identify missing tests.
 
 ## Installing
 
-Add this line to your package's pubspec.yaml under the `dev_dependencies` section:
-
-```yaml
-dev_dependencies:
-  pull_request_coverage:
-```
-
-You should specify the version to avoid breaking changes
+There are two ways install this `pull_request_coverage`. Since it is a binary package, you can activate it from the command line using `dart pub global activate pull_request_coverage` and use it as an ordinary program on your CLI or you can add it to the `pubspec.yaml` of your project, on the `dev_dependencies` section.
 
 ## Usage
 
@@ -41,6 +34,8 @@ Run the following command to generate the `coverage/lcov.info` file:
 flutter test --coverage
 ```
 
+If you want to analyze a Dart project rather than Flutter, use the [coverage package](https://pub.dev/packages/coverage)
+
 ### Running pull_request_coverage
 
 To check the PR's code, pull_request_coverage needs a diff between its branch and the target one. The diff is read from the `STDIN` input.
@@ -49,6 +44,11 @@ You can pipe the STDIN to `pull_request_coverage` using bash's `|` operator, lik
 
 ```bash
 git diff repository/main | flutter pub run pull_request_coverage
+```
+
+If you activate `pull_request_coverage` using `dart pub global activate`, you can invoke directly it:
+```bash
+git diff repository/main | pull_request_coverage
 ```
 
 See [Example](https://github.com/talesbarreto/pull_request_coverage/tree/main/example) tab to check an output example out

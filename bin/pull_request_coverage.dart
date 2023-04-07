@@ -8,6 +8,7 @@ import 'package:pull_request_coverage/src/di/user_options_module.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_exit_code.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/use_case/get_or_fail_user_options.dart';
+import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_for_unexpected_file_structure.dart';
 
@@ -21,7 +22,9 @@ Future<void> main(List<String> arguments) async {
   final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
   final colorizeText = ColorizeCliText(userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli);
   final outputGenerator = OutputGeneratorModule.providePlainTextOutputGenerator(userOptions);
-  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines(outputGenerator: outputGenerator);
+  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines();
+
+  Logger.setGlobalLogger(Logger(colorizeCliText: colorizeText));
 
   PrintWarningsForUnexpectedFileStructure(print, colorizeText)(
     gitRootRelativePath: gitRootRelativePath,
