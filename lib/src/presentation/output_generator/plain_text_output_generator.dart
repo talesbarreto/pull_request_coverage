@@ -37,7 +37,7 @@ mixin PlainTextOutputGenerator implements OutputGenerator {
     final uncoveredLinesCount = fileDiff.uncoveredNewLinesCount;
     final totalNewLinesCount = fileDiff.newLinesCount;
     final ignoredMsg = fileDiff.ignoredUntestedLinesCount > 0
-        ? " / ${colorizeText("${fileDiff.ignoredUntestedLinesCount} untested and ignored", TextColor.magenta)}"
+        ? " / ${colorizeText("${fileDiff.ignoredUntestedLinesCount} untested and ignored", ColorizeCliText.ignoredUntestedCodeColor)}"
         : "";
     if (uncoveredLinesCount == 0) {
       if (userOptions.reportFullyCoveredFiles) {

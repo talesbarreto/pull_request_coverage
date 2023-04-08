@@ -1,4 +1,6 @@
 class ColorizeCliText {
+  static const ignoredUntestedCodeColor = TextColor.cyan;
+
   final bool useColorfulOutput;
 
   const ColorizeCliText(this.useColorfulOutput);

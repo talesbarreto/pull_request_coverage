@@ -7,7 +7,7 @@ class TableBuilder {
   static const columnDivider = "|";
 
   void setHeader(List<String> header) {
-      _header = header;
+    _header = header;
   }
 
   int get columnsLength => _header.length;
@@ -24,7 +24,7 @@ class TableBuilder {
   }
 
   String _createContent(String content, int minLength, String filler) {
-    final remaining = content.length > minLength ? 0 : minLength - content.length;
+    final remaining = content.getLengthWithNoColor() > minLength ? 0 : minLength - content.getLengthWithNoColor();
     final suffix = remaining % 2 == 0 ? "" : filler;
     return "$filler${filler * (remaining ~/ 2)}$content${filler * (remaining ~/ 2)}$suffix$filler";
   }
