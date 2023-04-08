@@ -45,7 +45,10 @@ mixin PlainTextOutputGenerator implements OutputGenerator {
       }
       return null;
     }
-    return "${colorizeText(filePath, TextColor.red)} has $uncoveredLinesCount uncovered lines (${colorizeText("+$totalNewLinesCount", TextColor.green)}$ignoredMsg)\n";
+    return "${colorizeText(filePath, TextColor.yellow)}"
+    ": ${colorizeText("$uncoveredLinesCount lines missing tests",TextColor.red)}"
+    " (${colorizeText("+$totalNewLinesCount", TextColor.green)} "
+    "$ignoredMsg)\n";
   }
 
   @override
