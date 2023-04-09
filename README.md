@@ -46,7 +46,7 @@ You can pipe the STDIN to `pull_request_coverage` using bash's `|` operator, lik
 git diff repository/main | flutter pub run pull_request_coverage
 ```
 
-If you activate `pull_request_coverage` using `dart pub global activate`, you can invoke directly it:
+If you activate `pull_request_coverage` using `dart pub global activate`, you can invoke it directly:
 ```bash
 git diff repository/main | pull_request_coverage
 ```
@@ -77,7 +77,7 @@ ignore-lines:
   - "^.*@override.*$"
 ```
 
-## Settings available
+## Options available
 Default value within parenthesis
 
 ### Input
@@ -95,13 +95,13 @@ Default value within parenthesis
 
 - **ignore**: list of files that should be ignored, using the [widely-known Bash glob syntax](https://pub.dev/packages/glob#syntax). The sum of ignored lines from these files will be shown on the report for statistics purposes only.
 
-- **ignore-lines**: list of regex expressions to filter lines on source code
+- **ignore-lines**: list of regex expressions to filter lines on source code. The sum of ignored lines will be shown on the report for statistics purposes only.
 
 - **ignore-known-generated-files** (`true`) : Ignore file paths that ends with `.g.dart`, `.pb.dart`, `.pbenum.dart`, `.pbserver.dart` or `.pbjson.dart`
 
 - **add-to-known-generated-files**: list of [glob matchers](https://pub.dev/packages/glob#syntax) to extend the given list on `ignore-known-generated-files`. Those lines, differently from `ignore`, will be completely exclude from the report.
 
-#### Presentation
+### Presentation
 
 Check [example](https://github.com/talesbarreto/pull_request_coverage/tree/main/example) out to see how those params can change the output
 
@@ -124,11 +124,11 @@ Check [example](https://github.com/talesbarreto/pull_request_coverage/tree/main/
 
 - **fully-tested-message** : Set a custom output message to be displayed when there is no untested lines
 
-#### Under the hood
+### Under the hood
 
 - **stdin-timeout** (`1`): `pull_request_coverage` read diff from stdin. In some cases, it never closes and the analysis will be stuck. By default, if no data comes in one second, `pull_request_coverage` will assume that it reached `EOF`
-
-# Exit code
+___
+## Exit code
 
 | Code | Description                                       |
 |------|---------------------------------------------------|

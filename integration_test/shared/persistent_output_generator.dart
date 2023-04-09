@@ -11,10 +11,6 @@ class PersistentOutputGenerator implements OutputGenerator {
     diffs.add(fileDiff);
   }
 
-  @override
-  void printFatalError(String msg, error, StackTrace? stackTrace) {
-    // TODO: implement printFatalError
-  }
 
   @override
   void printOutput() {

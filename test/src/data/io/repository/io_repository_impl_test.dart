@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:file/memory.dart';
 import 'package:pull_request_coverage/src/data/io/repository/io_repository_impl.dart';
 import 'package:test/test.dart';
-import 'package:mocktail/mocktail.dart';
 
 void main() {
   group("when `getGitRootRelativePath` is invoked", () {
@@ -58,8 +55,4 @@ void main() {
       expect(await repository.doesLibDirectoryExist(), isFalse);
     });
   });
-}
-
-class _MockStdin extends Mock implements Stdin {
-  _MockStdin();
 }

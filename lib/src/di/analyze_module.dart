@@ -1,7 +1,5 @@
-import 'package:pull_request_coverage/src/di/output_generator_module.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
 import 'dart:async';
-import 'package:file/local.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_file_from_project.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_generated_file.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_an_ignored_file.dart';

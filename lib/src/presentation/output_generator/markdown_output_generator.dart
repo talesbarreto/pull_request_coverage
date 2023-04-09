@@ -1,25 +1,10 @@
-import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
-import 'package:pull_request_coverage/src/presentation/output_generator/get_result_table.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/plain_text_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
 
-class MarkdownOutputGenerator with PlainTextOutputGenerator {
-  @override
-  final UserOptions userOptions;
-  final GetResultTable getResultTable;
-  const MarkdownOutputGenerator({
-    required this.userOptions,
-    required this.getResultTable,
-    required this.print,
-  });
-
-  @override
-  final void Function(String message) print;
-
-  @override
-  bool get showUncoveredCode => userOptions.showUncoveredCode;
+class MarkdownOutputGenerator extends PlainTextOutputGenerator {
+  const MarkdownOutputGenerator(
+      {required super.colorizeCliText, required super.print, required super.tableBuilder, required super.userOptions});
 
   @override
   String? getSourceCodeHeader() => userOptions.markdownMode == MarkdownMode.diff ? "```diff\n" : "```dart\n";
@@ -53,13 +38,16 @@ class MarkdownOutputGenerator with PlainTextOutputGenerator {
   }
 
   @override
-  String getReport(AnalysisResult analysisResult) {
-    if (analysisResult.linesMissingTests == 0 && userOptions.fullyTestedMessage != null) {
-      return userOptions.fullyTestedMessage!;
-    }
-    return "\n${getResultTable(analysisResult)}";
-  }
+  ColorizeCliText? get colorizeCliText => null;
 
   @override
-  ColorizeCliText? get colorizeCliText => null;
+  String getFileHeader(String filePath, int newLinesCount, int ignoredUntestedLines, int missingTestsLines) {
+    final ignoredText = ignoredUntestedLines > 0 ? "$ignoredUntestedLines untested and ignored" : null;
+    final untestedText = missingTestsLines > 0 ? "$missingTestsLines lines missing tests" : null;
+
+    return " - `$filePath` (+$newLinesCount)"
+        "${ignoredText != null ? " / _${ignoredText}_ " : ""}"
+        "${untestedText != null ? " / **$untestedText** " : ""}"
+        "${ignoredText != null || untestedText != null ? "\n" : ""}";
+  }
 }
