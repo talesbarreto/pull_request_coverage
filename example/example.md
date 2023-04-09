@@ -6,7 +6,7 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 #### Output example
 
-<img width="827" alt="Screenshot 2023-01-14 at 11 05 26" src="https://user-images.githubusercontent.com/7644323/212476070-6e4d3c02-de8f-4771-9f9a-33ff854fee8e.png">
+![Screenshot 2023-04-09 at 11 08 01](https://user-images.githubusercontent.com/7644323/230777531-9a845de5-09a8-4914-b8a6-7ead78d7cb9e.png)
 
 You can disable the colors using `--use-colorful-output false`
 
@@ -19,8 +19,8 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 
 #### Output example
-- `lib/src/presentation/output_print_generator/cli_output_generator.dart` is fully covered (+16)
-- `lib/src/presentation/output_print_generator/cli_table_builder.dart` has 6 uncovered lines (+59)
+- `lib/src/presentation/output_print_generator/cli_output_generator.dart` (+16)
+- `lib/src/presentation/output_print_generator/cli_table_builder.dart` (+59) / **6 lines missing tests**
 ```diff
   25:   String build() {
   26:     final stringBuffer = StringBuffer();
@@ -43,15 +43,16 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
   49:     }
   50:     for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
 ```
-- `lib/src/presentation/output_print_generator/markdown_output_generator.dart` is fully covered (+14)
-- `lib/src/presentation/output_print_generator/output_generator.dart` is fully covered (+1)
-### Report
-|                                          | Current value | Threshold | Result   |
-|------------------------------------------|---------------|-----------|----------|
-| Lines that should be tested under `/lib` | 89            |           |          |
-| Uncovered new lines                      | 6             | 5         | **FAIL** |
-| Coverage rate                            | 93.26%        | 99.0%     | **FAIL** |
+- `lib/src/presentation/output_print_generator/markdown_output_generator.dart` (+14)
+- `lib/src/presentation/output_print_generator/output_generator.dart` (+1)
 
+|           Report            | Current value | Threshold |      |
+|-----------------------------|---------------|-----------|------|
+| Lines that should be tested |      89       |           |      |
+|   Ignored untested lines    |       0       |           |      |
+|                             |               |           |      |
+|     Lines missing tests     |       6       |     5     | FAIL |
+|        Coverage rate        |    93.26%     |   99.0%   | FAIL |
 ____
 ### Markdown output using `dart` mode
 
@@ -61,8 +62,8 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 
 #### Output example
-- `lib/src/presentation/output_print_generator/cli_output_generator.dart` is fully covered (+16)
-- `lib/src/presentation/output_print_generator/cli_table_builder.dart` has 6 uncovered lines (+59)
+- `lib/src/presentation/output_print_generator/cli_output_generator.dart` (+16)
+- `lib/src/presentation/output_print_generator/cli_table_builder.dart` (+59) / **6 lines missing tests**
 ```dart
   String build() {
     final stringBuffer = StringBuffer();
@@ -85,13 +86,15 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
     }
     for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
 ```
-- `lib/src/presentation/output_print_generator/markdown_output_generator.dart` is fully covered (+14)
-- `lib/src/presentation/output_print_generator/output_generator.dart` is fully covered (+1)
-### Report
-|                                          | Current value | Threshold | Result   |
-|------------------------------------------|---------------|-----------|----------|
-| Lines that should be tested under `/lib` | 89            |           |          |
-| Uncovered new lines                      | 6             | 5         | **FAIL** |
-| Coverage rate                            | 93.26%        | 99.0%     | **FAIL** |
+- `lib/src/presentation/output_print_generator/markdown_output_generator.dart` (+14)
+- `lib/src/presentation/output_print_generator/output_generator.dart` (+1)
+
+|           Report            | Current value | Threshold |      |
+|-----------------------------|---------------|-----------|------|
+| Lines that should be tested |      89       |           |      |
+|   Ignored untested lines    |       0       |           |      |
+|                             |               |           |      |
+|     Lines missing tests     |       6       |     5     | FAIL |
+|        Coverage rate        |    93.26%     |   99.0%   | FAIL |
 
 ____
