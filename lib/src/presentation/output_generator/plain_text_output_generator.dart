@@ -49,7 +49,9 @@ abstract class PlainTextOutputGenerator implements OutputGenerator {
   void addFile(FileDiff fileDiff) {
     final outputBuilder = StringBuffer();
     void write(String? message) => message != null ? outputBuilder.write(message) : null;
-
+    if (!userOptions.reportFullyCoveredFiles && !fileDiff.hasUncoveredLines) {
+      return;
+    }
     write(getFileHeader(
       fileDiff.path,
       fileDiff.newLinesCount,
