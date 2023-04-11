@@ -103,8 +103,9 @@ abstract class PlainTextOutputGenerator implements OutputGenerator {
     final linesResult =
         maximumUncoveredLines == null ? "-" : result(analysisResult.linesMissingTests <= maximumUncoveredLines);
     final lineThreshold = maximumUncoveredLines == null ? "-" : "$maximumUncoveredLines";
-    final rateResult =
-        minimumCoverageRate == null ? "-" : result(analysisResult.coverageRate >= (minimumCoverageRate / 100));
+    final rateResult = minimumCoverageRate == null || analysisResult.coverageRate.isNaN
+        ? "-"
+        : result(analysisResult.coverageRate >= (minimumCoverageRate / 100));
     final rateThreshold = minimumCoverageRate == null ? "-" : "$minimumCoverageRate%";
 
     final ignoredUntestedLinesText = colorizeText(
@@ -116,7 +117,6 @@ abstract class PlainTextOutputGenerator implements OutputGenerator {
       ..setHeader(["Report", "Current value", "Threshold", ""])
       ..addLine(["Lines that should be tested", analysisResult.linesShouldBeTested.toString(), "", ""])
       ..addLine(["Ignored untested lines", ignoredUntestedLinesText, "", ""])
-      ..addLine(["", "", "", ""])
       ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
       ..addLine(["Coverage rate", coverageTxt, rateThreshold, rateResult]);
 
