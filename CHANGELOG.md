@@ -1,5 +1,8 @@
+## 1.3.3
+- Added `topics` in `pubspec.yaml`.
+
 ## 1.3.2
-- Final result erroneously printing `FAIL` when there is no coverage rate available
+- FIx final result erroneously printing `FAIL` when there is no coverage rate available
 
 ## 1.3.1
 - Fix setting `report-fully-covered-files` to false does nothing
