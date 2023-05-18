@@ -1,3 +1,6 @@
+## 1.3.4
+- Readme improvements
+
 ## 1.3.3
 - Added `topics` in `pubspec.yaml`.
 
