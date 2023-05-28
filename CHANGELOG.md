@@ -1,3 +1,6 @@
+## 1.3.5
+- Fix `fully-tested-message` option not working
+
 ## 1.3.4
 - Readme improvements
 

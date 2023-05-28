@@ -119,7 +119,7 @@ Check [example](https://github.com/talesbarreto/pull_request_coverage/tree/main/
 
 - **fraction-digits** (`2`): Specifies the number of digits to display after the decimal point in the coverage rate.
 
-- **fully-tested-message** : Allows you to set a custom output message to be displayed when there are no untested lines.
+- **fully-tested-message** : Replace the final table report with a custom message when there are no untested lines
 
 ### Under the hood
 

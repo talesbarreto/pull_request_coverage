@@ -113,13 +113,17 @@ abstract class PlainTextOutputGenerator implements OutputGenerator {
       ColorizeCliText.ignoredUntestedCodeColor,
     );
 
-    tableBuilder
-      ..setHeader(["Report", "Current value", "Threshold", ""])
-      ..addLine(["Lines that should be tested", analysisResult.linesShouldBeTested.toString(), "", ""])
-      ..addLine(["Ignored untested lines", ignoredUntestedLinesText, "", ""])
-      ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
-      ..addLine(["Coverage rate", coverageTxt, rateThreshold, rateResult]);
+    if (analysisResult.linesMissingTests == 0 && userOptions.fullyTestedMessage != null) {
+      print(userOptions.fullyTestedMessage.toString());
+    } else {
+      tableBuilder
+        ..setHeader(["Report", "Current value", "Threshold", ""])
+        ..addLine(["Lines that should be tested", analysisResult.linesShouldBeTested.toString(), "", ""])
+        ..addLine(["Ignored untested lines", ignoredUntestedLinesText, "", ""])
+        ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
+        ..addLine(["Coverage rate", coverageTxt, rateThreshold, rateResult]);
 
-    print("\n${tableBuilder.build(userOptions.outputMode == OutputMode.markdown)}");
+      print("\n${tableBuilder.build(userOptions.outputMode == OutputMode.markdown)}");
+    }
   }
 }
