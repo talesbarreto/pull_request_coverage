@@ -14,6 +14,8 @@ In addition, you have the option to set thresholds that will cause tests to fail
 
 There are two ways to install the `pull_request_coverage` package. Since it is a binary package, you can activate it from the command line by using the command `dart pub global activate pull_request_coverage`. This will allow you to use it as a standalone program on your command-line interface (CLI). Alternatively, you can add it to the `dev_dependencies` section of your project's `pubspec.yaml` file.
 
+ℹ️  [Github Actions example](https://github.com/talesbarreto/uri_content/blob/main/.github/workflows/flutter-ci.yml)
+
 ## Usage
 
 This package requires two pieces of information to analyze the test coverage:
