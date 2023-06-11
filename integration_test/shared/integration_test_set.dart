@@ -29,7 +29,6 @@ Future<Analyze> getAnalyzeForIntegrationTest({
     ioRepository: IoModule.provideIoRepository(
       fileSystem: fileSystem,
       stdinTimeout: Duration(days: 10),
-      stdinStream: File(diffFilePath).openRead().transform(utf8.decoder).transform(LineSplitter()).asBroadcastStream(),
     ),
     getFileReportFromDiff: GetFileReportFromDiff(),
     onFilesOnGitDiff: OnFilesOnGitDiff(

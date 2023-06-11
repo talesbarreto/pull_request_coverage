@@ -8,7 +8,6 @@ class IoModule {
   static FileRepository provideIoRepository({
     required Duration stdinTimeout,
     required FileSystem fileSystem,
-    Stream<String>? stdinStream,
   }) {
     return FileRepositoryImpl(
       fileSystem: fileSystem,

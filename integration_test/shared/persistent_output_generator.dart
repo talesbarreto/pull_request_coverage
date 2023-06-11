@@ -12,7 +12,7 @@ class PersistentOutputGenerator implements OutputGenerator {
   }
 
   @override
-  Future<void> exit(AnalysisResult analysisResult) async {
+  Future<void> terminate(AnalysisResult analysisResult) async {
     this.analysisResult = analysisResult;
   }
 }

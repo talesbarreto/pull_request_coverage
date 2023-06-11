@@ -4,5 +4,5 @@ import 'package:pull_request_coverage/src/domain/analyzer/models/file_report.dar
 abstract class OutputGenerator {
   Future<void> addFileReport(FileReport report);
 
-  Future<void> exit(AnalysisResult analysisResult);
+  Future<void> terminate(AnalysisResult analysisResult);
 }

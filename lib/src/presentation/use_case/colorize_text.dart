@@ -3,7 +3,9 @@ class ColorizeText {
 
   final bool useColorfulOutput;
 
-  const ColorizeText(this.useColorfulOutput);
+  const ColorizeText({
+    required this.useColorfulOutput,
+  });
 
   String call(String text, TextColor color) {
     if (useColorfulOutput) {

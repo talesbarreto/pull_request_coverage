@@ -10,7 +10,6 @@ import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_exit_code
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_file_report_from_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/files_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
-import 'package:pull_request_coverage/src/domain/user_options/use_case/get_or_fail_user_options.dart';
 import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
@@ -18,33 +17,41 @@ import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_f
 
 Future<void> main(List<String> arguments) async {
   final fileSystem = LocalFileSystem();
-  final userOptions = GetOrFailUserOptions(
-    userOptionsRepository: UserOptionsModule.provideUserOptionsRepository(fileSystem: fileSystem),
-  ).call(arguments);
-
+  final userOptions = UserOptionsModule.provideUserOptions(arguments: arguments, fileSystem: fileSystem);
   final ioRepository = IoModule.provideIoRepository(stdinTimeout: userOptions.stdinTimeout, fileSystem: fileSystem);
-  final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
-  final colorizeText = ColorizeText(userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli);
-  final outputGenerator = OutputGeneratorModule.providePlainTextOutputGenerator(userOptions);
-  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines();
-  final logger = Logger(colorizeCliText: colorizeText, logLevel: LogLevel.warning);
+
+  final colorizeText = ColorizeText(
+    useColorfulOutput: userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli,
+  );
+
+  final logger = Logger(
+    colorizeCliText: colorizeText,
+    logLevel: LogLevel.warning,
+  );
   Logger.setGlobalLogger(logger);
 
+  final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
   PrintWarningsForUnexpectedFileStructure(print, colorizeText, logger)(
     gitRootRelativePath: gitRootRelativePath,
     isLibDirPresent: await ioRepository.doesLibDirectoryExist(),
   );
 
+  final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines();
   final lcovLines = await getOrFailLcovLines(userOptions.lcovFilePath, fileSystem);
+
+  final onFilesOnGitDiff = OnFilesOnGitDiff(stdin.transform(utf8.decoder).transform<String>(const LineSplitter()))();
 
   final analyze = await AnalyzeModule.provideAnalyzeUseCase(
     userOptions: userOptions,
     lcovLines: lcovLines,
     ioRepository: ioRepository,
     getFileReportFromDiff: GetFileReportFromDiff(),
-    onFilesOnGitDiff: OnFilesOnGitDiff(
-      stdin.transform(utf8.decoder).transform<String>(const LineSplitter()),
-    )(),
+    onFilesOnGitDiff: onFilesOnGitDiff,
+  );
+
+  final outputGenerator = OutputGeneratorModule.provideGenerator(
+    userOptions: userOptions,
+    colorizeText: colorizeText,
   );
 
   await for (final result in analyze()) {
@@ -53,7 +60,7 @@ Future<void> main(List<String> arguments) async {
         outputGenerator.addFileReport(data);
       },
       isAnalysisResult: (data) {
-        outputGenerator.exit(data);
+        outputGenerator.terminate(data);
         exit(GetExitCode()(data, userOptions));
       },
     );

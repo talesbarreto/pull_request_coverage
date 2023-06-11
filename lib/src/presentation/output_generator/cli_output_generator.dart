@@ -73,9 +73,13 @@ class CliOutputGenerator implements OutputGenerator {
   }
 
   @override
-  Future<void> exit(AnalysisResult analysisResult) async {
-    print(_testedFilesReport.toString());
-    print(_missingTestFilesReport.toString());
+  Future<void> terminate(AnalysisResult analysisResult) async {
+    if (_testedFilesReport.isNotEmpty) {
+      print(_testedFilesReport.toString());
+    }
+    if (_missingTestFilesReport.isNotEmpty) {
+      print(_missingTestFilesReport.toString());
+    }
     print(getResultTable(userOptions, analysisResult));
   }
 }

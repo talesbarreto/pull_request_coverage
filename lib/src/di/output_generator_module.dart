@@ -11,8 +11,10 @@ import '../presentation/output_generator/output_generator.dart';
 class OutputGeneratorModule {
   const OutputGeneratorModule._();
 
-  static OutputGenerator providePlainTextOutputGenerator(UserOptions userOptions) {
-    final colorizeText = ColorizeText(userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli);
+  static OutputGenerator provideGenerator({
+    required UserOptions userOptions,
+    required ColorizeText colorizeText,
+  }) {
     switch (userOptions.outputMode) {
       case OutputMode.cli:
         return CliOutputGenerator(
