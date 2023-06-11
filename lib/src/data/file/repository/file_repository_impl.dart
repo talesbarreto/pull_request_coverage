@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:file/file.dart';
+import 'package:pull_request_coverage/src/domain/file/repository/file_repository.dart';
 
-import 'package:pull_request_coverage/src/domain/io/repository/io_repository.dart';
 import 'package:pull_request_coverage/src/extensions/file.dart';
 
-class FileRepositoryImpl implements IoRepository {
+class FileRepositoryImpl implements FileRepository {
   static const gitFileName = ".git";
 
   final FileSystem fileSystem;

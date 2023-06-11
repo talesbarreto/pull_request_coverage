@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:file/local.dart';
 import 'package:pull_request_coverage/src/di/analyze_module.dart';
-import 'package:pull_request_coverage/src/di/io_module.dart';
+import 'package:pull_request_coverage/src/di/file_module.dart';
 import 'package:pull_request_coverage/src/di/user_options_module.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_file_report_from_diff.dart';

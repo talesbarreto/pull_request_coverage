@@ -1,6 +1,6 @@
 import 'package:file/file.dart';
 
-abstract class IoRepository {
+abstract class FileRepository {
 
   /// Example:
   /// Considering the existing file structure:

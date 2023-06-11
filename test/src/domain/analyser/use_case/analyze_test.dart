@@ -1,6 +1,5 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
-import 'package:pull_request_coverage/src/domain/analyzer/models/file_report.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_file_report_from_diff.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_file_from_project.dart';
@@ -188,22 +187,6 @@ class _MockGetUncoveredFileLines extends Mock implements GetUncoveredFileLines {
     final mock = _MockGetUncoveredFileLines();
     when(() => mock.call(any(), any())).thenReturn(answer);
     return mock;
-  }
-}
-
-class _MockGetFileReportFromDiff extends Mock implements GetFileReportFromDiff {
-  _MockGetFileReportFromDiff();
-
-  _MockGetFileReportFromDiff.dummy() {
-    registerFallbackValue(FileDiff(path: '', lines: []));
-    when(() => call(any(), any())).thenReturn(FileReport(
-      filePath: '',
-      chunks: [],
-      newLinesCount: 0,
-      linesThatShouldBeTestedCount: 0,
-      linesMissingTestsCount: 0,
-      untestedAndIgnoredLines: 0,
-    ));
   }
 }
 

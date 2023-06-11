@@ -1,5 +1,5 @@
 import 'package:file/memory.dart';
-import 'package:pull_request_coverage/src/data/io/repository/file_repository_impl.dart';
+import 'package:pull_request_coverage/src/data/file/repository/file_repository_impl.dart';
 import 'package:test/test.dart';
 
 void main() {
