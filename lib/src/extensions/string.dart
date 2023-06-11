@@ -1,4 +1,4 @@
-import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 
 extension RemovePrefix on String {
   String removePrefix(String prefix) {

@@ -6,10 +6,10 @@ import 'package:pull_request_coverage/src/di/analyze_module.dart';
 import 'package:pull_request_coverage/src/di/io_module.dart';
 import 'package:pull_request_coverage/src/di/user_options_module.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_file_report_from_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/files_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/user_options/use_case/get_or_fail_user_options.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
-
-import 'persistent_output_generator.dart';
 
 Future<Analyze> getAnalyzeForIntegrationTest({
   required String diffFilePath,
@@ -21,7 +21,6 @@ Future<Analyze> getAnalyzeForIntegrationTest({
   final userOptions = GetOrFailUserOptions(
     userOptionsRepository: UserOptionsModule.provideUserOptionsRepository(fileSystem: fileSystem),
   ).call(arguments);
-  final outputGeneratorImpl = outputGenerator ?? PersistentOutputGenerator();
   final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines();
 
   return AnalyzeModule.provideAnalyzeUseCase(
@@ -29,9 +28,12 @@ Future<Analyze> getAnalyzeForIntegrationTest({
     lcovLines: await getOrFailLcovLines(userOptions.lcovFilePath, fileSystem),
     ioRepository: IoModule.provideIoRepository(
       fileSystem: fileSystem,
-      stdinTimeout: userOptions.stdinTimeout,
+      stdinTimeout: Duration(days: 10),
       stdinStream: File(diffFilePath).openRead().transform(utf8.decoder).transform(LineSplitter()).asBroadcastStream(),
     ),
-    outputGenerator: outputGeneratorImpl,
+    getFileReportFromDiff: GetFileReportFromDiff(),
+    onFilesOnGitDiff: OnFilesOnGitDiff(
+      File(diffFilePath).openRead().transform(utf8.decoder).transform(LineSplitter()),
+    )(),
   );
 }

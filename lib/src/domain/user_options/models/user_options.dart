@@ -22,12 +22,12 @@ class UserOptions {
 
   /// [fractionalDigits] how many digits after the decimal point to show on coverage rate
   const UserOptions({
-    required this.ignoredFiles,
-    required this.lcovFilePath,
-    required this.showUncoveredCode,
-    required this.outputMode,
-    required this.fractionalDigits,
-    required this.markdownMode,
+    this.ignoredFiles = const [],
+    this.lcovFilePath = "coverage/lcov.info",
+    this.showUncoveredCode = true,
+    this.outputMode = OutputMode.cli,
+    this.fractionalDigits = 3,
+    this.markdownMode = MarkdownMode.diff,
     this.fullyTestedMessage,
     this.knownGeneratedFiles = const [],
     this.minimumCoverageRate,

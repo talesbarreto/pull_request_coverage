@@ -1,8 +1,8 @@
 import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 
 class Logger {
-  final ColorizeCliText colorizeCliText;
+  final ColorizeText colorizeCliText;
   static Logger? _global;
 
   static Logger? get global => _global;

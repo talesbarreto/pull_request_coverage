@@ -1,9 +1,9 @@
 import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 
 class PrintWarningsForUnexpectedFileStructure {
   final void Function(String message) print;
-  final ColorizeCliText colorizeText;
+  final ColorizeText colorizeText;
   final Logger logger;
 
   const PrintWarningsForUnexpectedFileStructure(this.print, this.colorizeText, this.logger);

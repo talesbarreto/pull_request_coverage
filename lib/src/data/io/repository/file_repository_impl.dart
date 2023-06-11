@@ -5,29 +5,16 @@ import 'package:file/file.dart';
 import 'package:pull_request_coverage/src/domain/io/repository/io_repository.dart';
 import 'package:pull_request_coverage/src/extensions/file.dart';
 
-class IoRepositoryImpl implements IoRepository {
+class FileRepositoryImpl implements IoRepository {
   static const gitFileName = ".git";
-
-  final Stream<String> stdinStream;
 
   final FileSystem fileSystem;
   final Duration stdinTimeout;
 
-  const IoRepositoryImpl({
+  const FileRepositoryImpl({
     required this.fileSystem,
-    required this.stdinStream,
     required this.stdinTimeout,
   });
-
-  @override
-  Future<String?> readStdinLine() async {
-    try {
-      final line = await stdinStream.first.timeout(stdinTimeout);
-      return line;
-    } catch (e) {
-      return null;
-    }
-  }
 
   @override
   Future<String?> getGitRootRelativePath() async {

@@ -1,8 +1,6 @@
 import 'package:file/file.dart';
 
 abstract class IoRepository {
-  /// Reads a single line from [stdin] asynchronously.
-  Future<String?> readStdinLine();
 
   /// Example:
   /// Considering the existing file structure:
