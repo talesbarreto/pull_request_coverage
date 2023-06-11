@@ -1,9 +1,9 @@
-class ColorizeCliText {
+class ColorizeText {
   static const ignoredUntestedCodeColor = TextColor.cyan;
 
   final bool useColorfulOutput;
 
-  const ColorizeCliText(this.useColorfulOutput);
+  const ColorizeText(this.useColorfulOutput);
 
   String call(String text, TextColor color) {
     if (useColorfulOutput) {

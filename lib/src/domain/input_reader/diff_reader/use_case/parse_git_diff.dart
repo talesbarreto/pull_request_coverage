@@ -34,9 +34,9 @@ class ParseGitDiff {
         lineNumber++;
         lines.add(
           FileLine(
-            line: line.removePrefix("+"),
+            code: line.removePrefix("+"),
             lineNumber: lineNumber,
-            isANewLine: line.startsWith("+"),
+            isNew: line.startsWith("+"),
           ),
         );
       }

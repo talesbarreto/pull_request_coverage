@@ -1,12 +1,16 @@
 class AnalysisResult {
-  final int linesShouldBeTested;
+  final int linesThatShouldBeTested;
   final int linesMissingTests;
   final int untestedIgnoredLines;
+  final int? linesMissingTestsThreshold;
+  final double? coverageRateThreshold;
   final double coverageRate;
 
   const AnalysisResult({
-    required this.linesShouldBeTested,
+    required this.linesThatShouldBeTested,
     required this.linesMissingTests,
     required this.untestedIgnoredLines,
-  }) : coverageRate = 1 - (linesMissingTests / linesShouldBeTested);
+    required this.linesMissingTestsThreshold,
+    required this.coverageRateThreshold,
+  }) : coverageRate = 1 - (linesMissingTests / linesThatShouldBeTested);
 }

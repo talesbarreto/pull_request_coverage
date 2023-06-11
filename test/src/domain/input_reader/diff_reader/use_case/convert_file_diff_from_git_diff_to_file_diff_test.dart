@@ -12,11 +12,11 @@ void main() {
     test("expect correct file name", () => expect(result.path, ".drone.yml"));
     test(
       "line 17 is `     commands:`",
-      () => expect(result.lines.firstWhere((element) => element.lineNumber == 17).line, "     commands:"),
+      () => expect(result.lines.firstWhere((element) => element.lineNumber == 17).code, "     commands:"),
     );
     test(
       "line 55 is `    image: cirrusci/flutter:3.3.7`",
-      () => expect(result.lines.firstWhere((element) => element.lineNumber == 55).line, "    image: cirrusci/flutter:3.3.7"),
+      () => expect(result.lines.firstWhere((element) => element.lineNumber == 55).code, "    image: cirrusci/flutter:3.3.7"),
     );
   });
 
@@ -29,7 +29,7 @@ void main() {
 
     test(
       "expect that line 17 is `     commands:`",
-      () => expect(result.lines.firstWhere((element) => element.lineNumber == 2).line, "import 'package:flutter_svg/flutter_svg.dart';"),
+      () => expect(result.lines.firstWhere((element) => element.lineNumber == 2).code, "import 'package:flutter_svg/flutter_svg.dart';"),
     );
   });
 }

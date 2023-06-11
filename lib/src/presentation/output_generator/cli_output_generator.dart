@@ -1,33 +1,46 @@
-import 'package:pull_request_coverage/src/presentation/output_generator/plain_text_output_generator.dart';
-import 'package:pull_request_coverage/src/presentation/use_case/colorize_cli_text.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
+import 'package:pull_request_coverage/src/domain/analyzer/models/file_report.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_line.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/get_result_table.dart';
 
-class CliOutputGenerator extends PlainTextOutputGenerator {
-  const CliOutputGenerator({
-    required ColorizeCliText super.colorizeCliText,
-    required super.print,
-    required super.tableBuilder,
-    required super.userOptions,
+class CliOutputGenerator implements OutputGenerator {
+  final UserOptions userOptions;
+  final ColorizeText colorizeCliText;
+  final GetResultTable getResultTable;
+  final void Function(String message) print;
+
+  CliOutputGenerator({
+    required this.userOptions,
+    required this.colorizeCliText,
+    required this.getResultTable,
+    required this.print,
   });
 
-  @override
-  String? getSourceCodeHeader() => null;
+  final _missingTestFilesReport = StringBuffer();
+  final _testedFilesReport = StringBuffer();
 
-  @override
-  String? getSourceCodeFooter() => null;
+  String? _getLine(FileLine fileLine) {
+    if (fileLine.isNew && fileLine.isTestMissing) {
+      return colorizeCliText("[${fileLine.lineNumber}]: ${fileLine.code.replaceFirst("+", "→")}", TextColor.red);
+    } else {
+      return " ${fileLine.lineNumber} : ${fileLine.code}";
+    }
+  }
 
-  @override
-  String? getSourceCodeBlocDivider() => "......\n\n";
-
-  @override
-  String getFileHeader(String filePath, int newLinesCount, int ignoredUntestedLines, int missingTestsLines) {
-    final ignoredText = ignoredUntestedLines > 0
-        ? colorizeText("$ignoredUntestedLines untested and ignored", ColorizeCliText.ignoredUntestedCodeColor)
+  String _getFileHeader(FileReport fileReport) {
+    final ignoredText = fileReport.untestedAndIgnoredLines > 0
+        ? colorizeCliText(
+            "${fileReport.untestedAndIgnoredLines} untested and ignored", ColorizeText.ignoredUntestedCodeColor)
         : null;
-    final untestedText =
-        missingTestsLines > 0 ? "${colorizeText("$missingTestsLines lines missing tests", TextColor.red)}\n" : null;
+    final untestedText = fileReport.linesMissingTestsCount > 0
+        ? "${colorizeCliText("${fileReport.linesMissingTestsCount} lines missing tests", TextColor.red)}\n"
+        : null;
 
-    return "${colorizeText(filePath, missingTestsLines > 0 ? TextColor.yellow : TextColor.noColor)}"
-        " (${colorizeCliText!("+$newLinesCount", TextColor.green)})"
+    return "${colorizeCliText(fileReport.filePath, fileReport.linesMissingTestsCount > 0 ? TextColor.yellow : TextColor.noColor)}"
+        " (${colorizeCliText("+${fileReport.newLinesCount}", TextColor.green)})"
         "${ignoredText != null || untestedText != null ? "\n ┗━▶" : ""}"
         "${ignoredText != null ? " $ignoredText" : ""}"
         "${ignoredText != null && untestedText != null ? ", " : " "}"
@@ -35,14 +48,32 @@ class CliOutputGenerator extends PlainTextOutputGenerator {
   }
 
   @override
-  String? getLine(String line, int lineNumber, bool isANewLine, bool isUntested) {
-    if (isANewLine && isUntested) {
-      return "${colorizeCliText!("[$lineNumber]: ${line.replaceFirst("+", "→")}", TextColor.red)}\n";
+  Future<void> addFileReport(FileReport fileReport) async {
+    final stringBuffer = StringBuffer();
+    if (fileReport.untestedAndIgnoredLines > 0 || userOptions.reportFullyCoveredFiles) {
+      stringBuffer.write(_getFileHeader(fileReport));
+    }
+
+    if (userOptions.showUncoveredCode && fileReport.linesMissingTestsCount > 0) {
+      for (int i = 0; i < fileReport.chunks.length; i++) {
+        final chunk = fileReport.chunks[i];
+        if (i > 0) {
+          stringBuffer.write("......\n\n");
+        }
+        for (final line in chunk) {
+          stringBuffer.writeln(_getLine(line));
+        }
+      }
+      _missingTestFilesReport.writeln(stringBuffer.toString());
     } else {
-      return " $lineNumber : $line\n";
+      _testedFilesReport.writeln(stringBuffer.toString());
     }
   }
 
   @override
-  String formatFileHeader(String text) => text;
+  Future<void> exit(AnalysisResult analysisResult) async {
+    print(_testedFilesReport.toString());
+    print(_missingTestFilesReport.toString());
+    print(getResultTable(userOptions, analysisResult));
+  }
 }
