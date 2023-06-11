@@ -87,7 +87,9 @@ class MarkdownOutputGenerator implements OutputGenerator {
       stringBuffer.writeln(_getSourceCodeFooter());
       _missingTestFilesReport.writeln(stringBuffer.toString());
     } else {
-      _testedFilesReport.writeln(stringBuffer.toString());
+      if (stringBuffer.isNotEmpty) {
+        _testedFilesReport.writeln(stringBuffer.toString());
+      }
     }
   }
 

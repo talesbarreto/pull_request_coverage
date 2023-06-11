@@ -50,7 +50,7 @@ class CliOutputGenerator implements OutputGenerator {
   @override
   Future<void> addFileReport(FileReport fileReport) async {
     final stringBuffer = StringBuffer();
-    if (fileReport.untestedAndIgnoredLines > 0 || userOptions.reportFullyCoveredFiles) {
+    if (fileReport.linesMissingTestsCount > 0 || userOptions.reportFullyCoveredFiles) {
       stringBuffer.write(_getFileHeader(fileReport));
     }
 
@@ -66,7 +66,9 @@ class CliOutputGenerator implements OutputGenerator {
       }
       _missingTestFilesReport.writeln(stringBuffer.toString());
     } else {
-      _testedFilesReport.writeln(stringBuffer.toString());
+      if (stringBuffer.isNotEmpty) {
+        _testedFilesReport.writeln(stringBuffer.toString());
+      }
     }
   }
 
