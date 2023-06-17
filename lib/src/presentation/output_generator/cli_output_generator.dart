@@ -8,13 +8,13 @@ import 'package:pull_request_coverage/src/presentation/use_case/get_result_table
 
 class CliOutputGenerator implements OutputGenerator {
   final UserOptions userOptions;
-  final ColorizeText colorizeCliText;
+  final ColorizeText colorizeText;
   final GetResultTable getResultTable;
   final void Function(String message) print;
 
   CliOutputGenerator({
     required this.userOptions,
-    required this.colorizeCliText,
+    required this.colorizeText,
     required this.getResultTable,
     required this.print,
   });
@@ -24,7 +24,7 @@ class CliOutputGenerator implements OutputGenerator {
 
   String? _getLine(FileLine fileLine) {
     if (fileLine.isNew && fileLine.isTestMissing) {
-      return colorizeCliText("[${fileLine.lineNumber}]: ${fileLine.code.replaceFirst("+", "→")}", TextColor.red);
+      return colorizeText("[${fileLine.lineNumber}]: ${fileLine.code.replaceFirst("+", "→")}", TextColor.red);
     } else {
       return " ${fileLine.lineNumber} : ${fileLine.code}";
     }
@@ -32,15 +32,15 @@ class CliOutputGenerator implements OutputGenerator {
 
   String _getFileHeader(FileReport fileReport) {
     final ignoredText = fileReport.untestedAndIgnoredLines > 0
-        ? colorizeCliText(
+        ? colorizeText(
             "${fileReport.untestedAndIgnoredLines} untested and ignored", ColorizeText.ignoredUntestedCodeColor)
         : null;
     final untestedText = fileReport.linesMissingTestsCount > 0
-        ? "${colorizeCliText("${fileReport.linesMissingTestsCount} lines missing tests", TextColor.red)}\n"
+        ? "${colorizeText("${fileReport.linesMissingTestsCount} lines missing tests", TextColor.red)}\n"
         : null;
 
-    return "${colorizeCliText(fileReport.filePath, fileReport.linesMissingTestsCount > 0 ? TextColor.yellow : TextColor.noColor)}"
-        " (${colorizeCliText("+${fileReport.newLinesCount}", TextColor.green)})"
+    return "${colorizeText(fileReport.filePath, fileReport.linesMissingTestsCount > 0 ? TextColor.yellow : TextColor.noColor)}"
+        " (${colorizeText("+${fileReport.newLinesCount}", TextColor.green)})"
         "${ignoredText != null || untestedText != null ? "\n ┗━▶" : ""}"
         "${ignoredText != null ? " $ignoredText" : ""}"
         "${ignoredText != null && untestedText != null ? ", " : " "}"
@@ -48,7 +48,7 @@ class CliOutputGenerator implements OutputGenerator {
   }
 
   @override
-  Future<void> addFileReport(FileReport fileReport) async {
+  void addFileReport(FileReport fileReport) {
     final stringBuffer = StringBuffer();
     if (fileReport.linesMissingTestsCount > 0 || userOptions.reportFullyCoveredFiles) {
       stringBuffer.write(_getFileHeader(fileReport));
@@ -73,13 +73,17 @@ class CliOutputGenerator implements OutputGenerator {
   }
 
   @override
-  Future<void> terminate(AnalysisResult analysisResult) async {
+  void terminate(AnalysisResult analysisResult) {
     if (_testedFilesReport.isNotEmpty) {
       print(_testedFilesReport.toString());
     }
     if (_missingTestFilesReport.isNotEmpty) {
       print(_missingTestFilesReport.toString());
     }
-    print(getResultTable(userOptions, analysisResult));
+    if (analysisResult.linesMissingTests == 0 && userOptions.fullyTestedMessage != null) {
+      print(userOptions.fullyTestedMessage.toString());
+    } else {
+      print(getResultTable(userOptions, analysisResult));
+    }
   }
 }

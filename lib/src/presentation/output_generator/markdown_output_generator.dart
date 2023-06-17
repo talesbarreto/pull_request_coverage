@@ -101,6 +101,10 @@ class MarkdownOutputGenerator implements OutputGenerator {
     if (_missingTestFilesReport.isNotEmpty) {
       print(_missingTestFilesReport.toString());
     }
-    print(getResultTable(userOptions, analysisResult));
+    if (analysisResult.linesMissingTests == 0 && userOptions.fullyTestedMessage != null) {
+      print(userOptions.fullyTestedMessage.toString());
+    } else {
+      print(getResultTable(userOptions, analysisResult));
+    }
   }
 }

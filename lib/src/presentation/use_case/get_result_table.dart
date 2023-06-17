@@ -5,13 +5,14 @@ import 'package:pull_request_coverage/src/presentation/output_generator/table_bu
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 
 class GetResultTable {
-  final TableBuilder tableBuilder;
-  final ColorizeText colorizeText;
+  final TableBuilder _tableBuilder;
+  final ColorizeText _colorizeText;
 
   const GetResultTable({
-    required this.tableBuilder,
-    required this.colorizeText,
-  });
+    required TableBuilder tableBuilder,
+    required ColorizeText colorizeText,
+  })  : _colorizeText = colorizeText,
+        _tableBuilder = tableBuilder;
 
   String call(UserOptions userOptions, AnalysisResult analysisResult) {
     final stringBuffer = StringBuffer();
@@ -23,7 +24,7 @@ class GetResultTable {
     final coverageTxt = coverage.isNaN ? "-" : "${coverage.toStringAsFixed(userOptions.fractionalDigits)}%";
 
     String result(bool success) =>
-        success ? colorizeText("Success", TextColor.green) : colorizeText("FAIL", TextColor.red);
+        success ? _colorizeText("Success", TextColor.green) : _colorizeText("FAIL", TextColor.red);
 
     final linesResult =
         maximumUncoveredLines == null ? "-" : result(analysisResult.linesMissingTests <= maximumUncoveredLines);
@@ -33,23 +34,19 @@ class GetResultTable {
         : result(analysisResult.coverageRate >= (minimumCoverageRate / 100));
     final rateThreshold = minimumCoverageRate == null ? "-" : "$minimumCoverageRate%";
 
-    final ignoredUntestedLinesText = colorizeText(
+    final ignoredUntestedLinesText = _colorizeText(
       analysisResult.untestedIgnoredLines.toString(),
       ColorizeText.ignoredUntestedCodeColor,
     );
 
-    if (analysisResult.linesMissingTests == 0 && userOptions.fullyTestedMessage != null) {
-      stringBuffer.write(userOptions.fullyTestedMessage.toString());
-    } else {
-      tableBuilder
-        ..setHeader(["Report", "Current value", "Threshold", ""])
-        ..addLine(["Lines that should be tested", analysisResult.linesThatShouldBeTested.toString(), "", ""])
-        ..addLine(["Ignored untested lines", ignoredUntestedLinesText, "", ""])
-        ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
-        ..addLine(["Coverage rate", coverageTxt, rateThreshold, rateResult]);
+    _tableBuilder
+      ..setHeader(["Report", "Current value", "Threshold", ""])
+      ..addLine(["Lines that should be tested", analysisResult.linesThatShouldBeTested.toString(), "", ""])
+      ..addLine(["Ignored untested lines", ignoredUntestedLinesText, "", ""])
+      ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
+      ..addLine(["Coverage rate", coverageTxt, rateThreshold, rateResult]);
 
-      stringBuffer.write("\n${tableBuilder.build(userOptions.outputMode == OutputMode.markdown)}");
-    }
+    stringBuffer.write("\n${_tableBuilder.build(userOptions.outputMode == OutputMode.markdown)}");
     return stringBuffer.toString();
   }
 }

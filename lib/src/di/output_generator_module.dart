@@ -18,7 +18,7 @@ class OutputGeneratorModule {
     switch (userOptions.outputMode) {
       case OutputMode.cli:
         return CliOutputGenerator(
-          colorizeCliText: colorizeText,
+          colorizeText: colorizeText,
           userOptions: userOptions,
           print: print,
           getResultTable: GetResultTable(

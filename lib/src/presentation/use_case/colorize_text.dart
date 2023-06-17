@@ -1,14 +1,14 @@
 class ColorizeText {
   static const ignoredUntestedCodeColor = TextColor.cyan;
 
-  final bool useColorfulOutput;
+  final bool _useColorfulOutput;
 
   const ColorizeText({
-    required this.useColorfulOutput,
-  });
+    required final bool useColorfulOutput,
+  }) : _useColorfulOutput = useColorfulOutput;
 
   String call(String text, TextColor color) {
-    if (useColorfulOutput) {
+    if (_useColorfulOutput) {
       return "${color.colorCode}$text${TextColor.noColor.colorCode}";
     } else {
       return text;
