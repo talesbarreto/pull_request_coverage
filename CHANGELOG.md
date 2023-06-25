@@ -2,7 +2,10 @@
 
 - ⚠️ Output is now sorted: files missing tests will be shown at the end of the report
 - Change markdown output style
-- Upgrade `file` dependency to version 7.0.0
+
+## 1.3.6
+
+- Upgrade `File` dependency to version 7.0.0
 
 ## 1.3.5
 
