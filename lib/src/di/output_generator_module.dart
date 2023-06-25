@@ -5,6 +5,7 @@ import 'package:pull_request_coverage/src/presentation/output_generator/markdown
 import 'package:pull_request_coverage/src/presentation/output_generator/table_builder.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/get_result_table.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/print_emoji.dart';
 
 import '../presentation/output_generator/output_generator.dart';
 
@@ -15,15 +16,19 @@ class OutputGeneratorModule {
     required UserOptions userOptions,
     required ColorizeText colorizeText,
   }) {
+    final printEmoji = PrintEmoji(userOptions.useEmojis);
+
     switch (userOptions.outputMode) {
       case OutputMode.cli:
         return CliOutputGenerator(
           colorizeText: colorizeText,
           userOptions: userOptions,
           print: print,
+          printEmoji: printEmoji,
           getResultTable: GetResultTable(
             tableBuilder: TableBuilder(),
             colorizeText: colorizeText,
+            printEmoji: printEmoji,
           ),
         );
       case OutputMode.markdown:
@@ -33,7 +38,9 @@ class OutputGeneratorModule {
           getResultTable: GetResultTable(
             tableBuilder: TableBuilder(),
             colorizeText: colorizeText,
+            printEmoji: printEmoji,
           ),
+          printEmoji: printEmoji,
         );
     }
   }

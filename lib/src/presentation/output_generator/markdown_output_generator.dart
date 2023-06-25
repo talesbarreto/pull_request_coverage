@@ -5,15 +5,18 @@ import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mo
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/get_result_table.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/print_emoji.dart';
 
 class MarkdownOutputGenerator implements OutputGenerator {
   final UserOptions userOptions;
   final GetResultTable getResultTable;
+  final PrintEmoji printEmoji;
   final void Function(String message) print;
 
   MarkdownOutputGenerator({
     required this.userOptions,
     required this.getResultTable,
+    required this.printEmoji,
     required this.print,
   });
 
@@ -48,9 +51,13 @@ class MarkdownOutputGenerator implements OutputGenerator {
   String _getFileHeader(FileReport fileReport) {
     final String? ignoredText;
     final String? untestedText;
-    final pathHeader = fileReport.linesMissingTestsCount > 0 ? "##### " : "";
 
-    if (fileReport.untestedAndIgnoredLines > 0) {
+    final hasIgnoredUntestedLines = fileReport.untestedAndIgnoredLines > 0;
+    final hasMissingTestLines = fileReport.linesMissingTestsCount > 0;
+
+    final pathHeader = hasMissingTestLines? "##### " : "";
+
+    if (hasIgnoredUntestedLines) {
       ignoredText = "${fileReport.untestedAndIgnoredLines} untested and ignored";
     } else {
       ignoredText = null;
@@ -61,7 +68,15 @@ class MarkdownOutputGenerator implements OutputGenerator {
       untestedText = null;
     }
 
-    return "$pathHeader`${fileReport.filePath}` (+${fileReport.newLinesCount})"
+    final emoji = printEmoji(
+        !hasIgnoredUntestedLines && !hasMissingTestLines
+            ? "🎉 "
+            : hasIgnoredUntestedLines && !hasMissingTestLines
+            ? "🐰 "
+            : "🚨 ",
+        "");
+
+    return "$pathHeader$emoji`${fileReport.filePath}` (+${fileReport.newLinesCount})"
         "${ignoredText != null ? " / _${ignoredText}_ " : ""}"
         "${untestedText != null ? " / **$untestedText** " : ""}";
   }

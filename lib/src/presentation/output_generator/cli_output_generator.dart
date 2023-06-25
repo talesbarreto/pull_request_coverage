@@ -5,17 +5,20 @@ import 'package:pull_request_coverage/src/domain/user_options/models/user_option
 import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/get_result_table.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/print_emoji.dart';
 
 class CliOutputGenerator implements OutputGenerator {
   final UserOptions userOptions;
   final ColorizeText colorizeText;
   final GetResultTable getResultTable;
+  final PrintEmoji printEmoji;
   final void Function(String message) print;
 
   CliOutputGenerator({
     required this.userOptions,
     required this.colorizeText,
     required this.getResultTable,
+    required this.printEmoji,
     required this.print,
   });
 
@@ -30,20 +33,40 @@ class CliOutputGenerator implements OutputGenerator {
   }
 
   String _getFileHeader(FileReport fileReport) {
-    final ignoredText = fileReport.untestedAndIgnoredLines > 0
+    final filePath = colorizeText(
+      fileReport.filePath,
+      fileReport.linesMissingTestsCount > 0 ? TextColor.yellow : TextColor.noColor,
+    );
+
+    final hasIgnoredUntestedLines = fileReport.untestedAndIgnoredLines > 0;
+    final hasMissingTestLines = fileReport.linesMissingTestsCount > 0;
+
+    final newLinesCount = "(${colorizeText("+${fileReport.newLinesCount}", TextColor.green)})";
+
+    final ignoredText = hasIgnoredUntestedLines
         ? colorizeText(
-            "${fileReport.untestedAndIgnoredLines} untested and ignored", ColorizeText.ignoredUntestedCodeColor)
-        : null;
-    final untestedText = fileReport.linesMissingTestsCount > 0
-        ? "${colorizeText("${fileReport.linesMissingTestsCount} lines missing tests", TextColor.red)}\n"
+            "[${fileReport.untestedAndIgnoredLines} ignored]",
+            ColorizeText.ignoredUntestedCodeColor,
+          )
+        : "";
+
+    final untestedText = hasMissingTestLines
+        ? "${colorizeText(
+            "${fileReport.linesMissingTestsCount} lines missing tests",
+            TextColor.red,
+          )}\n"
         : null;
 
-    return "${colorizeText(fileReport.filePath, fileReport.linesMissingTestsCount > 0 ? TextColor.yellow : TextColor.noColor)}"
-        " (${colorizeText("+${fileReport.newLinesCount}", TextColor.green)})"
-        "${ignoredText != null || untestedText != null ? "\n ┗━▶" : ""}"
-        "${ignoredText != null ? " $ignoredText" : ""}"
-        "${ignoredText != null && untestedText != null ? ", " : " "}"
-        "${untestedText ?? ""}";
+    final emoji = printEmoji(
+        !hasIgnoredUntestedLines && !hasMissingTestLines
+            ? "🎉"
+            : hasIgnoredUntestedLines && !hasMissingTestLines
+                ? "🐰"
+                : "🚨",
+        "");
+
+    return "$emoji $filePath $newLinesCount $ignoredText"
+        "${untestedText != null ? "\n ┗━▶ $untestedText" : ""}";
   }
 
   @override

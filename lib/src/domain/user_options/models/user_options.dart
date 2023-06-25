@@ -13,6 +13,7 @@ class UserOptions {
   final bool useColorfulOutput;
   final bool ignoreKnownGeneratedFiles;
   final bool reportFullyCoveredFiles;
+  final bool useEmojis;
   final OutputMode outputMode;
   final MarkdownMode markdownMode;
   final int fractionalDigits;
@@ -38,5 +39,6 @@ class UserOptions {
     this.stdinTimeout = const Duration(seconds: 1),
     this.deprecatedFilterSet = false,
     this.lineFilters = const [],
+    this.useEmojis = true,
   });
 }

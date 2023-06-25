@@ -67,25 +67,28 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
 
       return ResultSuccess(
         UserOptions(
-            ignoredFiles: (excludesFileList != null) ? _parseGlob(excludesFileList) : [],
-            lcovFilePath: arg.getString(UserOptionsArgs.lcovFile) ?? UserOptionsArgs.lcovFile.defaultValue,
-            minimumCoverageRate: arg.getDouble(UserOptionsArgs.minimumCoverage),
-            maximumUncoveredLines: arg.getInt(UserOptionsArgs.maximumUncoveredLines),
-            showUncoveredCode: arg.getBooleanOrDefault(UserOptionsArgs.showUncoveredCode),
-            useColorfulOutput: arg.getBooleanOrDefault(UserOptionsArgs.useColorfulOutput),
-            reportFullyCoveredFiles: arg.getBooleanOrDefault(UserOptionsArgs.reportFullyCoveredFiles),
-            outputMode: arg.getString(UserOptionsArgs.outputMode) == "markdown" ? OutputMode.markdown : OutputMode.cli,
-            fractionalDigits: arg.getInt(UserOptionsArgs.fractionDigits) ?? 2,
-            markdownMode: arg.getString(UserOptionsArgs.markdownMode) == "dart" ? MarkdownMode.dart : MarkdownMode.diff,
-            fullyTestedMessage: arg.getString(UserOptionsArgs.fullyTestedMessage),
-            stdinTimeout: Duration(seconds: arg.getInt(UserOptionsArgs.stdinTimeout) ?? 1),
-            deprecatedFilterSet: false,
-            lineFilters: _parseRegex(arg.getStringList(UserOptionsArgs.ignoreLines)),
-            ignoreKnownGeneratedFiles: arg.getBooleanOrDefault(UserOptionsArgs.excludeKnownGeneratedFiles),
-            knownGeneratedFiles: [
-              ..._parseGlob(arg.getStringList(UserOptionsArgs.knownGeneratedFiles) ?? UserOptionsArgs.knownGeneratedFiles.defaultValue),
-              ..._parseGlob(arg.getStringList(UserOptionsArgs.addToKnownGeneratedFiles) ?? []),
-            ]),
+          ignoredFiles: (excludesFileList != null) ? _parseGlob(excludesFileList) : [],
+          lcovFilePath: arg.getString(UserOptionsArgs.lcovFile) ?? UserOptionsArgs.lcovFile.defaultValue,
+          minimumCoverageRate: arg.getDouble(UserOptionsArgs.minimumCoverage),
+          maximumUncoveredLines: arg.getInt(UserOptionsArgs.maximumUncoveredLines),
+          showUncoveredCode: arg.getBooleanOrDefault(UserOptionsArgs.showUncoveredCode),
+          useColorfulOutput: arg.getBooleanOrDefault(UserOptionsArgs.useColorfulOutput),
+          reportFullyCoveredFiles: arg.getBooleanOrDefault(UserOptionsArgs.reportFullyCoveredFiles),
+          outputMode: arg.getString(UserOptionsArgs.outputMode) == "markdown" ? OutputMode.markdown : OutputMode.cli,
+          fractionalDigits: arg.getInt(UserOptionsArgs.fractionDigits) ?? 2,
+          markdownMode: arg.getString(UserOptionsArgs.markdownMode) == "dart" ? MarkdownMode.dart : MarkdownMode.diff,
+          fullyTestedMessage: arg.getString(UserOptionsArgs.fullyTestedMessage),
+          stdinTimeout: Duration(seconds: arg.getInt(UserOptionsArgs.stdinTimeout) ?? 1),
+          deprecatedFilterSet: false,
+          lineFilters: _parseRegex(arg.getStringList(UserOptionsArgs.ignoreLines)),
+          ignoreKnownGeneratedFiles: arg.getBooleanOrDefault(UserOptionsArgs.excludeKnownGeneratedFiles),
+          knownGeneratedFiles: [
+            ..._parseGlob(arg.getStringList(UserOptionsArgs.knownGeneratedFiles) ??
+                UserOptionsArgs.knownGeneratedFiles.defaultValue),
+            ..._parseGlob(arg.getStringList(UserOptionsArgs.addToKnownGeneratedFiles) ?? []),
+          ],
+          useEmojis: arg.getBooleanOrDefault(UserOptionsArgs.useEmojis),
+        ),
       );
     } catch (e, s) {
       return ResultError(e.toString(), e, s);
