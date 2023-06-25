@@ -20,7 +20,6 @@ class CliOutputGenerator implements OutputGenerator {
   });
 
   final _missingTestFilesReport = StringBuffer();
-  final _testedFilesReport = StringBuffer();
 
   String? _getLine(FileLine fileLine) {
     if (fileLine.isNew && fileLine.isTestMissing) {
@@ -67,16 +66,13 @@ class CliOutputGenerator implements OutputGenerator {
       _missingTestFilesReport.writeln(stringBuffer.toString());
     } else {
       if (stringBuffer.isNotEmpty) {
-        _testedFilesReport.writeln(stringBuffer.toString());
+        print(stringBuffer.toString());
       }
     }
   }
 
   @override
   void terminate(AnalysisResult analysisResult) {
-    if (_testedFilesReport.isNotEmpty) {
-      print(_testedFilesReport.toString());
-    }
     if (_missingTestFilesReport.isNotEmpty) {
       print(_missingTestFilesReport.toString());
     }

@@ -18,7 +18,6 @@ class MarkdownOutputGenerator implements OutputGenerator {
   });
 
   final _missingTestFilesReport = StringBuffer();
-  final _testedFilesReport = StringBuffer();
 
   String? _getSourceCodeHeader() => userOptions.markdownMode == MarkdownMode.diff ? "```diff\n" : "```dart\n";
 
@@ -88,16 +87,13 @@ class MarkdownOutputGenerator implements OutputGenerator {
       _missingTestFilesReport.writeln(stringBuffer.toString());
     } else {
       if (stringBuffer.isNotEmpty) {
-        _testedFilesReport.writeln(stringBuffer.toString());
+        print(stringBuffer.toString());
       }
     }
   }
 
   @override
   Future<void> terminate(AnalysisResult analysisResult) async {
-    if (_testedFilesReport.isNotEmpty) {
-      print(_testedFilesReport.toString());
-    }
     if (_missingTestFilesReport.isNotEmpty) {
       print(_missingTestFilesReport.toString());
     }
