@@ -1,3 +1,6 @@
+## 1.3.6
+- Upgrade `File` dependency to version 7.0.0
+
 ## 1.3.5
 - Fix `fully-tested-message` option not working
 
