@@ -3,15 +3,19 @@ import 'package:pull_request_coverage/src/domain/user_options/models/output_mode
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/table_builder.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/print_emoji.dart';
 
 class GetResultTable {
   final TableBuilder _tableBuilder;
   final ColorizeText _colorizeText;
+  final PrintEmoji _printEmoji;
 
   const GetResultTable({
     required TableBuilder tableBuilder,
     required ColorizeText colorizeText,
+    required PrintEmoji printEmoji,
   })  : _colorizeText = colorizeText,
+        _printEmoji = printEmoji,
         _tableBuilder = tableBuilder;
 
   String call(UserOptions userOptions, AnalysisResult analysisResult) {
@@ -23,8 +27,9 @@ class GetResultTable {
     final coverage = (analysisResult.coverageRate * 100);
     final coverageTxt = coverage.isNaN ? "-" : "${coverage.toStringAsFixed(userOptions.fractionalDigits)}%";
 
-    String result(bool success) =>
-        success ? _colorizeText("Success", TextColor.green) : _colorizeText("FAIL", TextColor.red);
+    String result(bool success) => success
+        ? _printEmoji("✅", _colorizeText("Success", TextColor.green))
+        : _printEmoji("❌", _colorizeText("FAIL", TextColor.red));
 
     final linesResult =
         maximumUncoveredLines == null ? "-" : result(analysisResult.linesMissingTests <= maximumUncoveredLines);

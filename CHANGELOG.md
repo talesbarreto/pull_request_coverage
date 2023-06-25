@@ -1,7 +1,8 @@
 ## 2.0.0
 
-- ⚠️ Output is now sorted: files missing tests will be shown at the end of the report
-- Change markdown output style
+- Output now has emojis by default. You can disable it by setting `use-emojis` to `false`.
+- Output is now sorted: files missing tests will be shown at the end of the report
+- Change output style
 
 ## 1.3.6
 

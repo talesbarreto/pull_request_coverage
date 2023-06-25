@@ -119,6 +119,8 @@ Check [example](https://github.com/talesbarreto/pull_request_coverage/tree/main/
 
 - **use-colorful-output** (`true`): By default, `pull_request_coverage` utilizes a colorful font to highlight uncovered lines. You can disable this feature by setting this parameter to `false`. Please note that this option is only available when the output mode is set to `cli`.
 
+- **use-emojis** (`true`) : Enable or disabled emojis in the output.
+
 - **fraction-digits** (`2`): Specifies the number of digits to display after the decimal point in the coverage rate.
 
 - **fully-tested-message** : Replace the final table report with a custom message when there are no untested lines

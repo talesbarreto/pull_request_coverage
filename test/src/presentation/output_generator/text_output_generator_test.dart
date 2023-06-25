@@ -5,6 +5,7 @@ import 'package:pull_request_coverage/src/presentation/output_generator/markdown
 import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/get_result_table.dart';
+import 'package:pull_request_coverage/src/presentation/use_case/print_emoji.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -22,6 +23,7 @@ void main() {
         colorizeText: colorizeText,
         getResultTable: getResultTable,
         print: (String message) => output.write(message),
+        printEmoji: FakePrintEmoji(),
       );
       testFunction(generator, output);
     });
@@ -32,6 +34,7 @@ void main() {
         userOptions: userOptions,
         getResultTable: getResultTable,
         print: (String message) => output.write(message),
+        printEmoji: FakePrintEmoji(),
       );
       testFunction(generator, output);
     });
@@ -99,8 +102,6 @@ void main() {
       );
     });
   });
-
-  
 }
 
 class FakeGetResultTable implements GetResultTable {
@@ -117,4 +118,9 @@ class FakeColorizeText implements ColorizeText {
 
   @override
   String call(String text, TextColor color) => text;
+}
+
+class FakePrintEmoji implements PrintEmoji {
+  @override
+  String call(String emoji, String replacement) => emoji;
 }
