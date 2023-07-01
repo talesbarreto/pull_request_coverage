@@ -48,10 +48,12 @@ void main() {
     expect(dataSource.getStringList(option), ["*ha", "he", "hi", "ho", "hu"]);
   });
 
-  test("when an argument is missing", () {
+  test("when an argument is missing, throw an InvalidUserOptionError", () {
     final dataSource = getDataSource();
-    dataSource.parse(["--${option.names.last}",]);
-    expect(dataSource.getString(option), "alabama");
+    expect(
+      () => dataSource.parse(["--${option.names.last}"]),
+      throwsA(isA<InvalidUserOptionsArg>()),
+    );
   });
 
   test("when an invalid option is passed, throw an InvalidUserOptionError", () {
