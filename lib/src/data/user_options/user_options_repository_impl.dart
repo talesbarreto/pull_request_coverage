@@ -2,6 +2,7 @@ import 'package:file/file.dart';
 import 'package:glob/glob.dart';
 import 'package:pull_request_coverage/src/data/user_options/data_source/arg_data_source.dart';
 import 'package:pull_request_coverage/src/data/user_options/data_source/yaml_data_source.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/invalid_user_option_error.dart';
 import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
 import 'package:pull_request_coverage/src/domain/common/result.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
@@ -39,6 +40,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
     final yamlFile = fileSystem.file(yamlFilePath);
     if (yamlFile.existsSync()) {
       yamlDataSource.parse(yamlFile.readAsStringSync());
+      yamlDataSource.throwExceptionOnInvalidUserOption(UserOptionsArgs.getValidOptions());
       argGetters.setDataSources([argDataSource, yamlDataSource]);
     } else {
       argGetters.setDataSources([argDataSource]);

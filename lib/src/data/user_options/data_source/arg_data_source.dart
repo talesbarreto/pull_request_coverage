@@ -1,6 +1,8 @@
 import 'package:args/args.dart';
 import 'package:pull_request_coverage/src/data/user_options/data_source/user_option_data_source.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/invalid_user_option_error.dart';
 import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
+import 'package:pull_request_coverage/src/extensions/string.dart';
 
 class ArgDataSource implements UserOptionDataSource {
   final List<UserOptionsArgs> availableOptions;
@@ -28,7 +30,11 @@ class ArgDataSource implements UserOptionDataSource {
         );
       }
     }
-    _argResultsComputation = argParser.parse(arguments);
+    try {
+      _argResultsComputation = argParser.parse(arguments);
+    } catch (e) {
+      throw InvalidUserOptionError(arguments.first.removePrefix("--"), "command line");
+    }
   }
 
   @override
