@@ -13,10 +13,10 @@ class PrintWarningsForUnexpectedFileStructure {
     required bool isLibDirPresent,
   }) {
     if (gitRootRelativePath == null) {
-      logger.printWarning(msg: "no `.git` file was found on current directory nor any of its ancestors");
+      logger.printWarning( "no `.git` file was found on current directory nor any of its ancestors");
     }
     if (!isLibDirPresent) {
-      logger.printWarning(msg: "`./lib` is expected but was not found");
+      logger.printWarning( "`./lib` is expected but was not found");
     }
   }
 }

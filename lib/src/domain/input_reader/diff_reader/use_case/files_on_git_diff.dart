@@ -1,3 +1,4 @@
+import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 
 /// Split the diff into files chunks and call the callback for each one of them
@@ -24,7 +25,12 @@ class OnFilesOnGitDiff {
         yield fileContent;
       }
     } catch (e, s) {
-      Logger.global?.printError(msg: e.toString(), stackTrace: s);
+      logger.log(
+        message: e.toString(),
+        stackTrace: s,
+        tag: 'OnFilesOnGitDiff',
+        level: LogLevel.error,
+      );
       print(e);
     }
     return;

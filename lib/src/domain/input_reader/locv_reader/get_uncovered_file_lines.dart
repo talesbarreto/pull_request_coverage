@@ -1,3 +1,4 @@
+import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 
 /// [GetUncoveredFileLines] returns a list of line index that are not covered by tests.
@@ -42,9 +43,10 @@ class GetUncoveredFileLines {
         }
       }
     }
-    Logger.global?.printInfo(
-      origin: "GetUncoveredFileLines",
-      msg: "coverage info of `$filePath` not found in lcov.info",
+    logger.log(
+      tag: "GetUncoveredFileLines",
+      message: "coverage info of `$filePath` not found in lcov.info",
+      level: LogLevel.info,
     );
     return null;
   }
