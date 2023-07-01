@@ -1,7 +1,7 @@
 import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 
-/// Split the diff into files chunks and call the callback for each one of them
+/// Split the diff into file chunks and emits all lines of each of them
 class OnFilesOnGitDiff {
   final Stream<String> diffLinesStream;
 

@@ -5,6 +5,9 @@
 - Invalid options are no longer ignored. An error will be displayed, and execution will be aborted.
 - Updated output style.
 - New `log-level` option.
+- Upgrade `args` dependency to version 2.4.2
+- Upgrade `glob` dependency to version 2.1.2
+- Upgrade `yaml` dependency to version 3.1.2
 
 ## 1.3.6
 
