@@ -4,6 +4,7 @@
 - Output is now sorted, with files missing tests shown at the end of the report.
 - Invalid options are no longer ignored. An error will be displayed, and execution will be aborted.
 - Updated output style.
+- New `log-level` option.
 
 ## 1.3.6
 
