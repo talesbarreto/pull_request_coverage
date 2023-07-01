@@ -87,7 +87,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
                 UserOptionsArgs.knownGeneratedFiles.defaultValue),
             ..._parseGlob(arg.getStringList(UserOptionsArgs.addToKnownGeneratedFiles) ?? []),
           ],
-          useEmojis: arg.getBooleanOrDefault(UserOptionsArgs.useEmojis),
+          useEmojis: arg.getBooleanOrDefault(UserOptionsArgs.printEmojis),
         ),
       );
     } catch (e, s) {

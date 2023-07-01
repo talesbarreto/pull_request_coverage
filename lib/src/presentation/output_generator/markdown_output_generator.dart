@@ -55,10 +55,13 @@ class MarkdownOutputGenerator implements OutputGenerator {
     final hasIgnoredUntestedLines = fileReport.untestedAndIgnoredLines > 0;
     final hasMissingTestLines = fileReport.linesMissingTestsCount > 0;
 
-    final pathHeader = hasMissingTestLines? "##### " : "";
+    final pathHeader = hasMissingTestLines ? "##### " : "";
 
     if (hasIgnoredUntestedLines) {
-      ignoredText = "${fileReport.untestedAndIgnoredLines} untested and ignored";
+      ignoredText = printEmoji(
+        "${OutputGenerator.skipEmoji} ${fileReport.untestedAndIgnoredLines}",
+        "_. ~ ${fileReport.untestedAndIgnoredLines} ignored_",
+      );
     } else {
       ignoredText = null;
     }
@@ -68,17 +71,18 @@ class MarkdownOutputGenerator implements OutputGenerator {
       untestedText = null;
     }
 
-    final emoji = printEmoji(
-        !hasIgnoredUntestedLines && !hasMissingTestLines
-            ? "🎉 "
-            : hasIgnoredUntestedLines && !hasMissingTestLines
-            ? "🐰 "
-            : "🚨 ",
-        "");
+    final surroundingEmojis = OutputGenerator.getFileHeaderSurroundingEmojis(
+      printEmoji: printEmoji,
+      hasMissingTestLines: hasMissingTestLines,
+      hasIgnoredUntestedLines: hasIgnoredUntestedLines,
+      hasNewLines: fileReport.newLinesCount > 0,
+    );
+    final newLinesText = fileReport.newLinesCount > 0 ? " (+${fileReport.newLinesCount})" : "(0)";
 
-    return "$pathHeader$emoji`${fileReport.filePath}` (+${fileReport.newLinesCount})"
-        "${ignoredText != null ? " / _${ignoredText}_ " : ""}"
-        "${untestedText != null ? " / **$untestedText** " : ""}";
+    return "$pathHeader${surroundingEmojis.prefix}`${fileReport.filePath}` $newLinesText"
+        "${ignoredText != null ? " $ignoredText " : ""}"
+        "${untestedText != null ? " \n - $untestedText " : ""}"
+        " ${surroundingEmojis.suffix}";
   }
 
   @override

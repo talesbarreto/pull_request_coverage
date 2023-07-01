@@ -1,6 +1,7 @@
 import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/table_builder.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_emoji.dart';
@@ -28,8 +29,8 @@ class GetResultTable {
     final coverageTxt = coverage.isNaN ? "-" : "${coverage.toStringAsFixed(userOptions.fractionalDigits)}%";
 
     String result(bool success) => success
-        ? _printEmoji("✅", _colorizeText("Success", TextColor.green))
-        : _printEmoji("❌", _colorizeText("FAIL", TextColor.red));
+        ? _printEmoji(OutputGenerator.successEmoji, _colorizeText("Success", TextColor.green))
+        : _printEmoji(OutputGenerator.failEmoji, _colorizeText("FAIL", TextColor.red));
 
     final linesResult =
         maximumUncoveredLines == null ? "-" : result(analysisResult.linesMissingTests <= maximumUncoveredLines);
@@ -47,7 +48,12 @@ class GetResultTable {
     _tableBuilder
       ..setHeader(["Report", "Current value", "Threshold", ""])
       ..addLine(["Lines that should be tested", analysisResult.linesThatShouldBeTested.toString(), "", ""])
-      ..addLine(["Ignored untested lines", ignoredUntestedLinesText, "", ""])
+      ..addLine([
+        "Ignored untested lines",
+        ignoredUntestedLinesText,
+        "",
+        analysisResult.untestedIgnoredLines > 0 ? _printEmoji(OutputGenerator.skipEmoji, "") : ""
+      ])
       ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
       ..addLine(["Coverage rate", coverageTxt, rateThreshold, rateResult]);
 

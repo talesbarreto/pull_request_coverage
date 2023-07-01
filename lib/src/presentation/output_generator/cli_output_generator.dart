@@ -41,11 +41,15 @@ class CliOutputGenerator implements OutputGenerator {
     final hasIgnoredUntestedLines = fileReport.untestedAndIgnoredLines > 0;
     final hasMissingTestLines = fileReport.linesMissingTestsCount > 0;
 
-    final newLinesCount = "(${colorizeText("+${fileReport.newLinesCount}", TextColor.green)})";
+    final newLinesCount =
+        fileReport.newLinesCount > 0 ? "(${colorizeText("+${fileReport.newLinesCount}", TextColor.green)})" : "(0)";
 
     final ignoredText = hasIgnoredUntestedLines
         ? colorizeText(
-            "[${fileReport.untestedAndIgnoredLines} ignored]",
+            printEmoji(
+              "${OutputGenerator.skipEmoji} ${fileReport.untestedAndIgnoredLines}",
+              "~ ${fileReport.untestedAndIgnoredLines} ignored",
+            ),
             ColorizeText.ignoredUntestedCodeColor,
           )
         : "";
@@ -57,15 +61,14 @@ class CliOutputGenerator implements OutputGenerator {
           )}\n"
         : null;
 
-    final emoji = printEmoji(
-        !hasIgnoredUntestedLines && !hasMissingTestLines
-            ? "🎉"
-            : hasIgnoredUntestedLines && !hasMissingTestLines
-                ? "🐰"
-                : "🚨",
-        "");
+    final surroundingEmojis = OutputGenerator.getFileHeaderSurroundingEmojis(
+      printEmoji: printEmoji,
+      hasMissingTestLines: hasMissingTestLines,
+      hasIgnoredUntestedLines: hasIgnoredUntestedLines,
+      hasNewLines: fileReport.newLinesCount > 0,
+    );
 
-    return "$emoji $filePath $newLinesCount $ignoredText"
+    return "${surroundingEmojis.prefix}$filePath $newLinesCount $ignoredText${surroundingEmojis.suffix}"
         "${untestedText != null ? "\n ┗━▶ $untestedText" : ""}";
   }
 

@@ -36,7 +36,7 @@ class UserOptionsArgs<T> {
     generatedFiles,
     addToKnownGeneratedFiles,
     knownGeneratedFiles,
-    useEmojis,
+    printEmojis,
   ];
 
   static const lcovFile = UserOptionsArgs<String>(
@@ -147,8 +147,8 @@ class UserOptionsArgs<T> {
     defaultValue: [],
   );
 
-  static const useEmojis = UserOptionsArgs<bool>(
-    names: ["use-emojis"],
+  static const printEmojis = UserOptionsArgs<bool>(
+    names: ["print-emojis"],
     description: "Use emojis in the output",
     defaultValue: true,
   );
