@@ -1,11 +1,11 @@
 import 'package:args/args.dart';
 import 'package:pull_request_coverage/src/data/user_options/data_source/user_option_data_source.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/invalid_user_option_error.dart';
-import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/user_option_exceptions.dart';
+import 'package:pull_request_coverage/src/domain/user_options/user_option_register.dart';
 import 'package:pull_request_coverage/src/extensions/string.dart';
 
 class ArgDataSource implements UserOptionDataSource {
-  final List<UserOptionsArgs> availableOptions;
+  final List<UserOptionRegister> availableOptions;
 
   final ArgParser argParser;
 
@@ -33,12 +33,17 @@ class ArgDataSource implements UserOptionDataSource {
     try {
       _argResultsComputation = argParser.parse(arguments);
     } catch (e) {
-      throw InvalidUserOptionError(arguments.first.removePrefix("--"), "command line");
+      if (e is ArgParserException) {
+        if (e.message.startsWith("Missing argument for")) {
+          throw InvalidUserOptionsArg(arguments.first.removePrefix("--"), "command line");
+        }
+      }
+      throw InvalidUserOptionException(arguments.first.removePrefix("--"), "command line");
     }
   }
 
   @override
-  String? getString(UserOptionsArgs userOptionsArgs) {
+  String? getString(UserOptionRegister userOptionsArgs) {
     for (final name in userOptionsArgs.names) {
       final value = _argResults[name];
       if (value != null) {
@@ -49,7 +54,7 @@ class ArgDataSource implements UserOptionDataSource {
   }
 
   @override
-  T? get<T>(UserOptionsArgs userOptionsArgs, T Function(String text) transform) {
+  T? get<T>(UserOptionRegister userOptionsArgs, T Function(String text) transform) {
     final result = getString(userOptionsArgs);
     if (result == null) {
       return null;
@@ -58,24 +63,24 @@ class ArgDataSource implements UserOptionDataSource {
   }
 
   @override
-  List<String>? getStringList(UserOptionsArgs userOptionsArgs) {
+  List<String>? getStringList(UserOptionRegister userOptionsArgs) {
     return get(userOptionsArgs, (string) => string.split(","));
   }
 
   @override
-  bool? getBoolean(UserOptionsArgs userOptionsArgs) {
+  bool? getBoolean(UserOptionRegister userOptionsArgs) {
     final value = getString(userOptionsArgs);
     return value == null ? null : value == "true";
   }
 
   @override
-  double? getDouble(UserOptionsArgs userOptionsArgs) {
+  double? getDouble(UserOptionRegister userOptionsArgs) {
     final value = getString(userOptionsArgs);
     return value != null ? double.tryParse(value) : null;
   }
 
   @override
-  int? getInt(UserOptionsArgs userOptionsArgs) {
+  int? getInt(UserOptionRegister userOptionsArgs) {
     final value = getString(userOptionsArgs);
     return value != null ? int.tryParse(value) : null;
   }

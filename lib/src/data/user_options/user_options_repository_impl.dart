@@ -2,12 +2,13 @@ import 'package:file/file.dart';
 import 'package:glob/glob.dart';
 import 'package:pull_request_coverage/src/data/user_options/data_source/arg_data_source.dart';
 import 'package:pull_request_coverage/src/data/user_options/data_source/yaml_data_source.dart';
-import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
+import 'package:pull_request_coverage/src/domain/user_options/user_option_register.dart';
 import 'package:pull_request_coverage/src/domain/common/result.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
+import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 
 import 'data_source/options_getters.dart';
 
@@ -34,12 +35,12 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
 
   void _setArgGetters(List<String> arguments) {
     argDataSource.parse(arguments);
-    final yamlConfig = UserOptionsArgs.yamlConfigFilePath;
+    final yamlConfig = UserOptionRegister.yamlConfigFilePath;
     final yamlFilePath = argDataSource.getString(yamlConfig) ?? yamlConfig.defaultValue;
     final yamlFile = fileSystem.file(yamlFilePath);
     if (yamlFile.existsSync()) {
       yamlDataSource.parse(yamlFile.readAsStringSync());
-      yamlDataSource.throwExceptionOnInvalidUserOption(UserOptionsArgs.getValidOptions());
+      yamlDataSource.throwExceptionOnInvalidUserOption(UserOptionRegister.getValidOptions());
       argGetters.setDataSources([argDataSource, yamlDataSource]);
     } else {
       argGetters.setDataSources([argDataSource]);
@@ -59,36 +60,53 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
         const [];
   }
 
+  LogLevel _parseLogLevel(String? text) {
+    switch (text) {
+      case "error":
+        return LogLevel.error;
+      case "warning":
+        return LogLevel.warning;
+      case "info":
+        return LogLevel.info;
+      case "verbose":
+        return LogLevel.verbose;
+      case "none":
+      default:
+        return LogLevel.none;
+    }
+  }
+
   @override
   Result<UserOptions> getUserOptions(List<String> arguments) {
     final arg = argGetters;
     try {
       _setArgGetters(arguments);
-      final excludesFileList = arg.getStringList(UserOptionsArgs.ignore);
+      final excludesFileList = arg.getStringList(UserOptionRegister.ignore);
 
       return ResultSuccess(
         UserOptions(
           ignoredFiles: (excludesFileList != null) ? _parseGlob(excludesFileList) : [],
-          lcovFilePath: arg.getString(UserOptionsArgs.lcovFile) ?? UserOptionsArgs.lcovFile.defaultValue,
-          minimumCoverageRate: arg.getDouble(UserOptionsArgs.minimumCoverage),
-          maximumUncoveredLines: arg.getInt(UserOptionsArgs.maximumUncoveredLines),
-          showUncoveredCode: arg.getBooleanOrDefault(UserOptionsArgs.showUncoveredCode),
-          useColorfulOutput: arg.getBooleanOrDefault(UserOptionsArgs.useColorfulOutput),
-          reportFullyCoveredFiles: arg.getBooleanOrDefault(UserOptionsArgs.reportFullyCoveredFiles),
-          outputMode: arg.getString(UserOptionsArgs.outputMode) == "markdown" ? OutputMode.markdown : OutputMode.cli,
-          fractionalDigits: arg.getInt(UserOptionsArgs.fractionDigits) ?? 2,
-          markdownMode: arg.getString(UserOptionsArgs.markdownMode) == "dart" ? MarkdownMode.dart : MarkdownMode.diff,
-          fullyTestedMessage: arg.getString(UserOptionsArgs.fullyTestedMessage),
-          stdinTimeout: Duration(seconds: arg.getInt(UserOptionsArgs.stdinTimeout) ?? 1),
+          lcovFilePath: arg.getString(UserOptionRegister.lcovFile) ?? UserOptionRegister.lcovFile.defaultValue,
+          minimumCoverageRate: arg.getDouble(UserOptionRegister.minimumCoverage),
+          maximumUncoveredLines: arg.getInt(UserOptionRegister.maximumUncoveredLines),
+          showUncoveredCode: arg.getBooleanOrDefault(UserOptionRegister.showUncoveredCode),
+          useColorfulOutput: arg.getBooleanOrDefault(UserOptionRegister.useColorfulOutput),
+          reportFullyCoveredFiles: arg.getBooleanOrDefault(UserOptionRegister.reportFullyCoveredFiles),
+          outputMode: arg.getString(UserOptionRegister.outputMode) == "markdown" ? OutputMode.markdown : OutputMode.cli,
+          fractionalDigits: arg.getInt(UserOptionRegister.fractionDigits) ?? 2,
+          markdownMode: arg.getString(UserOptionRegister.markdownMode) == "dart" ? MarkdownMode.dart : MarkdownMode.diff,
+          fullyTestedMessage: arg.getString(UserOptionRegister.fullyTestedMessage),
+          stdinTimeout: Duration(seconds: arg.getInt(UserOptionRegister.stdinTimeout) ?? 1),
           deprecatedFilterSet: false,
-          lineFilters: _parseRegex(arg.getStringList(UserOptionsArgs.ignoreLines)),
-          ignoreKnownGeneratedFiles: arg.getBooleanOrDefault(UserOptionsArgs.excludeKnownGeneratedFiles),
+          lineFilters: _parseRegex(arg.getStringList(UserOptionRegister.ignoreLines)),
+          ignoreKnownGeneratedFiles: arg.getBooleanOrDefault(UserOptionRegister.excludeKnownGeneratedFiles),
           knownGeneratedFiles: [
-            ..._parseGlob(arg.getStringList(UserOptionsArgs.knownGeneratedFiles) ??
-                UserOptionsArgs.knownGeneratedFiles.defaultValue),
-            ..._parseGlob(arg.getStringList(UserOptionsArgs.addToKnownGeneratedFiles) ?? []),
+            ..._parseGlob(arg.getStringList(UserOptionRegister.knownGeneratedFiles) ??
+                UserOptionRegister.knownGeneratedFiles.defaultValue),
+            ..._parseGlob(arg.getStringList(UserOptionRegister.addToKnownGeneratedFiles) ?? []),
           ],
-          useEmojis: arg.getBooleanOrDefault(UserOptionsArgs.printEmojis),
+          useEmojis: arg.getBooleanOrDefault(UserOptionRegister.printEmojis),
+          logLevel: _parseLogLevel(arg.getString(UserOptionRegister.logLevel)),
         ),
       );
     } catch (e, s) {

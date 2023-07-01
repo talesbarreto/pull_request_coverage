@@ -1,15 +1,15 @@
-import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
+import 'package:pull_request_coverage/src/domain/user_options/user_option_register.dart';
 
 abstract class UserOptionDataSource {
-  String? getString(UserOptionsArgs userOptionsArgs);
+  String? getString(UserOptionRegister userOptionsArgs);
 
-  T? get<T>(UserOptionsArgs<T> userOptionsArgs, T Function(String text) transform);
+  T? get<T>(UserOptionRegister<T> userOptionsArgs, T Function(String text) transform);
 
-  List<String>? getStringList(UserOptionsArgs<List<String>?> userOptionsArgs);
+  List<String>? getStringList(UserOptionRegister<List<String>?> userOptionsArgs);
 
-  bool? getBoolean(UserOptionsArgs<bool?> userOptionsArgs);
+  bool? getBoolean(UserOptionRegister<bool?> userOptionsArgs);
 
-  int? getInt(UserOptionsArgs<int?> userOptionsArgs);
+  int? getInt(UserOptionRegister<int?> userOptionsArgs);
 
-  double? getDouble(UserOptionsArgs<double?> userOptionsArgs);
+  double? getDouble(UserOptionRegister<double?> userOptionsArgs);
 }

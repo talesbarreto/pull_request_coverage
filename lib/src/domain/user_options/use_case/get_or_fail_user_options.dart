@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:pull_request_coverage/src/domain/analyzer/models/exit_code.dart';
 import 'package:pull_request_coverage/src/domain/common/result.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/invalid_user_option_error.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/user_option_exceptions.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
 import 'package:pull_request_coverage/src/domain/user_options/repositories/user_options_repository.dart';
 
@@ -18,7 +18,7 @@ class GetOrFailUserOptions {
     } else {
       userOptions as ResultError<UserOptions>;
       final error = userOptions.error;
-      if (error is InvalidUserOptionError) {
+      if (error is UserOptionException) {
         print(error.toString());
       } else {
         print("Error parsing params: ${userOptions.message}\n${userOptions.stackTrace}");

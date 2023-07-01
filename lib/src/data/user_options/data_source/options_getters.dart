@@ -1,5 +1,5 @@
 import 'package:pull_request_coverage/src/data/user_options/data_source/user_option_data_source.dart';
-import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
+import 'package:pull_request_coverage/src/domain/user_options/user_option_register.dart';
 
 class OptionsGetters implements UserOptionDataSource {
   List<UserOptionDataSource> sources = const [];
@@ -19,36 +19,36 @@ class OptionsGetters implements UserOptionDataSource {
   }
 
   @override
-  T? get<T>(UserOptionsArgs<T> userOptionsArgs, T Function(String text) transform) {
+  T? get<T>(UserOptionRegister<T> userOptionsArgs, T Function(String text) transform) {
     return _tryGetOnEachSource((source) => source.get(userOptionsArgs, transform));
   }
 
   @override
-  String? getString(UserOptionsArgs userOptionsArgs) {
+  String? getString(UserOptionRegister userOptionsArgs) {
     return _tryGetOnEachSource((source) => source.getString(userOptionsArgs));
   }
 
   @override
-  List<String>? getStringList(UserOptionsArgs<List<String>?> userOptionsArgs) {
+  List<String>? getStringList(UserOptionRegister<List<String>?> userOptionsArgs) {
     return _tryGetOnEachSource((source) => source.getStringList(userOptionsArgs));
   }
 
   @override
-  double? getDouble(UserOptionsArgs<double?> userOptionsArgs) {
+  double? getDouble(UserOptionRegister<double?> userOptionsArgs) {
     return _tryGetOnEachSource((source) => source.getDouble(userOptionsArgs));
   }
 
   @override
-  int? getInt(UserOptionsArgs<int?> userOptionsArgs) {
+  int? getInt(UserOptionRegister<int?> userOptionsArgs) {
     return _tryGetOnEachSource((source) => source.getInt(userOptionsArgs));
   }
 
   @override
-  bool? getBoolean(UserOptionsArgs<bool?> userOptionsArgs) {
+  bool? getBoolean(UserOptionRegister<bool?> userOptionsArgs) {
     return _tryGetOnEachSource((source) => source.getBoolean(userOptionsArgs));
   }
 
-  bool getBooleanOrDefault(UserOptionsArgs<bool> userOptionsArgs) {
+  bool getBooleanOrDefault(UserOptionRegister<bool> userOptionsArgs) {
     return getBoolean(userOptionsArgs) ?? userOptionsArgs.defaultValue;
   }
 }

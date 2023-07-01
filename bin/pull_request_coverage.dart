@@ -10,7 +10,6 @@ import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_exit_code
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_file_report_from_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/files_on_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
-import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_for_unexpected_file_structure.dart';
@@ -24,11 +23,7 @@ Future<void> main(List<String> arguments) async {
     useColorfulOutput: userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli,
   );
 
-  final logger = Logger(
-    colorizeCliText: colorizeText,
-    logLevel: LogLevel.warning,
-  );
-  Logger.setGlobalLogger(logger);
+  Logger.setGlobalLogger(Logger(logLevel: userOptions.logLevel));
 
   final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
   PrintWarningsForUnexpectedFileStructure(print, colorizeText, logger)(
