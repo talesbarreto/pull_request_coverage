@@ -1,4 +1,5 @@
 import 'package:pull_request_coverage/src/data/user_options/data_source/user_option_data_source.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/invalid_user_option_error.dart';
 import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
 import 'package:yaml/yaml.dart';
 
@@ -14,6 +15,16 @@ class YamlDataSource implements UserOptionDataSource {
 
   void parse(String yaml) {
     _yamlMapComputation = loadYaml(yaml);
+  }
+
+  void throwExceptionOnInvalidUserOption(List<String> options) {
+    if (_yamlMapComputation != null) {
+      for (final option in _yamlMap.keys) {
+        if (!options.contains(option.toString())) {
+          throw InvalidUserOptionError(option, "yaml file");
+        }
+      }
+    }
   }
 
   T? _get<T>(UserOptionsArgs userOptionsArgs) {

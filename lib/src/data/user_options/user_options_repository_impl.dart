@@ -39,6 +39,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
     final yamlFile = fileSystem.file(yamlFilePath);
     if (yamlFile.existsSync()) {
       yamlDataSource.parse(yamlFile.readAsStringSync());
+      yamlDataSource.throwExceptionOnInvalidUserOption(UserOptionsArgs.getValidOptions());
       argGetters.setDataSources([argDataSource, yamlDataSource]);
     } else {
       argGetters.setDataSources([argDataSource]);

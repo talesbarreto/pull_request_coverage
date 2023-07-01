@@ -39,6 +39,10 @@ class UserOptionsArgs<T> {
     printEmojis,
   ];
 
+  static List<String> getValidOptions() {
+    return options.map((e) => e.names).toList().reduce((e1, e2) => [...e1, ...e2]);
+  }
+
   static const lcovFile = UserOptionsArgs<String>(
     names: ["lcov-file"],
     description: "lcov.info file path",

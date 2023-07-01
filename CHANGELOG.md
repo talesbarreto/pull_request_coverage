@@ -1,8 +1,9 @@
 ## 2.0.0
 
-- Output now has emojis by default. You can disable it by setting `print-emojis` to `false`.
-- Output is now sorted: files missing tests will be shown at the end of the report
-- Change output style
+- Output has emojis now. You can disable them by setting `print-emojis` to `false`.
+- Output is now sorted, with files missing tests shown at the end of the report.
+- Invalid options are no longer ignored. An error will be displayed, and execution will be aborted.
+- Updated output style.
 
 ## 1.3.6
 
