@@ -23,8 +23,7 @@ Future<void> main(List<String> arguments) async {
     useColorfulOutput: userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli,
   );
 
-  final logger = Logger();
-  Logger.setGlobalLogger(logger);
+  Logger.setGlobalLogger(Logger(logLevel: userOptions.logLevel));
 
   final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
   PrintWarningsForUnexpectedFileStructure(print, colorizeText, logger)(

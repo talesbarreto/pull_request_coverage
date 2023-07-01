@@ -128,11 +128,12 @@ Check [example](https://github.com/talesbarreto/pull_request_coverage/tree/main/
 ### Under the hood
 
 - **stdin-timeout** (`1`): `pull_request_coverage` reads the diff from stdin. In certain cases, the stdin stream may never close, causing the analysis to become stuck. By default, if no data is received within one second, `pull_request_coverage` assumes that it has reached the EOF.
+
+- **log-level** (`none`): internal log level. Possible values are `none`, `error`, `warning`, `info`, `debug` and `verbose`. 
 ___
+
 ## Exit code
 
-| Code | Description                                       |
-|------|---------------------------------------------------|
-| 0    | Tests passed.                                     |
-| 1    | Tests failed (only when thresholds are set).      |
-| 255  | Execution has failed and tests were not executed. |
+- **0** - Tests passed.
+- **1** - Tests failed (only when thresholds are set).
+- **255** - Execution has failed and tests were not executed.

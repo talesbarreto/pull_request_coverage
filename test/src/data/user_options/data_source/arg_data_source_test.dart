@@ -1,11 +1,11 @@
 import 'package:args/args.dart';
 import 'package:pull_request_coverage/src/data/user_options/data_source/arg_data_source.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/invalid_user_option_error.dart';
-import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/user_option_exceptions.dart';
+import 'package:pull_request_coverage/src/domain/user_options/user_option_register.dart';
 import 'package:test/test.dart';
 
 void main() {
-  const option = UserOptionsArgs(names: ["option", "alias"], defaultValue: null);
+  const option = UserOptionRegister(names: ["option", "alias"], defaultValue: null);
 
   ArgDataSource getDataSource() {
     return ArgDataSource(ArgParser(), [option]);
@@ -48,11 +48,17 @@ void main() {
     expect(dataSource.getStringList(option), ["*ha", "he", "hi", "ho", "hu"]);
   });
 
+  test("when an argument is missing", () {
+    final dataSource = getDataSource();
+    dataSource.parse(["--${option.names.last}",]);
+    expect(dataSource.getString(option), "alabama");
+  });
+
   test("when an invalid option is passed, throw an InvalidUserOptionError", () {
     final dataSource = getDataSource();
     expect(
       () => dataSource.parse(["--invalid", "3"]),
-      throwsA(isA<InvalidUserOptionError>()),
+      throwsA(isA<InvalidUserOptionException>()),
     );
   });
 }

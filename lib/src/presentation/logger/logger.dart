@@ -9,11 +9,11 @@ class Logger {
 
   static void setGlobalLogger(Logger logger) => _global = logger;
 
-  final LogLevel _logLevel;
+  final LogLevel _currentLogLevel;
 
   const Logger({
-    LogLevel currentLogLevel = LogLevel.none,
-  }) : _logLevel = currentLogLevel;
+    LogLevel logLevel = LogLevel.none,
+  }) : _currentLogLevel = logLevel;
 
   void log({
     required String tag,
@@ -22,8 +22,8 @@ class Logger {
     StackTrace? stackTrace,
   }) {
     assert(level != LogLevel.none);
-    if (level.index <= _logLevel.index) {
-      print("[$tag] $message");
+    if (level.index <= _currentLogLevel.index) {
+      print("\t[$tag] $message");
     }
   }
 

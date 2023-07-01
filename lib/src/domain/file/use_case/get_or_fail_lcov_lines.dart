@@ -16,7 +16,7 @@ class GetOrFailLcovLines {
         stackTrace: s,
         level: LogLevel.error,
       );
-      logger.printWarning("\nError reading lcov.info file: $e. Did you run `flutter test --coverage`?");
+      logger.printWarning("Error reading lcov.info file: $e. Did you run `flutter test --coverage`?");
       exit(ExitCode.error);
     }
   }

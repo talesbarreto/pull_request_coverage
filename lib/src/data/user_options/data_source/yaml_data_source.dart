@@ -1,6 +1,6 @@
 import 'package:pull_request_coverage/src/data/user_options/data_source/user_option_data_source.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/invalid_user_option_error.dart';
-import 'package:pull_request_coverage/src/domain/user_options/user_options_args.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/user_option_exceptions.dart';
+import 'package:pull_request_coverage/src/domain/user_options/user_option_register.dart';
 import 'package:yaml/yaml.dart';
 
 class YamlDataSource implements UserOptionDataSource {
@@ -21,13 +21,13 @@ class YamlDataSource implements UserOptionDataSource {
     if (_yamlMapComputation != null) {
       for (final option in _yamlMap.keys) {
         if (!options.contains(option.toString())) {
-          throw InvalidUserOptionError(option, "yaml file");
+          throw InvalidUserOptionException(option, "yaml file");
         }
       }
     }
   }
 
-  T? _get<T>(UserOptionsArgs userOptionsArgs) {
+  T? _get<T>(UserOptionRegister userOptionsArgs) {
     for (final name in userOptionsArgs.names) {
       final value = _yamlMap[name];
       if (value != null) {
@@ -42,7 +42,7 @@ class YamlDataSource implements UserOptionDataSource {
   }
 
   @override
-  T? get<T>(UserOptionsArgs userOptionsArgs, T Function(String text) transform) {
+  T? get<T>(UserOptionRegister userOptionsArgs, T Function(String text) transform) {
     final result = getString(userOptionsArgs);
     if (result == null) {
       return null;
@@ -51,12 +51,12 @@ class YamlDataSource implements UserOptionDataSource {
   }
 
   @override
-  String? getString(UserOptionsArgs userOptionsArgs) {
+  String? getString(UserOptionRegister userOptionsArgs) {
     return _get<String>(userOptionsArgs);
   }
 
   @override
-  List<String>? getStringList(UserOptionsArgs userOptionsArgs) {
+  List<String>? getStringList(UserOptionRegister userOptionsArgs) {
     final result = _get<YamlList>(userOptionsArgs);
     if (result == null) {
       return null;
@@ -65,12 +65,12 @@ class YamlDataSource implements UserOptionDataSource {
   }
 
   @override
-  bool? getBoolean(UserOptionsArgs userOptionsArgs) {
+  bool? getBoolean(UserOptionRegister userOptionsArgs) {
     return _get<bool>(userOptionsArgs);
   }
 
   @override
-  double? getDouble(UserOptionsArgs userOptionsArgs) {
+  double? getDouble(UserOptionRegister userOptionsArgs) {
     final result = _get<Object>(userOptionsArgs);
     if (result is double) {
       return result;
@@ -83,7 +83,7 @@ class YamlDataSource implements UserOptionDataSource {
   }
 
   @override
-  int? getInt(UserOptionsArgs userOptionsArgs) {
+  int? getInt(UserOptionRegister userOptionsArgs) {
     final result = _get<Object>(userOptionsArgs);
     if (result is int) {
       return result;

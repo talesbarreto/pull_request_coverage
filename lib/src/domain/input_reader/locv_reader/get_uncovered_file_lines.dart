@@ -46,7 +46,7 @@ class GetUncoveredFileLines {
     logger.log(
       tag: "GetUncoveredFileLines",
       message: "coverage info of `$filePath` not found in lcov.info",
-      level: LogLevel.info,
+      level: LogLevel.verbose,
     );
     return null;
   }
