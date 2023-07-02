@@ -1,3 +1,5 @@
+Check the readme file to learn how to personalize the output. There are options such as disabling emojis, colors, etc.
+
 ### CLI output
 
 ```bash
@@ -6,9 +8,7 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 #### Output example
 
-![Screenshot 2023-04-09 at 11 08 01](https://user-images.githubusercontent.com/7644323/230777531-9a845de5-09a8-4914-b8a6-7ead78d7cb9e.png)
-
-You can disable the colors using `--use-colorful-output false`
+<img width="788" alt="Screenshot 2023-07-02 at 11 48 25" src="https://github.com/talesbarreto/pull_request_coverage/assets/7644323/ead7f1a9-16d1-4c28-aa2c-3503b9a82575">
 
 ____
 ### Markdown output
@@ -19,9 +19,17 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 
 #### Output example
-- `lib/src/presentation/output_print_generator/cli_output_generator.dart` (+16)
-- `lib/src/presentation/output_print_generator/cli_table_builder.dart` (+59) / **6 lines missing tests**
+cat input_samples/sample1/git.diff | dart bin/pull_request_coverage.dart --lcov-file input_samples/sample1/lcov.info  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown
+`lib/src/presentation/output_print_generator/cli_output_generator.dart`  (+16) 🎉
+
+`lib/src/presentation/output_print_generator/markdown_output_generator.dart`  (+14) 🎉
+
+`lib/src/presentation/output_print_generator/output_generator.dart`  (+1) 🎉
+
+##### 🚨 `lib/src/presentation/output_print_generator/cli_table_builder.dart`  (+59) 
+ - 6 lines missing tests  
 ```diff
+
   25:   String build() {
   26:     final stringBuffer = StringBuffer();
   27:     final columnSize = List.generate(columnsLength, (index) => 0);
@@ -43,16 +51,16 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
   49:     }
   50:     for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
 ```
-- `lib/src/presentation/output_print_generator/markdown_output_generator.dart` (+14)
-- `lib/src/presentation/output_print_generator/output_generator.dart` (+1)
 
-|           Report            | Current value | Threshold |      |
-|-----------------------------|---------------|-----------|------|
-| Lines that should be tested |      89       |           |      |
-|   Ignored untested lines    |       0       |           |      |
-|                             |               |           |      |
-|     Lines missing tests     |       6       |     5     | FAIL |
-|        Coverage rate        |    93.26%     |   99.0%   | FAIL |
+
+
+|           Report            | Current value | Threshold |   |
+|-----------------------------|---------------|-----------|---|
+| Lines that should be tested |      89       |           |   |
+|   Ignored untested lines    |       0       |           |   |
+|     Lines missing tests     |       6       |     5     | ❌ |
+|        Coverage rate        |    93.26%     |   99.0%   | ❌ |
+
 ____
 ### Markdown output using `dart` mode
 
@@ -62,9 +70,17 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
 ```
 
 #### Output example
-- `lib/src/presentation/output_print_generator/cli_output_generator.dart` (+16)
-- `lib/src/presentation/output_print_generator/cli_table_builder.dart` (+59) / **6 lines missing tests**
+cat input_samples/sample1/git.diff | dart bin/pull_request_coverage.dart --lcov-file input_samples/sample1/lcov.info  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown --markdown-mode dart
+`lib/src/presentation/output_print_generator/cli_output_generator.dart`  (+16) 🎉
+
+`lib/src/presentation/output_print_generator/markdown_output_generator.dart`  (+14) 🎉
+
+`lib/src/presentation/output_print_generator/output_generator.dart`  (+1) 🎉
+
+##### 🚨 `lib/src/presentation/output_print_generator/cli_table_builder.dart`  (+59) 
+ - 6 lines missing tests  
 ```dart
+
   String build() {
     final stringBuffer = StringBuffer();
     final columnSize = List.generate(columnsLength, (index) => 0);
@@ -86,15 +102,12 @@ git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-
     }
     for (var lineIndex = 0; lineIndex < table.length; lineIndex++) {
 ```
-- `lib/src/presentation/output_print_generator/markdown_output_generator.dart` (+14)
-- `lib/src/presentation/output_print_generator/output_generator.dart` (+1)
 
-|           Report            | Current value | Threshold |      |
-|-----------------------------|---------------|-----------|------|
-| Lines that should be tested |      89       |           |      |
-|   Ignored untested lines    |       0       |           |      |
-|                             |               |           |      |
-|     Lines missing tests     |       6       |     5     | FAIL |
-|        Coverage rate        |    93.26%     |   99.0%   | FAIL |
 
-____
+
+|           Report            | Current value | Threshold |   |
+|-----------------------------|---------------|-----------|---|
+| Lines that should be tested |      89       |           |   |
+|   Ignored untested lines    |       0       |           |   |
+|     Lines missing tests     |       6       |     5     | ❌ |
+|        Coverage rate        |    93.26%     |   99.0%   | ❌ |
