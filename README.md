@@ -1,6 +1,5 @@
 ![flutter-ci](https://github.com/talesbarreto/pull_request_coverage/actions/workflows/flutter-ci.yml/badge.svg)
 
-This is a tool intended to analyze the coverage rate of a pull request, ignoring lines that were not changed.
 
 ## Motivation
 

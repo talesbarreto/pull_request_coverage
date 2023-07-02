@@ -8,6 +8,10 @@ topics:
  - coverage
  - test-coverage
 
+screenshots:
+  - description: The output of the command `pull_request_coverage` in a terminal.
+    path: screenshots/Screenshot_01.png
+
 executables:
   pull_request_coverage:
 
