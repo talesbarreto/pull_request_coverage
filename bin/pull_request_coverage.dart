@@ -17,7 +17,7 @@ import 'package:pull_request_coverage/src/presentation/use_case/print_warnings_f
 Future<void> main(List<String> arguments) async {
   final fileSystem = LocalFileSystem();
   final userOptions = UserOptionsModule.provideUserOptions(arguments: arguments, fileSystem: fileSystem);
-  final ioRepository = IoModule.provideIoRepository(stdinTimeout: userOptions.stdinTimeout, fileSystem: fileSystem);
+  final fileRepository = IoModule.provideFileRepository(stdinTimeout: userOptions.stdinTimeout, fileSystem: fileSystem);
 
   final colorizeText = ColorizeText(
     useColorfulOutput: userOptions.useColorfulOutput && userOptions.outputMode == OutputMode.cli,
@@ -25,10 +25,12 @@ Future<void> main(List<String> arguments) async {
 
   Logger.setGlobalLogger(Logger(logLevel: userOptions.logLevel));
 
-  final gitRootRelativePath = await ioRepository.getGitRootRelativePath();
+  // finds where `.git` file is located
+  final gitRootRelativePath = await fileRepository.getGitRootRelativePath();
+
   PrintWarningsForUnexpectedFileStructure(print, colorizeText, logger)(
     gitRootRelativePath: gitRootRelativePath,
-    isLibDirPresent: await ioRepository.doesLibDirectoryExist(),
+    isLibDirPresent: await fileRepository.doesLibDirectoryExist(),
   );
 
   final getOrFailLcovLines = IoModule.provideGetOrFailLcovLines();
@@ -39,7 +41,7 @@ Future<void> main(List<String> arguments) async {
   final analyze = await AnalyzeModule.provideAnalyzeUseCase(
     userOptions: userOptions,
     lcovLines: lcovLines,
-    ioRepository: ioRepository,
+    ioRepository: fileRepository,
     getFileReportFromDiff: GetFileReportFromDiff(),
     onFilesOnGitDiff: onFilesOnGitDiff,
   );

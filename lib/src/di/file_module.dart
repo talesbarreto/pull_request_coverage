@@ -5,7 +5,7 @@ import 'package:pull_request_coverage/src/domain/file/use_case/get_or_fail_lcov_
 
 class IoModule {
   const IoModule._();
-  static FileRepository provideIoRepository({
+  static FileRepository provideFileRepository({
     required Duration stdinTimeout,
     required FileSystem fileSystem,
   }) {

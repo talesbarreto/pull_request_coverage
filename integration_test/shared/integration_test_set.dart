@@ -26,7 +26,7 @@ Future<Analyze> getAnalyzeForIntegrationTest({
   return AnalyzeModule.provideAnalyzeUseCase(
     userOptions: userOptions,
     lcovLines: await getOrFailLcovLines(userOptions.lcovFilePath, fileSystem),
-    ioRepository: IoModule.provideIoRepository(
+    ioRepository: IoModule.provideFileRepository(
       fileSystem: fileSystem,
       stdinTimeout: Duration(days: 10),
     ),
