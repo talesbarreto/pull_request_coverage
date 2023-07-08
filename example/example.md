@@ -4,7 +4,7 @@ Check the readme file to learn how to personalize the output. There are options 
 
 ```bash
 flutter test --coverage
-git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-lines 5 --minimum-coverage 99    
+git diff origin/main | pull_request_coverage  --maximum-uncovered-lines 5 --minimum-coverage 99    
 ```
 #### Output example
 
@@ -15,7 +15,7 @@ ____
 
 ```bash
 flutter test --coverage
-git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown    
+git diff origin/main | pull_request_coverage  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown    
 ```
 
 #### Output example
@@ -66,7 +66,7 @@ ____
 
 ```bash
 flutter test --coverage
-git diff origin/main | dart bin/pull_request_coverage.dart  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown --markdown-mode dart 
+git diff origin/main | pull_request_coverage  --maximum-uncovered-lines 5 --minimum-coverage 99 --output-mode markdown --markdown-mode dart 
 ```
 
 #### Output example
