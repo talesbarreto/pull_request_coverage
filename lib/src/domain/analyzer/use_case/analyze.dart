@@ -63,8 +63,6 @@ class Analyze {
         linesThatShouldBeTested: totalOfLinesThatShouldBeTested,
         untestedIgnoredLines: totalUntestedIgnoredLines,
         linesMissingTests: totalOfLinesMissingTests,
-        linesMissingTestsThreshold: userOptions.maximumUncoveredLines,
-        coverageRateThreshold: userOptions.minimumCoverageRate,
       ),
     );
   }
