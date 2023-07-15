@@ -2,6 +2,7 @@ import 'package:file/file.dart';
 import 'package:glob/glob.dart';
 import 'package:pull_request_coverage/src/data/user_options/data_source/arg_data_source.dart';
 import 'package:pull_request_coverage/src/data/user_options/data_source/yaml_data_source.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/approval_requirement.dart';
 import 'package:pull_request_coverage/src/domain/user_options/user_option_register.dart';
 import 'package:pull_request_coverage/src/domain/common/result.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
@@ -76,6 +77,16 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
     }
   }
 
+  ApprovalRequirement _parseApprovalRequirement(String? string) {
+    switch (string) {
+      case "lines-or-rate":
+        return ApprovalRequirement.linesOrRate;
+      case "lines-and-rate":
+      default:
+        return ApprovalRequirement.linesAndRate;
+    }
+  }
+
   @override
   Result<UserOptions> getUserOptions(List<String> arguments) {
     final arg = argGetters;
@@ -94,7 +105,8 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
           reportFullyCoveredFiles: arg.getBooleanOrDefault(UserOptionRegister.reportFullyCoveredFiles),
           outputMode: arg.getString(UserOptionRegister.outputMode) == "markdown" ? OutputMode.markdown : OutputMode.cli,
           fractionalDigits: arg.getInt(UserOptionRegister.fractionDigits) ?? 2,
-          markdownMode: arg.getString(UserOptionRegister.markdownMode) == "dart" ? MarkdownMode.dart : MarkdownMode.diff,
+          markdownMode:
+              arg.getString(UserOptionRegister.markdownMode) == "dart" ? MarkdownMode.dart : MarkdownMode.diff,
           fullyTestedMessage: arg.getString(UserOptionRegister.fullyTestedMessage),
           stdinTimeout: Duration(seconds: arg.getInt(UserOptionRegister.stdinTimeout) ?? 1),
           deprecatedFilterSet: false,
@@ -106,6 +118,7 @@ class UserOptionsRepositoryImpl implements UserOptionsRepository {
             ..._parseGlob(arg.getStringList(UserOptionRegister.addToKnownGeneratedFiles) ?? []),
           ],
           useEmojis: arg.getBooleanOrDefault(UserOptionRegister.printEmojis),
+          approvalRequirement: _parseApprovalRequirement(arg.getString(UserOptionRegister.approvalRequirement)),
           logLevel: _parseLogLevel(arg.getString(UserOptionRegister.logLevel)),
         ),
       );
