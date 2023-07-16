@@ -1,3 +1,4 @@
+import 'package:pull_request_coverage/src/domain/user_options/models/approval_requirement.dart';
 import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 
 class UserOptionRegister<T> {
@@ -39,6 +40,7 @@ class UserOptionRegister<T> {
     addToKnownGeneratedFiles,
     knownGeneratedFiles,
     printEmojis,
+    approvalRequirement,
     logLevel,
   ];
 
@@ -158,6 +160,14 @@ class UserOptionRegister<T> {
     names: ["print-emojis"],
     description: "Use emojis in the output",
     defaultValue: true,
+  );
+
+  static const approvalRequirement = UserOptionRegister<ApprovalRequirement>(
+    names: ["approval-requirement"],
+    description:
+        "when both minimum-coverage and maximum-uncovered-lines are specified, the approval-requirement determines the conditions for passing the tests.",
+    defaultValue: ApprovalRequirement.linesAndRate,
+    allowed: ["lines-and-rate", "lines-or-rate"],
   );
 
   static const logLevel = UserOptionRegister<LogLevel>(

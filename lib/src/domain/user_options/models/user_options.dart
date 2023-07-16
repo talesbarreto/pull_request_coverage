@@ -1,4 +1,5 @@
 import 'package:glob/glob.dart';
+import 'package:pull_request_coverage/src/domain/user_options/models/approval_requirement.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
 import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
 import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
@@ -21,6 +22,7 @@ class UserOptions {
   final Duration stdinTimeout;
   final bool deprecatedFilterSet;
   final List<RegExp> lineFilters;
+  final ApprovalRequirement approvalRequirement;
   final LogLevel logLevel;
 
   /// [fractionalDigits] how many digits after the decimal point to show on coverage rate
@@ -43,5 +45,6 @@ class UserOptions {
     this.lineFilters = const [],
     this.useEmojis = true,
     this.logLevel = LogLevel.none,
+    this.approvalRequirement = ApprovalRequirement.linesAndRate,
   });
 }

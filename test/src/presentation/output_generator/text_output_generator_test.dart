@@ -47,8 +47,6 @@ void main() {
         linesThatShouldBeTested: 12,
         linesMissingTests: 0,
         untestedIgnoredLines: 0,
-        linesMissingTestsThreshold: null,
-        coverageRateThreshold: null,
       );
 
       testGenerator(
@@ -77,8 +75,6 @@ void main() {
         linesThatShouldBeTested: 12,
         linesMissingTests: 1,
         untestedIgnoredLines: 0,
-        linesMissingTestsThreshold: null,
-        coverageRateThreshold: null,
       );
 
       testGenerator(

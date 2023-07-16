@@ -1,3 +1,6 @@
+## 2.1.0
+- New `approval-requirement` option
+
 ## 2.0.0
 
 - Output has emojis now. You can disable them by setting `print-emojis` to `false`.

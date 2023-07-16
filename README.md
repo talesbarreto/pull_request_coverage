@@ -90,6 +90,10 @@ Default values are indicated in parentheses.
 
 - **maximum-uncovered-lines** : Specifies the maximum number of uncovered lines allowed before the tests fail.
 
+- **approval-requirement** (`lines-and-rate`): when both, `minimum-coverage` and `maximum-uncovered-lines`, are specified, the `approval-requirement` determines the conditions for passing the tests. 
+  - `lines-and-rate`: both conditions must be met to pass the tests.
+  - `lines-or-rate:` only one of the conditions must be met to pass the tests.
+
 ### Filters
 
 - **ignore**: list of files that should be ignored, using the [widely-known Bash glob syntax](https://pub.dev/packages/glob#syntax). The cumulative count of ignored lines from these files will be shown in the report for statistical purposes only.
