@@ -1,7 +1,7 @@
 name: pull_request_coverage
 description: This tool is designed to analyze the test coverage rate of a pull request, taking into consideration only the lines that have been changed.
 repository: https://github.com/talesbarreto/pull_request_coverage
-version: 2.0.0
+version: 2.1.0
 topics:
  - ci
  - test
