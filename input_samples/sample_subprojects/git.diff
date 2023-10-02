@@ -1,0 +1,58 @@
+diff --git a/lib/main.dart b/lib/main.dart
+index 2667c31..a64f36f 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -1,7 +1,7 @@
+ void main(){
+     print("main dart");
+     print("main dart");
+-    print("main dart");
+-    print("main dart");
++    print("main dart edited");
++    print("main dart edited");
+     print("main dart");
+ }
+\ No newline at end of file
+diff --git a/lib/to_be_ignored.cp b/lib/to_be_ignored.cp
+index b94615d..15aaaf2 100644
+--- a/lib/to_be_ignored.cp
++++ b/lib/to_be_ignored.cp
+@@ -1,6 +1,6 @@
+ #include <iostream>
+
+ int main() {
+-    std::cout << "Hello World!";
++    std::cout << "Hello World  edited!";
+     return 0;
+ }
+\ No newline at end of file
+diff --git a/modules/featureX/lib/main.dart b/modules/featureX/lib/main.dart
+index 7dbb2a7..a2f1cea 100644
+--- a/modules/featureX/lib/main.dart
++++ b/modules/featureX/lib/main.dart
+@@ -1,7 +1,7 @@
+ void main(){
+     print("feature X main dart");
+     print("feature X main dart");
+-    print("feature X main dart");
+-    print("feature X main dart");
++    print("feature X main dart edited");
++    print("feature X main dart edited");
+     print("feature X main dart");
+ }
+\ No newline at end of file
+diff --git a/modules/featureY/lib/main.dart b/modules/featureY/lib/main.dart
+index dbee037..16ec043 100644
+--- a/modules/featureY/lib/main.dart
++++ b/modules/featureY/lib/main.dart
+@@ -1,7 +1,7 @@
+ void main(){
+     print("feature Y main dart");
+     print("feature Y main dart");
+-    print("feature Y main dart");
+-    print("feature Y main dart");
++    print("feature Y main dart edited");
++    print("feature Y main dart edited");
+     print("feature Y main dart");
+ Y
+\ No newline at end of file
