@@ -1,9 +1,11 @@
+import 'package:path/path.dart' as path;
 import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 
 /// [GetUncoveredFileLines] returns a list of line index that are not covered by tests.
 class GetUncoveredFileLines {
   bool _isSamePath(String filePath, String lcovFileHeader) {
+    filePath = path.normalize(filePath);
     if (lcovFileHeader.startsWith("SF:$filePath")) {
       return true;
     }
@@ -14,7 +16,7 @@ class GetUncoveredFileLines {
             &&
             lcovFileHeader.startsWith("SF:/") //file path on lcov.info file is absolute
             &&
-            lcovFileHeader.substring(indexOfLib + 1) == filePath //
+            path.normalize(lcovFileHeader.substring(indexOfLib + 1)) == filePath //
         ) {
       return true;
     }
