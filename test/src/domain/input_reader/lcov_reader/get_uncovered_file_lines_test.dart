@@ -20,6 +20,13 @@ void main() {
       expect(result.first, 13);
       expect(result.last, 18);
     });
+
+    test("should normalize paths and return lines that are not covered", () {
+      final useCase = GetUncoveredFileLines();
+      final result = useCase(_content3.split("\n"), "./lib/src/extensions/string.dart");
+
+      expect(result, [5]);
+    });
   });
 }
 
@@ -58,5 +65,12 @@ DA:16,0
 DA:18,0
 LF:7
 LH:3
+end_of_record
+''';
+
+const _content3 = '''
+SF:./lib/src/extensions/string.dart
+DA:4,1
+DA:5,0
 end_of_record
 ''';
