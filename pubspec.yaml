@@ -1,5 +1,5 @@
 name: pull_request_coverage
-description: This tool is designed to analyze the test coverage rate of a pull request, taking into consideration only the lines that have been changed.
+description: This is a code coverage tool that tracks the number of code changes in pull requests covered by tests. It also highlights lines that have not been tested.
 repository: https://github.com/talesbarreto/pull_request_coverage
 version: 2.1.0
 topics:
@@ -7,6 +7,7 @@ topics:
  - test
  - coverage
  - test-coverage
+ - diff
 
 screenshots:
   - description: The output of the command `pull_request_coverage` in a terminal.
