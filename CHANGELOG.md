@@ -1,3 +1,8 @@
+## 2.1.1
+- Checking all files present in `lcov.info` file,not just those located under `/lib` as in previous versions.
+- Enhanced the logic for detecting file matches between the `lcov.info` file and the `git diff`.
+- Bug fix: Addressed an issue where ignored files could incorrectly appear in the final report in certain cases.
+
 ## 2.1.0
 - New `approval-requirement` option
 
