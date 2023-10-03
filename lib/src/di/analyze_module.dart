@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_file_report_from_diff.dart';
-import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_file_from_project.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_generated_file.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_an_ignored_file.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_file_line_result_data.dart';
@@ -35,7 +34,6 @@ class AnalyzeModule {
       lcovLines: lcovLines,
       setUncoveredLines: SetFileLineResultData(ShouldAnalyzeThisLine(userOptions.lineFilters), isAnIgnoredFile),
       getUncoveredFileLines: GetUncoveredFileLines(),
-      isAFileFromProject: IsAFileFromProject(),
       isAGeneratedFile: IsAGeneratedFile(userOptions),
       isAnIgnoredFile: isAnIgnoredFile,
       getFileReportFromDiff: getFileReportFromDiff,

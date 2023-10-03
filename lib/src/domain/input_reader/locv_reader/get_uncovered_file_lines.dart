@@ -2,6 +2,7 @@ import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 
 /// [GetUncoveredFileLines] returns a list of line index that are not covered by tests.
+/// returns `null` if the file doesn't exist in lcov.info file
 class GetUncoveredFileLines {
   bool _isSamePath(String filePath, String lcovFileHeader) {
     if (lcovFileHeader.startsWith("SF:$filePath")) {
@@ -22,7 +23,6 @@ class GetUncoveredFileLines {
   }
 
   List<int>? call(List<String> lcovInfoLines, String filePath) {
-    // most of this code was created by copilot. I'm scared 😰
     for (var i = 0; i < lcovInfoLines.length; i++) {
       final line = lcovInfoLines[i];
       if (_isSamePath(filePath, line)) {
