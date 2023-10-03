@@ -2,7 +2,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/analyze.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/get_file_report_from_diff.dart';
-import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_file_from_project.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_a_generated_file.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/is_an_ignored_file.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_file_line_result_data.dart';
@@ -18,13 +17,16 @@ void main() {
     registerFallbackValue(FileDiff(path: '', lines: []));
   });
 
-  test('do not analyze file if `IsAFileFromProject` returns false', () {
+  test('Exclude file file from the report if `GetUncoveredFileLines` returns null', () async {
     final getUncoveredFileLines = _MockGetUncoveredFileLines();
-    final analyze = _getAnalyze(isAFileFromProject: _FakeIsAFileFromProject(response: false));
+    final analyze = _getAnalyze(getUncoveredFileLines: getUncoveredFileLines);
 
-    analyze();
+    when(() => getUncoveredFileLines.call(any(), any())).thenReturn(null);
 
-    verifyNever(() => getUncoveredFileLines.call(any(), any()));
+    final result = await analyze().toList();
+
+    expect(result.length, 1);
+    expect(result.first.analysisResult, isNotNull);
   });
 
   group('When there is three files, each one has two new lines and one of them is uncovered', () {
@@ -47,7 +49,6 @@ void main() {
         filesOnGitDIffStream: Stream.fromIterable(List.generate(totalOfFilesOnDiff, (index) => ["file$index"])),
         getUncoveredFileLines: _MockGetUncoveredFileLines.dummy([1, 3]),
         setUncoveredLinesOnFileDiff: setUncoveredLines,
-
       );
 
       return (await analyze().last).analysisResult!;
@@ -125,7 +126,6 @@ void main() {
 
 Analyze _getAnalyze({
   _MockParseGitHubDiff? parseGitHubDiff,
-  _FakeIsAFileFromProject? isAFileFromProject,
   _MockGetUncoveredFileLines? getUncoveredFileLines,
   Stream<List<String>>? filesOnGitDIffStream,
   _MockSetUncoveredLinesOnFileDiff? setUncoveredLinesOnFileDiff,
@@ -141,7 +141,6 @@ Analyze _getAnalyze({
     lcovLines: [],
     setUncoveredLines: setUncoveredLinesOnFileDiff ?? _MockSetUncoveredLinesOnFileDiff(),
     getUncoveredFileLines: getUncoveredFileLines ?? _MockGetUncoveredFileLines(),
-    isAFileFromProject: isAFileFromProject ?? _FakeIsAFileFromProject(),
     isAGeneratedFile: isAGeneratedFile ?? _MockIsAGeneratedFile.dummy(false),
     isAnIgnoredFile: isAnIgnoredFile ?? _MockIsAnIgnoredFile.dummy(false),
     getFileReportFromDiff: GetFileReportFromDiff(),
@@ -188,13 +187,4 @@ class _MockGetUncoveredFileLines extends Mock implements GetUncoveredFileLines {
     when(() => mock.call(any(), any())).thenReturn(answer);
     return mock;
   }
-}
-
-class _FakeIsAFileFromProject extends Fake implements IsAFileFromProject {
-  final bool response;
-
-  _FakeIsAFileFromProject({this.response = true});
-
-  @override
-  bool call(String path) => response;
 }
