@@ -14,11 +14,18 @@ void main() {
 
     test("should return the lines that are not covered by the lcov file if it uses absolute paths", () {
       final useCase = GetUncoveredFileLines();
-      final result = useCase(_content2.split("\n"), "lib/src/extensions/string.dart");
+      final result = useCase(_content2.split("\n"), "./lib/src/extensions/./string.dart");
 
       expect(result!.length, 4);
       expect(result.first, 13);
       expect(result.last, 18);
+    });
+
+    test("should normalize paths and return lines that are not covered", () {
+      final useCase = GetUncoveredFileLines();
+      final result = useCase(_content3.split("\n"), "./lib/src/extensions/string.dart");
+
+      expect(result, [5]);
     });
   });
 }
@@ -48,7 +55,7 @@ LH:2
 end_of_record''';
 
 const _content2 = '''
-SF:/Users/barreto/Projects/pull_request_coverage/lib/src/extensions/string.dart
+SF:/Users/./barreto/Projects////pull_request_coverage/lib/src/extensions/string.dart
 DA:4,1
 DA:5,1
 DA:6,1
@@ -58,5 +65,12 @@ DA:16,0
 DA:18,0
 LF:7
 LH:3
+end_of_record
+''';
+
+const _content3 = '''
+SF:./lib/src/extensions/string.dart
+DA:4,1
+DA:5,0
 end_of_record
 ''';
