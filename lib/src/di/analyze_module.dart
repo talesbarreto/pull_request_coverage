@@ -28,7 +28,7 @@ class AnalyzeModule {
       parseGitDiff: ParseGitDiff(
         RemoveGitRootRelativePath(
           gitRootRelativePath ?? await ioRepository.getGitRootRelativePath(),
-        ),
+        ).call,
       ),
       filesOnGitDIffStream: onFilesOnGitDiff,
       lcovLines: lcovLines,
