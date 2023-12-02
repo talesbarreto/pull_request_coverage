@@ -17,7 +17,7 @@ class YamlDataSource implements UserSettingsDataSource {
     _yamlMapComputation = loadYaml(yaml);
   }
 
-  void throwExceptionOnInvalidUserOption(List<String> options) {
+  void throwExceptionOnInvalidUserSettings(List<String> options) {
     if (_yamlMapComputation != null) {
       for (final option in _yamlMap.keys) {
         if (!options.contains(option.toString())) {

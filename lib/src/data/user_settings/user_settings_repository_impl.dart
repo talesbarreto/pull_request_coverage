@@ -41,7 +41,7 @@ class UserSettingsRepositoryImpl implements UserSettingsRepository {
     final yamlFile = fileSystem.file(yamlFilePath);
     if (yamlFile.existsSync()) {
       yamlDataSource.parse(yamlFile.readAsStringSync());
-      yamlDataSource.throwExceptionOnInvalidUserOption(UserSettingsRegister.getValidOptions());
+      yamlDataSource.throwExceptionOnInvalidUserSettings(UserSettingsRegister.getValidOptions());
       argGetters.setDataSources([argDataSource, yamlDataSource]);
     } else {
       argGetters.setDataSources([argDataSource]);

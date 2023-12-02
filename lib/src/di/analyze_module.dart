@@ -37,7 +37,7 @@ class AnalyzeModule {
       isAGeneratedFile: IsAGeneratedFile(userSettings),
       isAnIgnoredFile: isAnIgnoredFile,
       getFileReportFromDiff: getFileReportFromDiff,
-      userOptions: userSettings,
+      userSettings: userSettings,
     );
   }
 }

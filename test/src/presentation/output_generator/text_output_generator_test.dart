@@ -19,7 +19,7 @@ void main() {
     test("`$description` on CLI output generator", () {
       final output = StringBuffer();
       final generator = CliOutputGenerator(
-        userOptions: userOptions,
+        userSettings: userOptions,
         colorizeText: colorizeText,
         getResultTable: getResultTable,
         print: (String message) => output.write(message),

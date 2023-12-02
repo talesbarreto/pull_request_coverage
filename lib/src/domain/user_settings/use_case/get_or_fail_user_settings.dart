@@ -12,16 +12,16 @@ class GetOrFailUserSettings {
   const GetOrFailUserSettings({required this.userSettingsRepository});
 
   UserSettings call(List<String> arguments) {
-    final userOptions = userSettingsRepository.getUserSettings(arguments);
-    if (userOptions is ResultSuccess<UserSettings>) {
-      return userOptions.data;
+    final userSettings = userSettingsRepository.getUserSettings(arguments);
+    if (userSettings is ResultSuccess<UserSettings>) {
+      return userSettings.data;
     } else {
-      userOptions as ResultError<UserSettings>;
-      final error = userOptions.error;
+      userSettings as ResultError<UserSettings>;
+      final error = userSettings.error;
       if (error is UserSettingsException) {
         print(error.toString());
       } else {
-        print("Error parsing params: ${userOptions.message}\n${userOptions.stackTrace}");
+        print("Error parsing params: ${userSettings.message}\n${userSettings.stackTrace}");
       }
       exit(ExitCode.error);
     }

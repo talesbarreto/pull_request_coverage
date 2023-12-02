@@ -19,7 +19,7 @@ class Analyze {
   final GetUncoveredFileLines getUncoveredFileLines;
   final List<String> lcovLines;
   final GetFileReportFromDiff getFileReportFromDiff;
-  final UserSettings userOptions;
+  final UserSettings userSettings;
 
   const Analyze({
     required this.parseGitDiff,
@@ -30,7 +30,7 @@ class Analyze {
     required this.setUncoveredLines,
     required this.getUncoveredFileLines,
     required this.getFileReportFromDiff,
-    required this.userOptions,
+    required this.userSettings,
   });
 
   Stream<Report> call() async* {

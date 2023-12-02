@@ -144,7 +144,7 @@ Analyze _getAnalyze({
     isAGeneratedFile: isAGeneratedFile ?? _MockIsAGeneratedFile.dummy(false),
     isAnIgnoredFile: isAnIgnoredFile ?? _MockIsAnIgnoredFile.dummy(false),
     getFileReportFromDiff: GetFileReportFromDiff(),
-    userOptions: const UserSettings(),
+    userSettings: const UserSettings(),
   );
 }
 

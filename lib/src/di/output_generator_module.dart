@@ -22,7 +22,7 @@ class OutputGeneratorModule {
       case OutputMode.cli:
         return CliOutputGenerator(
           colorizeText: colorizeText,
-          userOptions: userSettings,
+          userSettings: userSettings,
           print: print,
           printEmoji: printEmoji,
           getResultTable: GetResultTable(
