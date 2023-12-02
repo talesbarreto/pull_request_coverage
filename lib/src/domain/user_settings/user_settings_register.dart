@@ -1,18 +1,18 @@
-import 'package:pull_request_coverage/src/domain/user_options/models/approval_requirement.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/approval_requirement.dart';
 import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 
-class UserOptionRegister<T> {
+class UserSettingsRegister<T> {
   final List<String> names;
   final T defaultValue;
   final String? description;
   final List<String>? allowed;
   final bool isDeprecated;
-  final UserOptionsArgType userOptionsArgType;
+  final UserSettingsArgType userSettingsArgType;
 
-  const UserOptionRegister({
+  const UserSettingsRegister({
     required this.names,
     required this.defaultValue,
-    this.userOptionsArgType = UserOptionsArgType.string,
+    this.userSettingsArgType = UserSettingsArgType.string,
     this.description,
     this.allowed,
     this.isDeprecated = false,
@@ -20,7 +20,7 @@ class UserOptionRegister<T> {
 
   // begin of consts
 
-  static const options = <UserOptionRegister>[
+  static const options = <UserSettingsRegister>[
     lcovFile,
     excludeKnownGeneratedFiles,
     ignore,
@@ -48,99 +48,99 @@ class UserOptionRegister<T> {
     return options.map((e) => e.names).toList().reduce((e1, e2) => [...e1, ...e2]);
   }
 
-  static const lcovFile = UserOptionRegister<String>(
+  static const lcovFile = UserSettingsRegister<String>(
     names: ["lcov-file"],
     description: "lcov.info file path",
     defaultValue: 'coverage/lcov.info',
   );
 
-  static const excludeKnownGeneratedFiles = UserOptionRegister<bool>(
+  static const excludeKnownGeneratedFiles = UserSettingsRegister<bool>(
     names: ["ignore-known-generated-files", "exclude-known-generated-files"],
     description: "Exclude generated files like `.g` or `.pb.dart`",
     defaultValue: true,
   );
 
-  static const ignore = UserOptionRegister(
+  static const ignore = UserSettingsRegister(
     names: ["ignore", "exclude"],
     description: "Exclude files path that matches with Glob pattern",
-    userOptionsArgType: UserOptionsArgType.list,
+    userSettingsArgType: UserSettingsArgType.list,
     defaultValue: null,
   );
 
-  static const minimumCoverage = UserOptionRegister(
+  static const minimumCoverage = UserSettingsRegister(
     names: ["minimum-coverage"],
     description: "If the coverage is lower than this value, the test will fail",
     defaultValue: null,
   );
 
-  static const maximumUncoveredLines = UserOptionRegister(
+  static const maximumUncoveredLines = UserSettingsRegister(
     names: ["maximum-uncovered-lines"],
     description: "If there is more than this number of uncovered lines, the test will fail",
     defaultValue: null,
   );
 
-  static const useColorfulOutput = UserOptionRegister<bool>(
+  static const useColorfulOutput = UserSettingsRegister<bool>(
     names: ["use-colorful-output"],
     defaultValue: true,
   );
 
-  static const showUncoveredCode = UserOptionRegister<bool>(
+  static const showUncoveredCode = UserSettingsRegister<bool>(
     names: ["show-uncovered-code"],
     defaultValue: true,
   );
 
-  static const reportFullyCoveredFiles = UserOptionRegister<bool>(
+  static const reportFullyCoveredFiles = UserSettingsRegister<bool>(
     names: ["report-fully-covered-files"],
     defaultValue: true,
   );
 
-  static const outputMode = UserOptionRegister<String>(
+  static const outputMode = UserSettingsRegister<String>(
     names: ["output-mode"],
     defaultValue: "cli",
     allowed: ["cli", "markdown"],
   );
 
-  static const markdownMode = UserOptionRegister<String>(
+  static const markdownMode = UserSettingsRegister<String>(
     names: ["markdown-mode"],
     defaultValue: "cli",
     allowed: ["diff", "dart"],
   );
 
-  static const fractionDigits = UserOptionRegister<int>(
+  static const fractionDigits = UserSettingsRegister<int>(
     names: ["fraction-digits"],
     defaultValue: 2,
   );
 
-  static const stdinTimeout = UserOptionRegister<int>(
+  static const stdinTimeout = UserSettingsRegister<int>(
     names: ["stdin-timeout"],
     defaultValue: 1,
   );
 
-  static const fullyTestedMessage = UserOptionRegister(
+  static const fullyTestedMessage = UserSettingsRegister(
     names: ["fully-tested-message"],
     defaultValue: null,
   );
 
-  static const yamlConfigFilePath = UserOptionRegister(
+  static const yamlConfigFilePath = UserSettingsRegister(
     names: ["config-file"],
     defaultValue: "pull_request_coverage.yaml",
   );
 
-  static const ignoreLines = UserOptionRegister<List<String>?>(
+  static const ignoreLines = UserSettingsRegister<List<String>?>(
     names: ["ignore-lines"],
-    userOptionsArgType: UserOptionsArgType.list,
+    userSettingsArgType: UserSettingsArgType.list,
     defaultValue: null,
   );
 
-  static const generatedFiles = UserOptionRegister<List<String>?>(
+  static const generatedFiles = UserSettingsRegister<List<String>?>(
     names: ["generated-files"],
-    userOptionsArgType: UserOptionsArgType.list,
+    userSettingsArgType: UserSettingsArgType.list,
     defaultValue: null,
   );
 
-  static const knownGeneratedFiles = UserOptionRegister<List<String>>(
+  static const knownGeneratedFiles = UserSettingsRegister<List<String>>(
     names: ["known-generated-files"],
-    userOptionsArgType: UserOptionsArgType.list,
+    userSettingsArgType: UserSettingsArgType.list,
     defaultValue: [
       '**.g.dart',
       '**.pb.dart',
@@ -150,19 +150,19 @@ class UserOptionRegister<T> {
     ],
   );
 
-  static const addToKnownGeneratedFiles = UserOptionRegister<List<String>>(
+  static const addToKnownGeneratedFiles = UserSettingsRegister<List<String>>(
     names: ["add-to-known-generated-files"],
-    userOptionsArgType: UserOptionsArgType.list,
+    userSettingsArgType: UserSettingsArgType.list,
     defaultValue: [],
   );
 
-  static const printEmojis = UserOptionRegister<bool>(
+  static const printEmojis = UserSettingsRegister<bool>(
     names: ["print-emojis"],
     description: "Use emojis in the output",
     defaultValue: true,
   );
 
-  static const approvalRequirement = UserOptionRegister<ApprovalRequirement>(
+  static const approvalRequirement = UserSettingsRegister<ApprovalRequirement>(
     names: ["approval-requirement"],
     description:
         "when both minimum-coverage and maximum-uncovered-lines are specified, the approval-requirement determines the conditions for passing the tests.",
@@ -170,14 +170,14 @@ class UserOptionRegister<T> {
     allowed: ["lines-and-rate", "lines-or-rate"],
   );
 
-  static const logLevel = UserOptionRegister<LogLevel>(
+  static const logLevel = UserSettingsRegister<LogLevel>(
     names: ["log-level"],
     description: "Internal log level",
     defaultValue: LogLevel.none,
   );
 }
 
-enum UserOptionsArgType {
+enum UserSettingsArgType {
   string,
   list,
 }

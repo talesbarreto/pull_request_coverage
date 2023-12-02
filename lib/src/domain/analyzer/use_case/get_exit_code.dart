@@ -1,12 +1,12 @@
 import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/models/exit_code.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/approval_requirement.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/approval_requirement.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 
 class GetExitCode {
   const GetExitCode();
 
-  int call(AnalysisResult analysisResult, UserOptions userOptions) {
+  int call(AnalysisResult analysisResult, UserSettings userOptions) {
     final minimumCoverageFailRateIsSet = userOptions.minimumCoverageRate != null;
     final maximumUncoveredLinesFailIsSet = userOptions.maximumUncoveredLines != null;
 

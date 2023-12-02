@@ -1,11 +1,11 @@
 import 'package:args/args.dart';
-import 'package:pull_request_coverage/src/data/user_options/data_source/arg_data_source.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_option_exceptions.dart';
-import 'package:pull_request_coverage/src/domain/user_options/user_option_register.dart';
+import 'package:pull_request_coverage/src/data/user_settings/data_source/arg_data_source.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings_exceptions.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/user_settings_register.dart';
 import 'package:test/test.dart';
 
 void main() {
-  const option = UserOptionRegister(names: ["option", "alias"], defaultValue: null);
+  const option = UserSettingsRegister(names: ["option", "alias"], defaultValue: null);
 
   ArgDataSource getDataSource() {
     return ArgDataSource(ArgParser(), [option]);
@@ -52,7 +52,7 @@ void main() {
     final dataSource = getDataSource();
     expect(
       () => dataSource.parse(["--${option.names.last}"]),
-      throwsA(isA<InvalidUserOptionsArg>()),
+      throwsA(isA<InvalidUserSettingsArg>()),
     );
   });
 
@@ -60,7 +60,7 @@ void main() {
     final dataSource = getDataSource();
     expect(
       () => dataSource.parse(["--invalid", "3"]),
-      throwsA(isA<InvalidUserOptionException>()),
+      throwsA(isA<InvalidUserSettingsException>()),
     );
   });
 }

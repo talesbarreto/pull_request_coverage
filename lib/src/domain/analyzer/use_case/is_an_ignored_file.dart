@@ -1,7 +1,7 @@
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 
 class IsAnIgnoredFile {
-  final UserOptions userOptions;
+  final UserSettings userOptions;
 
   const IsAnIgnoredFile(this.userOptions);
 

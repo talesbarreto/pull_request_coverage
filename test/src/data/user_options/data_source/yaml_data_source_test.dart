@@ -1,9 +1,9 @@
-import 'package:pull_request_coverage/src/data/user_options/data_source/yaml_data_source.dart';
-import 'package:pull_request_coverage/src/domain/user_options/user_option_register.dart';
+import 'package:pull_request_coverage/src/data/user_settings/data_source/yaml_data_source.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/user_settings_register.dart';
 import 'package:test/test.dart';
 
 void main() {
-  const option = UserOptionRegister(names: ["option", "alias"], defaultValue: null);
+  const option = UserSettingsRegister(names: ["option", "alias"], defaultValue: null);
 
   test("parse Int type correctly", () {
     final dataSource = YamlDataSource();

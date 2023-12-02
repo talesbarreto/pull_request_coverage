@@ -1,4 +1,4 @@
-import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/files_on_git_diff.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/get_files_oon_git_diff_stream.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -18,7 +18,7 @@ void main() {
 
   group("split the input on each line started by `diff --git`", () {
     Future<List<List<String>>> getTestFiles() async {
-      final useCase = OnFilesOnGitDiff(Stream.fromIterable(fileContent));
+      final useCase = GetFilesOnGitDiffStream(Stream.fromIterable(fileContent));
       return useCase().toList();
     }
 

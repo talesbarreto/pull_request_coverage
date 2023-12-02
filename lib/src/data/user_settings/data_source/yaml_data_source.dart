@@ -1,9 +1,9 @@
-import 'package:pull_request_coverage/src/data/user_options/data_source/user_option_data_source.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_option_exceptions.dart';
-import 'package:pull_request_coverage/src/domain/user_options/user_option_register.dart';
+import 'package:pull_request_coverage/src/data/user_settings/data_source/user_option_data_source.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings_exceptions.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/user_settings_register.dart';
 import 'package:yaml/yaml.dart';
 
-class YamlDataSource implements UserOptionDataSource {
+class YamlDataSource implements UserSettingsDataSource {
   YamlMap? _yamlMapComputation;
 
   YamlMap get _yamlMap {
@@ -21,14 +21,14 @@ class YamlDataSource implements UserOptionDataSource {
     if (_yamlMapComputation != null) {
       for (final option in _yamlMap.keys) {
         if (!options.contains(option.toString())) {
-          throw InvalidUserOptionException(option, "yaml file");
+          throw InvalidUserSettingsException(option, "yaml file");
         }
       }
     }
   }
 
-  T? _get<T>(UserOptionRegister userOptionsArgs) {
-    for (final name in userOptionsArgs.names) {
+  T? _get<T>(UserSettingsRegister userSettingArgs) {
+    for (final name in userSettingArgs.names) {
       final value = _yamlMap[name];
       if (value != null) {
         if (value is T) {
@@ -42,8 +42,8 @@ class YamlDataSource implements UserOptionDataSource {
   }
 
   @override
-  T? get<T>(UserOptionRegister userOptionsArgs, T Function(String text) transform) {
-    final result = getString(userOptionsArgs);
+  T? get<T>(UserSettingsRegister userSettingArgs, T Function(String text) transform) {
+    final result = getString(userSettingArgs);
     if (result == null) {
       return null;
     }
@@ -51,13 +51,13 @@ class YamlDataSource implements UserOptionDataSource {
   }
 
   @override
-  String? getString(UserOptionRegister userOptionsArgs) {
-    return _get<String>(userOptionsArgs);
+  String? getString(UserSettingsRegister userSettingArgs) {
+    return _get<String>(userSettingArgs);
   }
 
   @override
-  List<String>? getStringList(UserOptionRegister userOptionsArgs) {
-    final result = _get<YamlList>(userOptionsArgs);
+  List<String>? getStringList(UserSettingsRegister userSettingArgs) {
+    final result = _get<YamlList>(userSettingArgs);
     if (result == null) {
       return null;
     }
@@ -65,13 +65,13 @@ class YamlDataSource implements UserOptionDataSource {
   }
 
   @override
-  bool? getBoolean(UserOptionRegister userOptionsArgs) {
-    return _get<bool>(userOptionsArgs);
+  bool? getBoolean(UserSettingsRegister userSettingArgs) {
+    return _get<bool>(userSettingArgs);
   }
 
   @override
-  double? getDouble(UserOptionRegister userOptionsArgs) {
-    final result = _get<Object>(userOptionsArgs);
+  double? getDouble(UserSettingsRegister userSettingArgs) {
+    final result = _get<Object>(userSettingArgs);
     if (result is double) {
       return result;
     }
@@ -83,8 +83,8 @@ class YamlDataSource implements UserOptionDataSource {
   }
 
   @override
-  int? getInt(UserOptionRegister userOptionsArgs) {
-    final result = _get<Object>(userOptionsArgs);
+  int? getInt(UserSettingsRegister userSettingArgs) {
+    final result = _get<Object>(userSettingArgs);
     if (result is int) {
       return result;
     }

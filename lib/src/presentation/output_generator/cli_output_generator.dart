@@ -1,14 +1,14 @@
 import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
 import 'package:pull_request_coverage/src/domain/analyzer/models/file_report.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_line.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/get_result_table.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/print_emoji.dart';
 
 class CliOutputGenerator implements OutputGenerator {
-  final UserOptions userOptions;
+  final UserSettings userOptions;
   final ColorizeText colorizeText;
   final GetResultTable getResultTable;
   final PrintEmoji printEmoji;
