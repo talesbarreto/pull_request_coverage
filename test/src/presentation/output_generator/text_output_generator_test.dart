@@ -1,5 +1,5 @@
 import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/cli_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/markdown_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
@@ -11,7 +11,7 @@ import 'package:test/test.dart';
 void main() {
   void testGenerator(
     String description,
-    UserOptions userOptions,
+    UserSettings userOptions,
     void Function(OutputGenerator generator, StringBuffer output) testFunction, {
     ColorizeText colorizeText = const FakeColorizeText(),
     GetResultTable getResultTable = const FakeGetResultTable(),
@@ -19,7 +19,7 @@ void main() {
     test("`$description` on CLI output generator", () {
       final output = StringBuffer();
       final generator = CliOutputGenerator(
-        userOptions: userOptions,
+        userSettings: userOptions,
         colorizeText: colorizeText,
         getResultTable: getResultTable,
         print: (String message) => output.write(message),
@@ -31,7 +31,7 @@ void main() {
     test("`$description` on Markdown output generator", () {
       final output = StringBuffer();
       final generator = MarkdownOutputGenerator(
-        userOptions: userOptions,
+        userSettings: userOptions,
         getResultTable: getResultTable,
         print: (String message) => output.write(message),
         printEmoji: FakePrintEmoji(),
@@ -51,7 +51,7 @@ void main() {
 
       testGenerator(
         "show its message",
-        UserOptions(fullyTestedMessage: message),
+        UserSettings(fullyTestedMessage: message),
         (generator, output) {
           generator.terminate(result);
 
@@ -61,7 +61,7 @@ void main() {
 
       testGenerator(
         "do not show table",
-        UserOptions(fullyTestedMessage: message),
+        UserSettings(fullyTestedMessage: message),
         (generator, output) {
           generator.terminate(result);
 
@@ -79,7 +79,7 @@ void main() {
 
       testGenerator(
         "do not show custom message",
-        UserOptions(fullyTestedMessage: message),
+        UserSettings(fullyTestedMessage: message),
         (generator, output) {
           generator.terminate(result);
 
@@ -89,7 +89,7 @@ void main() {
 
       testGenerator(
         "show table",
-        UserOptions(fullyTestedMessage: message),
+        UserSettings(fullyTestedMessage: message),
         (generator, output) {
           generator.terminate(result);
 
@@ -106,7 +106,7 @@ class FakeGetResultTable implements GetResultTable {
   static const table = "eruighfweiuyr weiurgy weyurg weuyrg wueyrg uwyerg iuewrg";
 
   @override
-  String call(UserOptions userOptions, AnalysisResult analysisResult) => table;
+  String call(UserSettings userOptions, AnalysisResult analysisResult) => table;
 }
 
 class FakeColorizeText implements ColorizeText {

@@ -1,6 +1,6 @@
 import 'package:pull_request_coverage/src/domain/analyzer/models/analysis_result.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/output_mode.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/table_builder.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
@@ -19,14 +19,14 @@ class GetResultTable {
         _printEmoji = printEmoji,
         _tableBuilder = tableBuilder;
 
-  String call(UserOptions userOptions, AnalysisResult analysisResult) {
+  String call(UserSettings userSettings, AnalysisResult analysisResult) {
     final stringBuffer = StringBuffer();
 
-    final maximumUncoveredLines = userOptions.maximumUncoveredLines;
-    final minimumCoverageRate = userOptions.minimumCoverageRate;
+    final maximumUncoveredLines = userSettings.maximumUncoveredLines;
+    final minimumCoverageRate = userSettings.minimumCoverageRate;
 
     final coverage = (analysisResult.coverageRate * 100);
-    final coverageTxt = coverage.isNaN ? "-" : "${coverage.toStringAsFixed(userOptions.fractionalDigits)}%";
+    final coverageTxt = coverage.isNaN ? "-" : "${coverage.toStringAsFixed(userSettings.fractionalDigits)}%";
 
     String result(bool success) => success
         ? _printEmoji(OutputGenerator.successEmoji, _colorizeText("Success", TextColor.green))
@@ -57,7 +57,7 @@ class GetResultTable {
       ..addLine(["Lines missing tests", analysisResult.linesMissingTests.toString(), lineThreshold, linesResult])
       ..addLine(["Coverage rate", coverageTxt, rateThreshold, rateResult]);
 
-    stringBuffer.write("\n${_tableBuilder.build(userOptions.outputMode == OutputMode.markdown)}");
+    stringBuffer.write("\n${_tableBuilder.build(userSettings.outputMode == OutputMode.markdown)}");
     return stringBuffer.toString();
   }
 }

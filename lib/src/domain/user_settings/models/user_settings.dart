@@ -1,10 +1,10 @@
 import 'package:glob/glob.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/approval_requirement.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/markdown_mode.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/approval_requirement.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/markdown_mode.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/output_mode.dart';
 import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 
-class UserOptions {
+class UserSettings {
   final List<Glob> ignoredFiles;
   final List<Glob> knownGeneratedFiles;
   final String lcovFilePath;
@@ -26,7 +26,7 @@ class UserOptions {
   final LogLevel logLevel;
 
   /// [fractionalDigits] how many digits after the decimal point to show on coverage rate
-  const UserOptions({
+  const UserSettings({
     this.ignoredFiles = const [],
     this.lcovFilePath = "coverage/lcov.info",
     this.showUncoveredCode = true,

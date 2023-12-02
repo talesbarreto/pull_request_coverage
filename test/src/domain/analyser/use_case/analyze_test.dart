@@ -9,7 +9,7 @@ import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_line.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -144,7 +144,7 @@ Analyze _getAnalyze({
     isAGeneratedFile: isAGeneratedFile ?? _MockIsAGeneratedFile.dummy(false),
     isAnIgnoredFile: isAnIgnoredFile ?? _MockIsAnIgnoredFile.dummy(false),
     getFileReportFromDiff: GetFileReportFromDiff(),
-    userOptions: const UserOptions(),
+    userSettings: const UserSettings(),
   );
 }
 

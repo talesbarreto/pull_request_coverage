@@ -1,5 +1,5 @@
-import 'package:pull_request_coverage/src/domain/user_options/models/output_mode.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/output_mode.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/cli_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/markdown_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/table_builder.dart';
@@ -13,16 +13,16 @@ class OutputGeneratorModule {
   const OutputGeneratorModule._();
 
   static OutputGenerator provideGenerator({
-    required UserOptions userOptions,
+    required UserSettings userSettings,
     required ColorizeText colorizeText,
   }) {
-    final printEmoji = PrintEmoji(userOptions.useEmojis);
+    final printEmoji = PrintEmoji(userSettings.useEmojis);
 
-    switch (userOptions.outputMode) {
+    switch (userSettings.outputMode) {
       case OutputMode.cli:
         return CliOutputGenerator(
           colorizeText: colorizeText,
-          userOptions: userOptions,
+          userSettings: userSettings,
           print: print,
           printEmoji: printEmoji,
           getResultTable: GetResultTable(
@@ -33,7 +33,7 @@ class OutputGeneratorModule {
         );
       case OutputMode.markdown:
         return MarkdownOutputGenerator(
-          userOptions: userOptions,
+          userSettings: userSettings,
           print: print,
           getResultTable: GetResultTable(
             tableBuilder: TableBuilder(),

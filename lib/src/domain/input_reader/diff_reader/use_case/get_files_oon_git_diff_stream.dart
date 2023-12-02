@@ -2,10 +2,10 @@ import 'package:pull_request_coverage/src/presentation/logger/log_level.dart';
 import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 
 /// Split the diff into file chunks and emits all lines of each of them
-class OnFilesOnGitDiff {
+class GetFilesOnGitDiffStream {
   final Stream<String> diffLinesStream;
 
-  const OnFilesOnGitDiff(this.diffLinesStream);
+  const GetFilesOnGitDiffStream(this.diffLinesStream);
 
   Stream<List<String>> call() async* {
     List<String> fileContent = [];

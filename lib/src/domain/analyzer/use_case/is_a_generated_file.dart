@@ -1,11 +1,11 @@
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 
 class IsAGeneratedFile {
-  final UserOptions userOptions;
+  final UserSettings userSettings;
 
-  const IsAGeneratedFile(this.userOptions);
+  const IsAGeneratedFile(this.userSettings);
 
   bool call(String filePath) {
-    return userOptions.knownGeneratedFiles.any((glob) => glob.matches(filePath));
+    return userSettings.knownGeneratedFiles.any((glob) => glob.matches(filePath));
   }
 }

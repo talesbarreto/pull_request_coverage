@@ -10,34 +10,34 @@ import 'package:pull_request_coverage/src/domain/file/repository/file_repository
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/remove_git_root_relative_path.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart';
-import 'package:pull_request_coverage/src/domain/user_options/models/user_options.dart';
+import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 
 class AnalyzeModule {
   const AnalyzeModule._();
 
   static Future<Analyze> provideAnalyzeUseCase({
-    required UserOptions userOptions,
+    required UserSettings userSettings,
     required List<String> lcovLines,
     required FileRepository ioRepository,
     required GetFileReportFromDiff getFileReportFromDiff,
-    required Stream<List<String>> onFilesOnGitDiff,
+    required Stream<List<String>> filesOnGitDiffStream,
     String? gitRootRelativePath,
   }) async {
-    final isAnIgnoredFile = IsAnIgnoredFile(userOptions);
+    final isAnIgnoredFile = IsAnIgnoredFile(userSettings);
     return Analyze(
       parseGitDiff: ParseGitDiff(
         RemoveGitRootRelativePath(
           gitRootRelativePath ?? await ioRepository.getGitRootRelativePath(),
         ).call,
       ),
-      filesOnGitDIffStream: onFilesOnGitDiff,
+      filesOnGitDIffStream: filesOnGitDiffStream,
       lcovLines: lcovLines,
-      setUncoveredLines: SetFileLineResultData(ShouldAnalyzeThisLine(userOptions.lineFilters), isAnIgnoredFile),
+      setUncoveredLines: SetFileLineResultData(ShouldAnalyzeThisLine(userSettings.lineFilters), isAnIgnoredFile),
       getUncoveredFileLines: GetUncoveredFileLines(),
-      isAGeneratedFile: IsAGeneratedFile(userOptions),
+      isAGeneratedFile: IsAGeneratedFile(userSettings),
       isAnIgnoredFile: isAnIgnoredFile,
       getFileReportFromDiff: getFileReportFromDiff,
-      userOptions: userOptions,
+      userSettings: userSettings,
     );
   }
 }
