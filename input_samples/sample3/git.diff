@@ -75,10 +75,10 @@ index 0853c87..4939f50 100644
 +    return GetOrFailLcovLines();
    }
  }
-diff --git a/lib/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart b/lib/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart
+diff --git a/lib/src/domain/input_reader/lcov_reader/get_uncovered_file_lines.dart b/lib/src/domain/input_reader/lcov_reader/get_uncovered_file_lines.dart
 index 55d6f20..8a6ca9b 100644
---- a/lib/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart
-+++ b/lib/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart
+--- a/lib/src/domain/input_reader/lcov_reader/get_uncovered_file_lines.dart
++++ b/lib/src/domain/input_reader/lcov_reader/get_uncovered_file_lines.dart
 @@ -1,10 +1,30 @@
 +import 'package:pull_request_coverage/src/presentation/logger/logger.dart';
 +

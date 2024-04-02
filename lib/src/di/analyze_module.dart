@@ -9,7 +9,7 @@ import 'package:pull_request_coverage/src/domain/analyzer/use_case/should_analyz
 import 'package:pull_request_coverage/src/domain/file/repository/file_repository.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/remove_git_root_relative_path.dart';
-import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/lcov_reader/get_uncovered_file_lines.dart';
 import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 
 class AnalyzeModule {

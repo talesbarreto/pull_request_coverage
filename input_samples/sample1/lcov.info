@@ -50,7 +50,7 @@ DA:11,0
 LF:3
 LH:0
 end_of_record
-SF:lib/src/domain/input_reader/locv_reader/get_uncoverd_file_lines.dart
+SF:lib/src/domain/input_reader/lcov_reader/get_uncoverd_file_lines.dart
 DA:3,1
 DA:5,3
 DA:6,1
