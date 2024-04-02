@@ -6,7 +6,7 @@ import 'package:pull_request_coverage/src/extensions/string.dart';
 // [RemoveGitRootRelativePath] will be used during diff parse, replacing path read from diff by [call]
 // making it match with those read from `lcov.info`
 
-/// Dart project may not be in the repository root, causing mismatches between paths from git diff and from locv file.
+/// Dart project may not be in the repository root, causing mismatches between paths from git diff and from lcov file.
 /// [RemoveGitRootRelativePath] will remove the path segment between repository root and the dart project itself
 class RemoveGitRootRelativePath {
   final String? gitRootRelativePath;

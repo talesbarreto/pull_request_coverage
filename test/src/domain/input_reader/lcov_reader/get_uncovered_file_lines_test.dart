@@ -1,4 +1,4 @@
-import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/lcov_reader/get_uncovered_file_lines.dart';
 import 'package:test/test.dart';
 
 void main() {

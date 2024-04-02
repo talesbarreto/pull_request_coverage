@@ -8,7 +8,7 @@ import 'package:pull_request_coverage/src/domain/analyzer/use_case/set_file_line
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_diff.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/models/file_line.dart';
 import 'package:pull_request_coverage/src/domain/input_reader/diff_reader/use_case/parse_git_diff.dart';
-import 'package:pull_request_coverage/src/domain/input_reader/locv_reader/get_uncovered_file_lines.dart';
+import 'package:pull_request_coverage/src/domain/input_reader/lcov_reader/get_uncovered_file_lines.dart';
 import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 import 'package:test/test.dart';
 
