@@ -29,4 +29,4 @@ dependencies:
 dev_dependencies:
   test: ^1.24.7
   mocktail: ^1.0.1
-  lints: ">=2.1.1 <5.0.0"
+  lints: ">=2.1.1 <6.0.0"
