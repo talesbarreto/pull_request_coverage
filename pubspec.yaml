@@ -1,13 +1,13 @@
 name: pull_request_coverage
-description: This is a code coverage tool that tracks the number of code changes in pull requests covered by tests. It also highlights lines that have not been tested.
+description: "A diff coverage tool. It provides a clear and achievable standard for code review: If you touch a line of code, that line should be covered."
 repository: https://github.com/talesbarreto/pull_request_coverage
-version: 2.1.2
+version: 2.1.3
 topics:
- - ci
  - test
  - coverage
- - test-coverage
  - diff
+ - test-coverage
+ - ci
 
 screenshots:
   - description: The output of the command `pull_request_coverage` in a terminal.
@@ -20,11 +20,11 @@ environment:
   sdk: '>=2.17.0 <4.0.0'
 
 dependencies:
-  args: ^2.4.2
+  args: ^2.5.0
   file: ^7.0.0
   glob: ^2.1.2
   yaml: ^3.1.2
-  path: ^1.8.3
+  path: ^1.9.0
 
 dev_dependencies:
   test: ^1.24.7

@@ -1,3 +1,9 @@
+## 2.1.3
+- Update docs
+- Bump args dependency to 2.5.0
+- Bump path dependency to 1.9.0
+- Bump lints dependency to ">=2.1.1 <6.0.0"
+
 ## 2.1.2
 - Fix `Implicit tear-off of the 'call' method.`
 
