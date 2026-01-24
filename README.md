@@ -3,15 +3,15 @@
 
 ## Motivation
 
-The coverage rate threshold on CI tools is a common approach to encourage developers to write tests. However, judging a pull request solely based on the coverage rate of the entire project is not always fair, particularly when it comes to significant refactor tasks that may naturally reduce the coverage rate.
+The coverage rate threshold on CI tools is a common approach to encourage developers to write tests. However, judging a pull request solely on the project's overall coverage rate is not always fair, particularly for significant refactoring tasks that may naturally reduce coverage.
 
 This package adopts a different approach to analyze test coverage: it specifically focuses on checking the lines added in the pull request. The coverage rate is then calculated by dividing the number of uncovered new lines by the total number of new lines.
 
-In addition, you have the option to set thresholds that will cause tests to fail on a CI tool. Furthermore, this package can also generate a report highlighting the uncovered code, making it easier to identify areas that require additional tests.
+In addition, you have the option to set thresholds that will cause tests to fail on a CI tool. Furthermore, this package can generate a report highlighting uncovered code, making it easier to identify areas that require additional testing.
 
 ## Installing
 
-There are two ways to install the `pull_request_coverage` package. Since it is a binary package, you can activate it from the command line by using the command `dart pub global activate pull_request_coverage`. This will allow you to use it as a standalone program on your command-line interface (CLI). Alternatively, you can add it to the `dev_dependencies` section of your project's `pubspec.yaml` file.
+There are two ways to install the `pull_request_coverage` package. Since it is a binary package, you can activate it from the command line with `dart pub global activate pull_request_coverage`. This will allow you to use it as a standalone program on your command-line interface (CLI). Alternatively, you can add it to the `dev_dependencies` section of your project's `pubspec.yaml` file.
 
 ℹ️  [Github Actions example](https://github.com/talesbarreto/uri_content/blob/main/.github/workflows/flutter-ci.yml)
 
@@ -37,7 +37,7 @@ If you want to analyze a Dart project rather than Flutter, use the [coverage pac
 
 ### Running pull_request_coverage
 
-To check the PR's code, pull_request_coverage needs a diff between its branch and the target one. The diff is read from the `STDIN` input.
+To check the PR's code, pull_request_coverage needs a diff between the PR's branch and the target branch. The diff is read from `STDIN`.
 
 You can pipe the `STDIN` to `pull_request_coverage` using bash's `|` operator, like this:
 
@@ -58,7 +58,7 @@ There are two ways to configure the execution of `pull_request_coverage`: using 
 
 By default, `pull_request_coverage` looks for the `./pull_request_coverage.yaml` file to load its settings. You can override this by using the `config-file` argument.
 
-Both methods support the same settings, and if a setting is provided through both CLI arguments and the YAML file, the value from the CLI arguments will take precedence.
+Both methods support the same settings, and if a setting is provided in both the CLI arguments and the YAML file, the value from the CLI arguments takes precedence.
 
 #### Examples
 ##### CLI args
@@ -86,11 +86,11 @@ Default values are indicated in parentheses.
 
 ### Threshold
 
-- **minimum-coverage** : Specifies the minimum coverage rate required for the tests to pass.
+- **minimum-coverage**: Specifies the minimum coverage rate required for the tests to pass.
 
-- **maximum-uncovered-lines** : Specifies the maximum number of uncovered lines allowed before the tests fail.
+- **maximum-uncovered-lines**: Specifies the maximum number of uncovered lines allowed before the tests fail.
 
-- **approval-requirement** (`lines-and-rate`): when both, `minimum-coverage` and `maximum-uncovered-lines`, are specified, the `approval-requirement` determines the conditions for passing the tests. 
+- **approval-requirement** (`lines-and-rate`): when both `minimum-coverage` and `maximum-uncovered-lines` are specified, the `approval-requirement` determines the conditions for passing the tests. 
   - `lines-and-rate`: both conditions must be met to pass the tests.
   - `lines-or-rate:` only one of the conditions must be met to pass the tests.
 
@@ -100,7 +100,7 @@ Default values are indicated in parentheses.
 
 - **ignore-lines**: A list of regular expressions used to filter lines in the source code. The cumulative count of ignored lines will be shown in the report for statistical purposes only.
 
-- **ignore-known-generated-files** (`true`) : Ignores file paths that end with `.g.dart`, `.pb.dart`, `.pbenum.dart`, `.pbserver.dart` or `.pbjson.dart`
+- **ignore-known-generated-files** (`true`) : Ignores file paths that end with `.g.dart`, `.pb.dart`, `.pbenum.dart`, `.pbserver.dart` or `.pbjson.dart`.
 
 - **add-to-known-generated-files**: list of [glob matchers](https://pub.dev/packages/glob#syntax) to extend the list specified in `ignore-known-generated-files`. Unlike `ignore`, the lines matched by these patterns will be completely excluded from the report.
 
@@ -118,15 +118,15 @@ Check [example](https://github.com/talesbarreto/pull_request_coverage/tree/main/
 
 - **report-fully-covered-files** (`true`): Prints the file path of each fully covered file as a celebratory message =)
 
-- **show-uncovered-code** (`true`):  When set to `true`, the source code of the uncovered lines will be printed in red font color, making it easier to identify the missing tests. If this parameter is set to `false`, only the file path will be shown in the log.
+- **show-uncovered-code** (`true`):  When set to `true`, the source code of the uncovered lines will be printed in red font color, making it easier to identify the missing tests. If this parameter is set to `false`, only the file path will be logged.
 
 - **use-colorful-output** (`true`): By default, `pull_request_coverage` utilizes a colorful font to highlight uncovered lines. You can disable this feature by setting this parameter to `false`. Please note that this option is only available when the output mode is set to `cli`.
 
-- **print-emojis** (`true`) : Enable or disabled emojis in the output 🫣.
+- **print-emojis** (`true`): Enable or disable emojis in the output 🫣.
 
 - **fraction-digits** (`2`): Specifies the number of digits to display after the decimal point in the coverage rate.
 
-- **fully-tested-message** : Replace the final table report with a custom message when there are no untested lines
+- **fully-tested-message**: Replace the final table report with a custom message when there are no untested lines
 
 ### Under the hood
 
@@ -139,12 +139,11 @@ ___
 
 - **0** - Tests passed.
 - **1** - Tests failed (only when thresholds are set).
-- **255** - Execution has failed and tests were not executed.
-
+- **255** - Execution has failed, and tests were not executed.
 
 ## Current state
 
-This project has entered *Maintenance Mode*.
+This project has entered **Maintenance Mode**.
 
 At this stage, the software is considered feature-complete and stable. Development efforts are focused on bug fixes and dependency version updates
 
