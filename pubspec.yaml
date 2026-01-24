@@ -1,7 +1,7 @@
 name: pull_request_coverage
 description: "A diff coverage tool. It provides a clear and achievable standard for code review: If you touch a line of code, that line should be covered."
 repository: https://github.com/talesbarreto/pull_request_coverage
-version: 2.1.3
+version: 2.1.4
 topics:
  - test
  - coverage
@@ -20,11 +20,11 @@ environment:
   sdk: '>=2.17.0 <4.0.0'
 
 dependencies:
-  args: ^2.5.0
-  file: ^7.0.0
-  glob: ^2.1.2
-  yaml: ^3.1.2
-  path: ^1.9.0
+  args: ^2.7.0
+  file: ^7.0.1
+  glob: ^2.1.3
+  yaml: ^3.1.3
+  path: ^1.9.1
 
 dev_dependencies:
   test: ^1.24.7

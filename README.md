@@ -140,3 +140,14 @@ ___
 - **0** - Tests passed.
 - **1** - Tests failed (only when thresholds are set).
 - **255** - Execution has failed and tests were not executed.
+
+
+## Current state
+
+This project has entered *Maintenance Mode*.
+
+At this stage, the software is considered feature-complete and stable. Development efforts are focused on bug fixes and dependency version updates
+
+No new features or breaking changes are planned.
+
+Updates may be released infrequently, but the project is actively maintained and not abandoned. Issues will continue to be addressed when raised.
