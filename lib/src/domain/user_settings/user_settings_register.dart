@@ -97,7 +97,7 @@ class UserSettingsRegister<T> {
   static const outputMode = UserSettingsRegister<String>(
     names: ["output-mode"],
     defaultValue: "cli",
-    allowed: ["cli", "markdown"],
+    allowed: ["cli", "markdown", "report-only"],
   );
 
   static const markdownMode = UserSettingsRegister<String>(

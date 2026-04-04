@@ -2,6 +2,7 @@ import 'package:pull_request_coverage/src/domain/user_settings/models/output_mod
 import 'package:pull_request_coverage/src/domain/user_settings/models/user_settings.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/cli_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/markdown_output_generator.dart';
+import 'package:pull_request_coverage/src/presentation/output_generator/report_only_output_generator.dart';
 import 'package:pull_request_coverage/src/presentation/output_generator/table_builder.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/colorize_text.dart';
 import 'package:pull_request_coverage/src/presentation/use_case/get_result_table.dart';
@@ -41,6 +42,16 @@ class OutputGeneratorModule {
             printEmoji: printEmoji,
           ),
           printEmoji: printEmoji,
+        );
+      case OutputMode.reportOnly:
+        return ReportOnlyOutputGenerator(
+          userSettings: userSettings,
+          print: print,
+          getResultTable: GetResultTable(
+            tableBuilder: TableBuilder(),
+            colorizeText: colorizeText,
+            printEmoji: printEmoji,
+          ),
         );
     }
   }
