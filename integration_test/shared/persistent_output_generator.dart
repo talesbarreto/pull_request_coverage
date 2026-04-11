@@ -15,4 +15,7 @@ class PersistentOutputGenerator implements OutputGenerator {
   Future<void> terminate(AnalysisResult analysisResult) async {
     this.analysisResult = analysisResult;
   }
+
+  @override
+  bool get reportOnly => false;
 }

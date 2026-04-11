@@ -1,3 +1,6 @@
+## 2.1.5
+- `reportOnly` option
+
 ## 2.1.4
 - Document maintenance mode status in README
 - Bump dependencies: args 2.7.0, file 7.0.1, glob 2.1.3, yaml 3.1.3, path 1.9.1
