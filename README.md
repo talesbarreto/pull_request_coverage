@@ -118,6 +118,8 @@ Check [example](https://github.com/talesbarreto/pull_request_coverage/tree/main/
 
 - **report-fully-covered-files** (`true`): Prints the file path of each fully covered file as a celebratory message =)
 
+- **report-only** (`false`): When set to `true`, suppresses intermediate file reports and outputs only the final summary table. This is useful for logging, CI summaries, or other scenarios where detailed file-by-file analysis is not needed. Works with both `cli` and `markdown` output modes.
+
 - **show-uncovered-code** (`true`):  When set to `true`, the source code of the uncovered lines will be printed in red font color, making it easier to identify the missing tests. If this parameter is set to `false`, only the file path will be logged.
 
 - **use-colorful-output** (`true`): By default, `pull_request_coverage` utilizes a colorful font to highlight uncovered lines. You can disable this feature by setting this parameter to `false`. Please note that this option is only available when the output mode is set to `cli`.

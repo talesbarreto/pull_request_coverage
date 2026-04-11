@@ -30,6 +30,7 @@ class UserSettingsRegister<T> {
     useColorfulOutput,
     showUncoveredCode,
     reportFullyCoveredFiles,
+    reportOnly,
     outputMode,
     markdownMode,
     fractionDigits,
@@ -94,10 +95,16 @@ class UserSettingsRegister<T> {
     defaultValue: true,
   );
 
+  static const reportOnly = UserSettingsRegister<bool>(
+    names: ["report-only"],
+    description: "Suppress intermediate file reports and output only the final summary table",
+    defaultValue: false,
+  );
+
   static const outputMode = UserSettingsRegister<String>(
     names: ["output-mode"],
     defaultValue: "cli",
-    allowed: ["cli", "markdown", "report-only"],
+    allowed: ["cli", "markdown"],
   );
 
   static const markdownMode = UserSettingsRegister<String>(

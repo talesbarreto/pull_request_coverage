@@ -9,6 +9,8 @@ abstract class OutputGenerator {
   static const successEmoji = "✅";
   static const failEmoji = "❌";
 
+  bool get reportOnly;
+
   void addFileReport(FileReport report);
 
   void terminate(AnalysisResult analysisResult);

@@ -20,6 +20,9 @@ class MarkdownOutputGenerator implements OutputGenerator {
     required this.print,
   });
 
+  @override
+  bool get reportOnly => userSettings.reportOnly;
+
   final _missingTestFilesReport = StringBuffer();
 
   String? _getSourceCodeHeader() => userSettings.markdownMode == MarkdownMode.diff ? "```diff\n" : "```dart\n";
@@ -87,6 +90,8 @@ class MarkdownOutputGenerator implements OutputGenerator {
 
   @override
   Future<void> addFileReport(FileReport fileReport) async {
+    if (reportOnly) return;
+
     final stringBuffer = StringBuffer();
     if (fileReport.linesMissingTestsCount > 0 || userSettings.reportFullyCoveredFiles) {
       stringBuffer.writeln(_getFileHeader(fileReport));

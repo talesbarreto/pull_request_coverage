@@ -22,6 +22,9 @@ class CliOutputGenerator implements OutputGenerator {
     required this.print,
   });
 
+  @override
+  bool get reportOnly => userSettings.reportOnly;
+
   final _missingTestFilesReport = StringBuffer();
 
   String? _getLine(FileLine fileLine) {
@@ -74,6 +77,8 @@ class CliOutputGenerator implements OutputGenerator {
 
   @override
   void addFileReport(FileReport fileReport) {
+    if (reportOnly) return;
+
     final stringBuffer = StringBuffer();
     if (fileReport.linesMissingTestsCount > 0 || userSettings.reportFullyCoveredFiles) {
       stringBuffer.write(_getFileHeader(fileReport));

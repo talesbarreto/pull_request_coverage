@@ -16,6 +16,7 @@ class UserSettings {
   final bool ignoreKnownGeneratedFiles;
   final bool reportFullyCoveredFiles;
   final bool useEmojis;
+  final bool reportOnly;
   final OutputMode outputMode;
   final MarkdownMode markdownMode;
   final int fractionalDigits;
@@ -40,6 +41,7 @@ class UserSettings {
     this.useColorfulOutput = true,
     this.ignoreKnownGeneratedFiles = true,
     this.reportFullyCoveredFiles = true,
+    this.reportOnly = false,
     this.stdinTimeout = const Duration(seconds: 1),
     this.deprecatedFilterSet = false,
     this.lineFilters = const [],
